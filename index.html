@@ -346,7 +346,7 @@
 
     <script async src="https://www.tiktok.com/embed.js"></script>
     <script>
-        // Use your brand-new, working API key
+        // Use provided API key or environment key
         const prodKey = "AIzaSyCxHO8s_g8ScXq3qDPe-cA-UCMy7OTK6oQ";
         const apiKey = (typeof __app_id !== 'undefined') ? "" : prodKey; 
         
@@ -375,10 +375,11 @@
                     if (response.ok) return response;
                     
                     const errorBody = await response.json().catch(() => ({}));
-                    console.error(`Attempt ${i+1} failed:`, errorBody);
+                    console.error(`Attempt ${i+1} failed with status ${response.status}:`, errorBody);
 
+                    // Handle specific error codes
                     if (response.status === 403) {
-                       throw new Error(`Forbidden (403): ${errorBody.error?.message || "Check Generative Language API is enabled."}`);
+                       throw new Error(`Forbidden (403): ${errorBody.error?.message || "Verify your API Key and enabled services."}`);
                     }
 
                     if (response.status === 429 || response.status >= 500) {
@@ -388,7 +389,7 @@
                         continue;
                     }
                     
-                    throw new Error(`HTTP Error: ${response.status}`);
+                    throw new Error(`HTTP ${response.status}: ${errorBody.error?.message || "Unknown error"}`);
                 } catch (err) {
                     if (i === maxRetries) throw err;
                     await new Promise(res => setTimeout(res, delay));
@@ -409,7 +410,7 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // v1beta predict endpoint for standard API keys
+                // Ensure the correct model and endpoint are used as per Gemini technical specs
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
                 
                 const response = await fetchWithBackoff(url, {
@@ -427,8 +428,10 @@
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
                     genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover">`;
                     genStatus.innerText = "MANIFESTED.";
+                } else if (data.error) {
+                    throw new Error(data.error.message);
                 } else {
-                    throw new Error(data.error?.message || "Summoning failed. Check API dashboard.");
+                    throw new Error("Invalid response format from API.");
                 }
             } catch (err) {
                 console.error("Critical summoning error:", err);
