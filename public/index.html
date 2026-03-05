@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+SC:wght@300;700&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDKs (Compat Version) -->
+    <!-- Firebase SDKs (Compat Version for easiest integration) -->
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
@@ -292,9 +292,6 @@
 </head>
 <body>
 
-    <!-- Hidden canvas for image optimization -->
-    <canvas id="comp-canvas" style="display:none;"></canvas>
-
     <div class="dragon-container">
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 50C10 50 20 20 40 30C60 40 80 10 90 50C100 90 60 80 40 70C20 60 10 80 10 50Z" stroke="#8b0000" stroke-width="0.5" stroke-dasharray="2 2" />
@@ -372,13 +369,14 @@
             </div>
         </div>
 
-        <!-- Community Gallery Section -->
+        <!-- NEW: Community Gallery Section -->
         <section class="max-w-6xl mx-auto mb-40">
             <div class="mb-12">
                 <h2 class="text-5xl text-yellow-500 calligraphy-font mb-4">The Community Forest</h2>
                 <div class="h-px w-32 bg-red-600 mx-auto mb-8"></div>
             </div>
             <div id="community-gallery" class="gallery-grid">
+                <!-- Injected via Firebase -->
                 <div class="text-red-900/40 calligraphy-font col-span-full py-20 text-xl italic tracking-widest">Observing the roots...</div>
             </div>
         </section>
@@ -472,8 +470,10 @@
                 const galleryEl = document.getElementById('community-gallery');
                 const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
                 
+                // Real-time listener for the gallery
                 creationsRef.onSnapshot((snapshot) => {
                     const docs = snapshot.docs.map(doc => doc.data());
+                    // Sort locally since we can't use complex queries without indexes
                     docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
                     
                     if (docs.length === 0) {
@@ -500,50 +500,6 @@
         }
         setupCommunity();
 
-        // --- IMAGE COMPRESSION LOGIC ---
-        const MAX_BYTES = 1048487; 
-
-        async function optimizeImage(base64Str) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.src = base64Str;
-                img.onload = () => {
-                    const canvas = document.getElementById('comp-canvas');
-                    let width = img.width;
-                    let height = img.height;
-
-                    // Scale down if dimension is huge
-                    const MAX_DIM = 1200;
-                    if (width > MAX_DIM || height > MAX_DIM) {
-                        if (width > height) {
-                            height *= MAX_DIM / width;
-                            width = MAX_DIM;
-                        } else {
-                            width *= MAX_DIM / height;
-                            height = MAX_DIM;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    // Recursive compression to find sweet spot
-                    function attempt(quality) {
-                        const compressedB64 = canvas.toDataURL('image/jpeg', quality);
-                        const size = Math.round((compressedB64.length * 3) / 4);
-                        
-                        if (size > MAX_BYTES && quality > 0.1) {
-                            return attempt(quality - 0.1);
-                        }
-                        resolve(compressedB64);
-                    }
-                    attempt(0.9);
-                };
-            });
-        }
-
         // --- UI ELEMENTS ---
         const genTrigger = document.getElementById('gen-trigger');
         const shareX = document.getElementById('share-x');
@@ -556,19 +512,25 @@
         slideLeft.onclick = () => { videoCarousel.scrollBy({ left: -345, behavior: 'smooth' }); };
         slideRight.onclick = () => { videoCarousel.scrollBy({ left: 345, behavior: 'smooth' }); };
 
-        const creatures = ["cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "shiba inu", "qilin", "baby elephant", "ghost dog"];
-        const costumes = ["traditional silk hanfu", "bamboo samurai armor", "terracotta mask", "imperial dragon robe", "neon-trim silk kimono"];
-        const settings = ["dark mossy Chinese forest", "misty mountain temple", "black lake with floating lanterns", "rainy cyberpunk alley"];
-        const styles = ["surreal and uncanny", "viral brainrot aesthetic", "dark fantasy concept art", "digital hallucination"];
-        const shareTexts = ["The algorithm decays. $CHINESEROT", "I have summoned the rot. $CHINESEROT", "Burn the spirit. Feed the forest. $CHINESEROT"];
+        const creatures = ["cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "golden monkey", "shiba inu", "chinese phoenix", "white tiger", "mystic toad", "immortal crane", "qilin", "baby elephant", "cyber-axolotl", "golden turtle", "emperor penguin", "feral raccoon", "celestial rabbit", "ghost dog"];
+        const costumes = ["traditional silk hanfu with intricate embroidery", "ancient bamboo samurai armor", "weathered terracotta mask", "glowing paper lantern headpiece", "imperial dragon robe", "monk's saffron-colored shawl", "heavy jade jewelry and crown", "vibrant red Beijing opera mask", "straw conical farmer's hat", "futuristic neon-trim silk kimono", "ancient general's war plates", "taoist priest vestments", "concubine's floral head-dress", "shadow assassin's cowl", "cyber-enhanced traditional armor"];
+        const settings = ["in a dark mossy Chinese forest with glowing roots", "inside a misty mountain temple with burning incense", "floating on a giant lotus leaf in a pitch-black lake", "sitting on a red bridge under neon cherry blossoms", "beside a waterfall of liquid molten gold", "surrounded by a thousand floating red lanterns", "in a bamboo grove where trees are fiber-optic cables", "atop a crumbling stone dragon statue covered in moss", "within a dense cloud of purple incense smoke", "in a rainy cyberpunk alley in Old Shanghai", "inside a digital void filled with floating chinese calligraphy scrolls", "on a mountain peak piercing through a sea of red clouds"];
+        const poses = ["meditating peacefully", "screaming into the void", "staring directly at the viewer with glowing eyes", "performing a martial arts stance", "holding a mysterious digital artifact", "dissolving into pixels", "emerging from a puddle of black ink", "surrounded by a swirl of magical energy", "sleeping on a pile of gold coins", "pointing a jade staff towards the sky"];
+        const artifacts = ["a glowing jade tablet", "a floating digital orb", "a cracked ancient vase leaking light", "a massive red paper fan", "a traditional pipa instrument made of glass", "a burning scroll of binary code", "a golden coin with a square hole", "a cluster of glowing red mushrooms"];
+        const styles = ["surreal and uncanny", "hyper-realistic 3D render", "viral brainrot aesthetic", "traditional Chinese ink painting mixed with modern 3D", "dark fantasy concept art", "glitch art with ancient paper textures", "psychedelic digital hallucination", "cinematic wide shot with dramatic volumetrics", "stylized claymation", "90s vhs recording style"];
+        const lighting = ["dramatic red and gold lighting", "eerie green jade glow", "shimmering moonlit ozone", "harsh flickering neon light", "warm candlelight with long dramatic shadows", "bioluminescent purple moss glow", "blinding golden sunbeams through thick fog"];
+        const shareTexts = ["The algorithm decays. The forest provides. I have summoned the rot. $CHINESEROT", "Manifesting pure digital brainrot from the deep forest. Witness the summoning. $CHINESEROT", "The dragon's breath smells of ozone and ancient ink. I am the Rot. $CHINESEROT", "I saw the future in the moss. It was beautiful and decaying. $CHINESEROT", "Burn the spirit. Feed the forest. $CHINESEROT"];
 
         async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
             const setting = settings[Math.floor(Math.random() * settings.length)];
+            const pose = poses[Math.floor(Math.random() * poses.length)];
+            const artifact = artifacts[Math.floor(Math.random() * artifacts.length)];
             const style = styles[Math.floor(Math.random() * styles.length)];
+            const light = lighting[Math.floor(Math.random() * lighting.length)];
             
-            const promptText = `A ${style} ${creature} wearing ${costume}, ${setting}. The text '$CHINESEROT' is carved into the background. Dramatic red lighting, 8k resolution, brainrot aesthetic.`;
+            const promptText = `A ${style} ${creature} ${pose} while wearing a ${costume}, holding ${artifact}, ${setting}. The text '$CHINESEROT' is carved into the background. ${light}, 8k resolution, highly detailed textures, mixing ancient history with modern digital brainrot.`;
 
             genStatus.innerText = "FERMENTING IN THE ABYSS...";
             genTrigger.disabled = true;
@@ -585,32 +547,28 @@
                 const data = await response.json();
 
                 if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
-                    const rawB64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                    
-                    genStatus.innerText = "OPTIMIZING FOR STORAGE...";
-                    const optimizedB64 = await optimizeImage(rawB64);
-
-                    genResult.innerHTML = `<img src="${optimizedB64}" class="w-full h-full object-cover rounded shadow-lg">`;
-                    genStatus.innerText = "MANIFESTED. SYNCING TO FOREST...";
+                    const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
+                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover rounded shadow-lg">`;
+                    genStatus.innerText = "MANIFESTED. RIGHT CLICK IMAGE TO COPY.";
                     shareX.style.display = 'flex';
 
                     // SAVE TO FIREBASE
                     if (auth.currentUser) {
                         const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
                         await creationsRef.add({
-                            imageUrl: optimizedB64,
+                            imageUrl: b64,
                             prompt: promptText,
                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             userId: auth.currentUser.uid
                         });
-                        genStatus.innerText = "STORED IN GALLERY.";
                     }
                 } else {
-                    throw new Error(data.error?.message || data.error || "The Rot refused.");
+                    const errorMsg = data.error?.message || data.error || "The Rot refused the connection.";
+                    throw new Error(errorMsg);
                 }
             } catch (err) {
                 console.error("Summoning error:", err);
-                genResult.innerHTML = `<div class="text-red-500 text-[12px] p-6 text-center uppercase">Portal Error:<br><span class="text-[10px] mt-2 block">${err.message}</span></div>`;
+                genResult.innerHTML = `<div class="text-red-500 text-[12px] p-6 text-center uppercase">Portal Closed:<br><span class="text-[10px] mt-2 block">${err.message}</span></div>`;
                 genStatus.innerText = "ACCESS RESTRICTED";
             } finally {
                 genTrigger.disabled = false;
@@ -619,8 +577,10 @@
 
         function handleShare() {
             const randomText = shareTexts[Math.floor(Math.random() * shareTexts.length)];
-            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(randomText + "\n\n" + window.location.href)}`;
+            const currentUrl = window.location.href;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(randomText + "\n\n" + currentUrl)}`;
             window.open(twitterUrl, '_blank');
+            genStatus.innerText = "PASTE YOUR IMAGE IN THE POST.";
         }
 
         genTrigger.addEventListener('click', generateRot);
@@ -634,7 +594,9 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
+            const originalStatus = genStatus.innerText;
             genStatus.innerText = "SCROLL COPIED.";
+            setTimeout(() => genStatus.innerText = originalStatus, 2000);
         });
     </script>
 </body>
