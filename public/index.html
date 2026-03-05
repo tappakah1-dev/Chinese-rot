@@ -121,28 +121,70 @@
             100% { transform: rotate(360deg); }
         }
 
+        .carousel-wrapper {
+            position: relative;
+            max-width: 100vw;
+        }
+
         .carousel-container {
             display: flex;
             overflow-x: auto;
             gap: 20px;
             padding: 20px 40px;
             scroll-behavior: smooth;
+            -ms-overflow-style: none;
             scrollbar-width: none;
+            scroll-snap-type: x mandatory;
         }
         .carousel-container::-webkit-scrollbar { display: none; }
 
         .carousel-card {
-            min-width: 300px;
+            min-width: 325px;
             background: #000;
             border: 2px solid var(--blood-red);
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
+            transition: 0.3s;
+            scroll-snap-align: center;
         }
+        .carousel-card:hover { 
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 30px var(--neon-gold);
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--blood-red);
+            color: var(--neon-gold);
+            border: 1px solid var(--neon-gold);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            font-size: 1.5rem;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--neon-gold);
+            color: var(--blood-red);
+        }
+
+        .nav-left { left: 10px; }
+        .nav-right { right: 10px; }
 
         .story-border {
             border: 1px solid rgba(255, 215, 0, 0.3);
             background-image: radial-gradient(circle at top right, rgba(139, 0, 0, 0.2), transparent);
-            padding: 2rem;
+            padding: 2.5rem;
         }
     </style>
+    <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
 <body>
 
@@ -202,14 +244,24 @@
             </div>
         </div>
 
-        <!-- Video Carousel -->
+        <!-- Video Carousel Section -->
         <section class="mb-40 py-10 relative">
-            <h2 class="text-4xl text-yellow-500 calligraphy-font mb-12">Visual Decay</h2>
-            <div class="carousel-container" id="video-carousel">
-                <!-- TikTok embeds go here as in previous version -->
-                <div class="carousel-card p-4 text-xs text-gray-500 italic">Historical data fragment...</div>
-                <div class="carousel-card p-4 text-xs text-gray-500 italic">Decay log 001...</div>
-                <div class="carousel-card p-4 text-xs text-gray-500 italic">Rot signature alpha...</div>
+            <div class="mb-12">
+                <h2 class="text-4xl text-yellow-500 calligraphy-font mb-2">Visual Decay</h2>
+                <h3 class="text-red-600 tracking-[0.5em] uppercase text-xs font-bold">Historical Data Stream</h3>
+            </div>
+            
+            <div class="carousel-wrapper">
+                <button class="nav-btn nav-left" id="slide-left" aria-label="Slide Left">❮</button>
+                <div class="carousel-container" id="video-carousel">
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7459703700727090439" data-video-id="7459703700727090439"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7512387823685668114" data-video-id="7512387823685668114"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7525004521790262536" data-video-id="7525004521790262536"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                </div>
+                <button class="nav-btn nav-right" id="slide-right" aria-label="Slide Right">❯</button>
             </div>
         </section>
 
@@ -221,6 +273,17 @@
         const shareX = document.getElementById('share-x');
         const genResult = document.getElementById('gen-result');
         const genStatus = document.getElementById('gen-status');
+        const videoCarousel = document.getElementById('video-carousel');
+        const slideLeft = document.getElementById('slide-left');
+        const slideRight = document.getElementById('slide-right');
+
+        // Navigation for Carousel
+        slideLeft.onclick = () => {
+            videoCarousel.scrollBy({ left: -345, behavior: 'smooth' });
+        };
+        slideRight.onclick = () => {
+            videoCarousel.scrollBy({ left: 345, behavior: 'smooth' });
+        };
 
         async function generateRot() {
             const creatures = ["cat", "capybara", "dragon", "koi", "shiba"];
