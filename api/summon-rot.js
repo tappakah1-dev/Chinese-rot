@@ -25,17 +25,24 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Missing prompt payload" });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    // BONUS BRAINROT TIP: 
+    // If you want it to truly "work forever" for free, you can generate 3 different 
+    // free API keys from different Google accounts and format your env var like this:
+    // GEMINI_API_KEY="key1,key2,key3"
+    const apiKeyEnv = process.env.GEMINI_API_KEY;
 
-    // Fix 1: Properly catch missing API key and inform frontend
-    if (!apiKey) {
+    if (!apiKeyEnv) {
         return res.status(500).json({ error: "Missing GEMINI_API_KEY in Vercel Environment Variables" });
     }
 
+    // This logic picks a random API key if you provide multiple separated by commas
+    const apiKeys = apiKeyEnv.split(',');
+    const apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)].trim();
+
     try {
-        // Updated to use Gemini 4.0 (imagen-4.0-generate-001)
+        // FIXED: Switched from the preview 4.0 model (70 limit) to the production 3.0 model (massive limit)
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${apiKey}`,
             {
                 method: "POST",
                 headers: {
@@ -54,7 +61,7 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        // Fix 3: Bubble up exact Google API errors (like bad keys or safety triggers)
+        // Bubble up exact Google API errors
         if (!response.ok) {
             return res.status(500).json({
                 error: "Google API rejected the request",
@@ -76,8 +83,6 @@ export default async function handler(req, res) {
             const imageBuffer = Buffer.from(imageBase64, 'base64');
             
             // Compress and convert the image to WebP format
-            // We scale it down to a max width/height of 1024px and use 80% quality
-            // This easily brings the image size from >1MB down to ~100-200KB
             const compressedBuffer = await sharp(imageBuffer)
                 .resize({ width: 1024, height: 1024, fit: 'inside', withoutEnlargement: true })
                 .webp({ quality: 80 })
@@ -85,7 +90,7 @@ export default async function handler(req, res) {
 
             const compressedBase64 = compressedBuffer.toString('base64');
 
-            // Send the smaller WebP back to the frontend instead of the PNG
+            // Send the smaller WebP back to the frontend
             return res.status(200).json({
                 image: `data:image/webp;base64,${compressedBase64}`
             });
