@@ -1,0 +1,8 @@
+{
+  "name": "chineserot-portal",
+  "version": "1.0.0",
+  "description": "Image compression for Firebase",
+  "dependencies": {
+    "sharp": "^0.33.2"
+  }
+}
