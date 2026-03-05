@@ -138,7 +138,8 @@
     </main>
 
     <script>
-        const apiKey = "AIzaSyCxHO8s_g8ScXq3qDPe-cA-UCMy7OTK6oQ"; 
+        // Updated with your new API Key
+        const apiKey = "AIzaSyCQeLh5NmTytoxXipYDhdbvCSavPqyt7S8"; 
         
         const genTrigger = document.getElementById('gen-trigger');
         const genResult = document.getElementById('gen-result');
@@ -146,6 +147,25 @@
 
         const creatures = ["cat", "capybara", "shrimp", "axolotl", "frog"];
         const costumes = ["ramen bowl", "bamboo armor", "lotus leaf hat", "glowing lantern"];
+
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            let delay = 1000;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429 || response.status >= 500) {
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2;
+                        continue;
+                    }
+                    return response;
+                } catch (err) {
+                    if (i === maxRetries - 1) throw err;
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+        }
 
         async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
@@ -158,20 +178,15 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Using the specific predict endpoint with the provided key
+                // Using the imagen-4.0-generate-001 model predict endpoint
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
                 
-                const response = await fetch(url, {
+                const response = await fetchWithRetry(url, {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         instances: [{ prompt: promptText }],
-                        parameters: { 
-                            sampleCount: 1,
-                            aspectRatio: "1:1"
-                        }
+                        parameters: { sampleCount: 1 }
                     })
                 });
 
@@ -179,14 +194,14 @@
 
                 if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover animate-pulse shadow-[0_0_20px_rgba(255,215,0,0.2)]">`;
+                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover animate-pulse">`;
                     genStatus.innerText = "MANIFESTED.";
                     setTimeout(() => genResult.querySelector('img').classList.remove('animate-pulse'), 1000);
                 } else if (response.status === 403) {
-                    throw new Error("403 Forbidden: Key restricted or Billing not enabled.");
+                    throw new Error("403 Forbidden: Ensure Billing is enabled and Vertex AI API is turned ON.");
                 } else {
-                    const errorDetails = data.error?.message || "Check API Key restrictions or safety filters.";
-                    throw new Error(errorDetails);
+                    const msg = data.error?.message || "Check API Key restrictions or safety filters.";
+                    throw new Error(msg);
                 }
             } catch (err) {
                 console.error("Summoning error:", err);
