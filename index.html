@@ -23,89 +23,6 @@
             line-height: 1.6;
         }
 
-        .psychedelic-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.6;
-            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            background-color: var(--ink-black);
-        }
-
-        .ink-stain {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(139, 0, 0, 0.15) 0%, transparent 70%);
-            filter: blur(50px);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .dragon-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-            overflow: hidden;
-        }
-
-        .dragon-snake {
-            position: absolute;
-            width: 300px;
-            opacity: 0.3;
-            filter: drop-shadow(0 0 8px var(--blood-red));
-            animation: dragonSwim 25s linear infinite;
-        }
-
-        @keyframes dragonSwim {
-            0% { left: -400px; top: 20%; transform: rotate(10deg); }
-            50% { top: 40%; transform: rotate(-10deg); }
-            100% { left: 110%; top: 20%; transform: rotate(10deg); }
-        }
-
-        .kongming-container {
-            position: fixed;
-            bottom: -100px;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 4;
-        }
-
-        .kongming-lantern {
-            position: absolute;
-            width: 48px;
-            height: 62px;
-            background: radial-gradient(circle at bottom, #ff9900 0%, var(--blood-red) 80%);
-            border-radius: 10px 10px 50% 50% / 10px 10px 20% 20%;
-            box-shadow: 0 0 20px rgba(255, 153, 0, 0.6);
-            opacity: 0.7;
-            animation: riseUp var(--duration) linear infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 215, 0, 0.9);
-            font-size: 14px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            font-family: 'Zhi Mang Xing', cursive;
-            padding: 4px;
-            text-align: center;
-        }
-
-        @keyframes riseUp {
-            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            100% { transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)); opacity: 0; }
-        }
-
         .glow-text {
             color: var(--neon-gold);
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.5), 0 0 30px rgba(139, 0, 0, 0.3);
@@ -134,11 +51,6 @@
             background: var(--neon-gold);
             color: var(--blood-red);
             box-shadow: 0 0 30px var(--neon-gold);
-        }
-
-        .btn-rot:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
 
         .gen-container {
@@ -178,79 +90,27 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        .story-card {
-            background: rgba(20, 5, 5, 0.6);
-            border: 1px solid rgba(139, 0, 0, 0.3);
-            transition: all 0.4s ease;
-        }
-
-        .story-card:hover {
-            border-color: var(--neon-gold);
-            background: rgba(40, 5, 5, 0.8);
-            transform: translateY(-5px);
-        }
-        
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--blood-red), transparent);
-            margin: 4rem 0;
-        }
-
-        #dexscreener-embed {
-            position: relative;
-            width: 100%;
-            padding-bottom: 125%;
-            margin-top: 50px;
-            border: 1px solid var(--blood-red);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        @media(min-width:1400px) {
-            #dexscreener-embed { padding-bottom: 65%; }
-        }
-        #dexscreener-embed iframe {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            border: 0;
-        }
     </style>
 </head>
 <body>
 
-    <div class="psychedelic-bg"></div>
-    <div class="ink-stain" style="top: -10%; left: -10%;"></div>
-    <div class="ink-stain" style="bottom: -10%; right: -10%;"></div>
-
-    <div class="dragon-layer">
-        <svg class="dragon-snake" viewBox="0 0 200 60">
-            <path d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" stroke="var(--neon-gold)" fill="none" stroke-width="2" stroke-dasharray="5,2" opacity="0.6"/>
-        </svg>
-    </div>
-
-    <div class="kongming-container" id="lantern-field"></div>
-
-    <nav class="pt-24 pb-8 px-8 flex justify-between items-center relative z-10">
+    <nav class="pt-12 pb-8 px-8 flex justify-between items-center relative z-10">
         <div class="text-3xl md:text-5xl glow-text calligraphy-font">【 $CHINESEROT 】</div>
         <div class="flex gap-6 text-xs font-bold uppercase tracking-widest text-yellow-500">
-            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="hover:text-white">X</a>
-            <a href="https://t.me/+vmw7T6AL9FZjMzRk" target="_blank" class="hover:text-white">Telegram</a>
+            <a href="#" class="hover:text-white">X</a>
+            <a href="#" class="hover:text-white">TG</a>
         </div>
     </nav>
 
     <main class="container mx-auto px-4 pt-12 text-center relative z-10 pb-40">
         
         <div class="mb-20">
-            <h1 class="text-7xl md:text-[10rem] glow-text calligraphy-font mb-4">Chinese Rot</h1>
-            <p class="text-xl md:text-2xl text-red-100/80 italic calligraphy-font max-w-2xl mx-auto">
-                "The algorithm rots. The forest provides."
+            <h1 class="text-6xl md:text-9xl glow-text calligraphy-font mb-4">Chinese Rot</h1>
+            <p class="text-xl text-red-100/80 italic calligraphy-font max-w-2xl mx-auto">
+                "The algorithm decays. The forest provides."
             </p>
         </div>
 
-        <!-- GENERATOR SECTION -->
         <section class="max-w-4xl mx-auto mb-32">
             <div class="gen-container p-6 md:p-10 rounded-lg grid md:grid-cols-2 gap-10 items-center">
                 <div class="image-display rounded" id="gen-result">
@@ -259,7 +119,7 @@
                 <div class="text-left space-y-6">
                     <h2 class="text-3xl text-yellow-500 calligraphy-font">The ROT Generator</h2>
                     <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
-                        Generate your own unique <strong>$CHINESEROT</strong> with our randomized ROT Generator, featuring the latest neural hallucinations.
+                        Summon a digital hallucination from the depths of the moss.
                     </p>
                     <button id="gen-trigger" class="btn-rot w-full py-6 text-xl">Summon My Rot</button>
                     <p id="gen-status" class="text-[10px] text-red-800 uppercase tracking-widest text-center h-4"></p>
@@ -267,176 +127,68 @@
             </div>
         </section>
 
-        <!-- CA SECTION -->
-        <div class="max-w-3xl mx-auto mb-32">
+        <div class="max-w-3xl mx-auto">
             <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-red-900 p-6 rounded flex flex-col md:flex-row items-center justify-between gap-4 transition-transform hover:scale-[1.02]">
                 <span class="text-red-600 font-bold">CA:</span>
                 <code class="text-yellow-500 font-mono text-xs md:text-base">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
                 <span class="text-xs bg-red-900 text-white px-3 py-1 rounded">COPY</span>
             </div>
-            <p id="copy-msg" class="text-yellow-500 text-xs mt-2 opacity-0 transition-opacity uppercase font-bold">Copied to clipboard</p>
         </div>
-
-        <div class="divider"></div>
-
-        <!-- STORY SECTION -->
-        <section class="max-w-6xl mx-auto mb-40 text-left px-6">
-            <h2 class="text-5xl md:text-7xl glow-text calligraphy-font mb-16 text-center">Chronicles of the Moss</h2>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="story-card p-8 rounded-lg">
-                    <div class="text-4xl mb-4">🪷</div>
-                    <h3 class="text-2xl text-yellow-500 calligraphy-font mb-4">The First Sprout</h3>
-                    <p class="text-sm text-gray-400 leading-relaxed font-light">
-                        In the year of the Digital Cicada, a single line of code began to decay. It didn't break; it transformed. The first Rot Cat crawled out of a pixelated bamboo stalk, carrying the $CHINESEROT ticker on its back like a sacred seal.
-                    </p>
-                </div>
-
-                <div class="story-card p-8 rounded-lg">
-                    <div class="text-4xl mb-4">🏮</div>
-                    <h3 class="text-2xl text-yellow-500 calligraphy-font mb-4">The Lantern Path</h3>
-                    <p class="text-sm text-gray-400 leading-relaxed font-light">
-                        Legend says those who follow the red lanterns deep into the Forest of Decay find the algorithm's end. Here, logic fails and "Brain Rot" becomes the only true wisdom. $CHINESEROT is the currency used to pay the moss-spirits for safe passage.
-                    </p>
-                </div>
-
-                <div class="story-card p-8 rounded-lg">
-                    <div class="text-4xl mb-4">🐸</div>
-                    <h3 class="text-2xl text-yellow-500 calligraphy-font mb-4">The Great Fermentation</h3>
-                    <p class="text-sm text-gray-400 leading-relaxed font-light">
-                        Reality is just a fruit that stayed on the branch too long. We embrace the rot. Every transaction strengthens the moss. Every holder becomes a guardian of the uncanny. The forest grows larger with every "Meow" in the dark.
-                    </p>
-                </div>
-            </div>
-
-            <div class="mt-16 p-10 border-l-2 border-yellow-600 bg-red-950/20 italic text-xl md:text-2xl text-red-200/70 calligraphy-font">
-                "Do not fear the melting mind. In the rot, there is no more noise, only the rhythm of the ticker."
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- CHART SECTION -->
-        <section class="max-w-5xl mx-auto mb-32">
-            <h3 class="text-3xl text-yellow-600 mb-8 calligraphy-font">The Market Pulse</h3>
-            <div id="dexscreener-embed">
-                <iframe src="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartTheme=dark&theme=dark&chartStyle=1&chartType=marketCap&interval=5"></iframe>
-            </div>
-        </section>
-
-        <!-- VIDEOS -->
-        <section class="max-w-md mx-auto mb-32">
-            <h3 class="text-2xl text-yellow-600 mb-8 calligraphy-font">Visions</h3>
-            <div class="video-carousel" id="rot-carousel">
-                <div class="video-item">
-                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215">
-                        <section></section>
-                    </blockquote>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER INFO -->
-        <footer class="mt-40 opacity-30 text-[10px] tracking-widest uppercase pb-20">
-            <p>$CHINESEROT is a decentralized experiment in digital decay.</p>
-            <p class="mt-2">No roadmaps. Only moss. Only Rot.</p>
-        </footer>
 
     </main>
 
-    <script async src="https://www.tiktok.com/embed.js"></script>
     <script>
-        // Use provided API key or environment key
-        const prodKey = "AIzaSyCxHO8s_g8ScXq3qDPe-cA-UCMy7OTK6oQ";
-        const apiKey = (typeof __app_id !== 'undefined') ? "" : prodKey; 
+        // Updated with the latest provided API Key
+        const apiKey = "AIzaSyCxHO8s_g8ScXq3qDPe-cA-UCMy7OTK6oQ"; 
         
         const genTrigger = document.getElementById('gen-trigger');
         const genResult = document.getElementById('gen-result');
         const genStatus = document.getElementById('gen-status');
 
-        const creatures = ["cat", "hamster", "axolotl", "capybara", "shrimp", "gremlin", "red panda", "blobfish", "frog", "panda"];
-        const costumes = ["avocado shell", "peeled banana", "rotten pumpkin", "giant strawberry", "ramen bowl", "bamboo stalk", "moss-covered armor", "lotus leaf"];
-        const placements = [
-            "the text '$CHINESEROT' is a glowing neon sign in the background",
-            "the creature is holding a wooden sign saying '$CHINESEROT' in bold letters",
-            "the ticker '$CHINESEROT' is spray painted in bright colors on the wall behind it",
-            "the creature has '$CHINESEROT' tattooed clearly on its arm/fur",
-            "the word '$CHINESEROT' is written in floating, glowing 3D holographic letters around the creature",
-            "the ticker '$CHINESEROT' is carved into the side of the creature's shell/costume",
-            "the creature is wearing a small gold medallion that says '$CHINESEROT'"
-        ];
-
-        async function fetchWithBackoff(url, options, maxRetries = 5) {
-            let delay = 1000;
-            for (let i = 0; i <= maxRetries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    
-                    if (response.ok) return response;
-                    
-                    const errorBody = await response.json().catch(() => ({}));
-                    console.error(`Attempt ${i+1} failed with status ${response.status}:`, errorBody);
-
-                    // Handle specific error codes
-                    if (response.status === 403) {
-                       throw new Error(`Forbidden (403): ${errorBody.error?.message || "Verify your API Key and enabled services."}`);
-                    }
-
-                    if (response.status === 429 || response.status >= 500) {
-                        if (i === maxRetries) throw new Error(`HTTP ${response.status}`);
-                        await new Promise(res => setTimeout(res, delay));
-                        delay *= 2;
-                        continue;
-                    }
-                    
-                    throw new Error(`HTTP ${response.status}: ${errorBody.error?.message || "Unknown error"}`);
-                } catch (err) {
-                    if (i === maxRetries) throw err;
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
-            }
-        }
+        const creatures = ["cat", "capybara", "shrimp", "axolotl", "frog"];
+        const costumes = ["ramen bowl", "bamboo armor", "lotus leaf hat", "glowing lantern"];
 
         async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
-            const placement = placements[Math.floor(Math.random() * placements.length)];
             
-            const prompt = `A weird ${creature} wearing a ${costume}. IMPORTANT: ${placement}. Brainrot aesthetic, hyper-saturated 3D render, uncanny, viral meme style, cinematic dramatic lighting, highly detailed textures, surreal Chinese forest setting.`;
+            const prompt = `A surreal and uncanny ${creature} wearing a ${costume}, sitting in a dark mossy Chinese forest, the text '$CHINESEROT' is glowing in the background, 3D render style, viral brainrot aesthetic, dramatic lighting.`;
 
-            genStatus.innerText = "FERMENTING REALITY...";
+            genStatus.innerText = "FERMENTING...";
             genTrigger.disabled = true;
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Ensure the correct model and endpoint are used as per Gemini technical specs
+                // Endpoint for imagen-4.0-generate-001
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
                 
-                const response = await fetchWithBackoff(url, {
+                const response = await fetch(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({
                         instances: [{ prompt: prompt }],
-                        parameters: { sampleCount: 1 }
+                        parameters: { 
+                            sampleCount: 1
+                        }
                     })
                 });
 
                 const data = await response.json();
-                
-                if (data.predictions && data.predictions[0]?.bytesBase64Encoded) {
+
+                if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
                     genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover">`;
                     genStatus.innerText = "MANIFESTED.";
-                } else if (data.error) {
-                    throw new Error(data.error.message);
                 } else {
-                    throw new Error("Invalid response format from API.");
+                    const errorDetails = data.error?.message || "Check API Key restrictions or safety filters.";
+                    throw new Error(errorDetails);
                 }
             } catch (err) {
-                console.error("Critical summoning error:", err);
-                genResult.innerHTML = `<div class="text-red-500 text-[10px] p-6 text-center uppercase">THE PORTAL IS CLOSED.<br><br>${err.message}</div>`;
-                genStatus.innerText = "ERROR IN THE MOSS.";
+                console.error("Summoning error:", err);
+                genResult.innerHTML = `<div class="text-red-500 text-[10px] p-6 text-center uppercase">Portal Closed:<br>${err.message}</div>`;
+                genStatus.innerText = "ERROR.";
             } finally {
                 genTrigger.disabled = false;
             }
@@ -452,27 +204,9 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            
-            const msg = document.getElementById('copy-msg');
-            msg.style.opacity = "1";
-            setTimeout(() => msg.style.opacity = "0", 2000);
+            genStatus.innerText = "COPIED TO CLIPBOARD";
+            setTimeout(() => genStatus.innerText = "", 2000);
         });
-
-        function createLantern() {
-            const container = document.getElementById('lantern-field');
-            if (!container) return;
-            
-            const l = document.createElement('div');
-            l.className = 'kongming-lantern';
-            l.style.left = Math.random() * 100 + 'vw';
-            l.style.setProperty('--duration', (Math.random() * 10 + 15) + 's');
-            l.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
-            l.style.setProperty('--rot', (Math.random() * 40 - 20) + 'deg');
-            l.innerText = "ROT";
-            container.appendChild(l);
-            setTimeout(() => l.remove(), 25000);
-        }
-        setInterval(createLantern, 3000);
     </script>
 </body>
 </html>
