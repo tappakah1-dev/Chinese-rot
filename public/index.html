@@ -149,7 +149,7 @@
             background: rgba(15, 2, 2, 0.9);
             border: 1px solid var(--neon-gold);
             position: relative;
-            /* Changed to absolute pixels to avoid aggressive cropping on tall cards */
+            /* Absolute pixels to avoid aggressive cropping on tall cards */
             clip-path: polygon(
                 0 16px, 16px 0, calc(100% - 16px) 0, 100% 16px, 
                 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px)
@@ -201,6 +201,7 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
             scroll-snap-type: x mandatory;
+            align-items: stretch; /* Forces all cards to stretch to the same height */
         }
         .carousel-container::-webkit-scrollbar { display: none; }
 
@@ -289,6 +290,9 @@
             transition: 0.3s;
             scroll-snap-align: center;
             overflow: hidden;
+            display: flex;
+            flex-direction: column; /* Allow content to flow naturally and fill height */
+            height: auto;
         }
         
         .gallery-card img {
@@ -466,14 +470,14 @@
                         return;
                     }
 
-                    // Added px-4 py-4 padding and increased substring length for better readability
+                    // Removed truncation CSS and JS substring entirely. Uses flex layout to allow multi-line text mapping.
                     galleryCarousel.innerHTML = docs.map(d => `
                         <div class="gallery-card group">
-                            <div class="overflow-hidden bg-red-950/20">
+                            <div class="overflow-hidden bg-red-950/20 shrink-0">
                                 <img src="${d.imageUrl}" loading="lazy" alt="Rot Summon">
                             </div>
-                            <div class="px-4 py-4 text-[11px] text-yellow-600/90 uppercase font-bold tracking-tight truncate">
-                                ${d.prompt.substring(0, 65)}...
+                            <div class="p-5 text-[11px] text-yellow-600/90 uppercase font-bold tracking-tight text-center flex-grow flex items-center justify-center leading-relaxed">
+                                ${d.prompt}
                             </div>
                         </div>
                     `).join('');
