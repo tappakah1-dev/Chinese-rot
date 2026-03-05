@@ -31,9 +31,9 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Reverted to imagen-3.0-generate-002
+        // Updated to use Gemini 4.0 (imagen-4.0-generate-001)
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`,
             {
                 method: "POST",
                 headers: {
