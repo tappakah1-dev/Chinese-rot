@@ -160,7 +160,6 @@
                     
                     if (response.ok) return { ok: true, data };
                     
-                    // If project/API not enabled or key error, return immediately
                     if (response.status === 403 || response.status === 400) {
                         return { ok: false, status: response.status, error: data.error };
                     }
@@ -180,15 +179,19 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Endpoint for Imagen 4 on Generative Language API
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+                // Endpoint for Gemini 2.5 Flash Image Preview on Generative Language API
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
                 
                 const result = await fetchWithBackoff(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        instances: [{ prompt: prompt }],
-                        parameters: { sampleCount: 1 }
+                        contents: [{
+                            parts: [{ text: prompt }]
+                        }],
+                        generationConfig: {
+                            responseModalities: ["IMAGE"]
+                        }
                     })
                 });
 
@@ -196,16 +199,17 @@
                     const msg = result.error?.message || "Unknown portal failure";
                     genStatus.innerHTML = `DECAY ERROR: ${msg}`;
                     genResult.innerHTML = `<div class="text-red-900 text-[10px] p-10 uppercase tracking-widest">Portal Obstructed</div>`;
-                    console.error("API Error Details:", result.error);
                     return;
                 }
 
-                if (result.data.predictions && result.data.predictions[0]) {
-                    const b64 = result.data.predictions[0].bytesBase64Encoded;
+                const imagePart = result.data.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+                
+                if (imagePart && imagePart.inlineData.data) {
+                    const b64 = imagePart.inlineData.data;
                     genResult.innerHTML = `<img src="data:image/png;base64,${b64}" class="fade-in w-full h-full object-cover">`;
                     genStatus.innerText = "ROT MANIFESTED.";
                 } else {
-                    throw new Error("No image data in response");
+                    throw new Error("No image data returned from Gemini 2.5");
                 }
 
             } catch (err) {
