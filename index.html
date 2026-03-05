@@ -12,6 +12,7 @@
             --neon-gold: #ffd700;
             --jade-green: #00a86b;
             --ink-black: #050505;
+            --paper-tan: #f4ecd8;
         }
 
         body {
@@ -19,8 +20,23 @@
             color: #e5e7eb;
             font-family: 'Noto Sans SC', sans-serif;
             overflow-x: hidden;
-            background: radial-gradient(circle at center, #1a0a0a 0%, #050505 100%);
+            background-image: 
+                radial-gradient(circle at center, rgba(139, 0, 0, 0.15) 0%, transparent 70%),
+                url("https://www.transparenttextures.com/patterns/dark-matter.png");
             line-height: 1.6;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(90deg, var(--blood-red) 2px, transparent 2px) 0 0,
+                linear-gradient(0deg, var(--blood-red) 2px, transparent 2px) 0 0;
+            background-size: 40px 40px;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .glow-text {
@@ -33,48 +49,72 @@
             font-family: 'Zhi Mang Xing', cursive;
         }
 
+        .dragon-container {
+            position: fixed;
+            top: 20%;
+            right: -100px;
+            width: 400px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+            animation: dragonFloat 15s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--blood-red));
+        }
+
+        @keyframes dragonFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-50px, 100px) rotate(5deg); }
+            50% { transform: translate(-100px, -50px) rotate(-5deg); }
+            75% { transform: translate(-50px, 50px) rotate(2deg); }
+        }
+
         .btn-rot {
             background: linear-gradient(45deg, var(--blood-red), #330000);
             color: var(--neon-gold);
             font-weight: 700;
             padding: 1rem 2rem;
-            border-radius: 4px;
-            border: 1px solid var(--neon-gold);
+            border-radius: 2px;
+            border: 2px solid var(--neon-gold);
             text-transform: uppercase;
             box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
             transition: 0.3s;
             letter-spacing: 2px;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-rot:hover:not(:disabled) {
             background: var(--neon-gold);
             color: var(--blood-red);
             box-shadow: 0 0 30px var(--neon-gold);
+            transform: scale(1.05);
+        }
+
+        .gen-container, .chart-container, .story-card {
+            background: rgba(15, 2, 2, 0.9);
+            border: 1px solid var(--neon-gold);
+            position: relative;
+            clip-path: polygon(
+                0 10%, 10% 0, 90% 0, 100% 10%, 
+                100% 90%, 90% 100%, 10% 100%, 0 90%
+            );
         }
 
         .gen-container {
-            background: rgba(10, 2, 2, 0.85);
-            border: 3px solid var(--blood-red);
-            box-shadow: 0 0 50px rgba(139,0,0,0.3);
-            position: relative;
+            border: 2px solid var(--neon-gold);
+            box-shadow: 0 0 40px rgba(139,0,0,0.5);
         }
 
         .image-display {
             width: 100%;
             aspect-ratio: 1;
             background: #000;
-            border: 2px solid #220000;
+            border: 1px solid var(--blood-red);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-        }
-
-        .image-display img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .loader {
@@ -90,63 +130,262 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .carousel-wrapper {
+            position: relative;
+            max-width: 100vw;
+        }
+
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 40px;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-snap-type: x mandatory;
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+
+        .carousel-card {
+            min-width: 325px;
+            background: #000;
+            border: 2px solid var(--blood-red);
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
+            transition: 0.3s;
+            scroll-snap-align: center;
+        }
+        .carousel-card:hover { 
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 30px var(--neon-gold);
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--blood-red);
+            color: var(--neon-gold);
+            border: 1px solid var(--neon-gold);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            font-size: 1.5rem;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--neon-gold);
+            color: var(--blood-red);
+        }
+
+        .nav-left { left: 10px; }
+        .nav-right { right: 10px; }
+
+        .story-border {
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            background-image: radial-gradient(circle at top right, rgba(139, 0, 0, 0.2), transparent);
+            padding: 2.5rem;
+        }
+
+        .stamp {
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--blood-red);
+            color: var(--blood-red);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Zhi Mang Xing';
+            font-size: 1.2rem;
+            transform: rotate(-15deg);
+            margin-bottom: 1rem;
+            font-weight: bold;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .lantern {
+            position: absolute;
+            color: var(--blood-red);
+            font-size: 3rem;
+            opacity: 0.6;
+            animation: swing 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes swing {
+            from { transform: rotate(-5deg); }
+            to { transform: rotate(5deg); }
+        }
     </style>
+    <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
 <body>
 
-    <nav class="pt-12 pb-8 px-8 flex justify-between items-center relative z-10">
-        <div class="text-3xl md:text-5xl glow-text calligraphy-font">【 $CHINESEROT 】</div>
-        <div class="flex gap-6 text-xs font-bold uppercase tracking-widest text-yellow-500">
-            <a href="#" class="hover:text-white">X</a>
-            <a href="#" class="hover:text-white">TG</a>
+    <div class="dragon-container">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50C10 50 20 20 40 30C60 40 80 10 90 50C100 90 60 80 40 70C20 60 10 80 10 50Z" stroke="#8b0000" stroke-width="0.5" stroke-dasharray="2 2" />
+            <text font-family="Zhi Mang Xing" font-size="8" fill="#8b0000" opacity="0.8">
+                <textPath href="#dragon-path">DRAGON DRAGON DRAGON DRAGON DRAGON</textPath>
+            </text>
+            <path id="dragon-path" d="M10 80 Q 25 10 50 50 T 90 20" fill="transparent" />
+            <text x="75" y="25" fill="#ffd700" font-size="25">🐲</text>
+        </svg>
+    </div>
+
+    <div class="lantern top-10 left-10">🏮</div>
+    <div class="lantern top-10 right-10">🏮</div>
+
+    <nav class="pt-16 pb-8 px-8 flex justify-between items-center relative z-10 border-b border-red-900/30">
+        <div class="text-4xl md:text-6xl glow-text calligraphy-font">
+            <span class="text-red-600 mr-2">ROT</span> $CHINESEROT
+        </div>
+        <div class="flex gap-8 text-sm font-bold uppercase tracking-widest text-yellow-500">
+            <a href="https://x.com" target="_blank" class="hover:text-white transition-colors">Twitter (X)</a>
+            <a href="https://t.me" target="_blank" class="hover:text-white transition-colors">Telegram</a>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 pt-12 text-center relative z-10 pb-40">
+    <main class="container mx-auto px-4 pt-16 text-center relative z-10 pb-40">
         
-        <div class="mb-20">
-            <h1 class="text-6xl md:text-9xl glow-text calligraphy-font mb-4">Chinese Rot</h1>
-            <p class="text-xl text-red-100/80 italic calligraphy-font max-w-2xl mx-auto">
-                "The algorithm decays. The forest provides."
+        <div class="mb-24">
+            <div class="inline-block border-y-2 border-yellow-600 py-4 px-12 mb-6">
+                <h1 class="text-7xl md:text-[10rem] glow-text calligraphy-font leading-none">Chinese Rot</h1>
+            </div>
+            <p class="text-2xl text-red-100/80 italic calligraphy-font max-w-2xl mx-auto tracking-widest">
+                "The algorithm decays. The forest provides. The dragon watches."
             </p>
         </div>
 
-        <section class="max-w-4xl mx-auto mb-32">
-            <div class="gen-container p-6 md:p-10 rounded-lg grid md:grid-cols-2 gap-10 items-center">
-                <div class="image-display rounded" id="gen-result">
-                    <div class="text-red-900/40 text-xs italic">Awaiting Summoning...</div>
-                </div>
-                <div class="text-left space-y-6">
-                    <h2 class="text-3xl text-yellow-500 calligraphy-font">The ROT Generator</h2>
-                    <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
-                        Summon a digital hallucination from the depths of the moss.
-                    </p>
-                    <button id="gen-trigger" class="btn-rot w-full py-6 text-xl">Summon My Rot</button>
-                    <div id="gen-status" class="text-[10px] text-red-500 font-bold uppercase tracking-widest text-center min-h-[20px] bg-black/40 p-1 rounded mt-2"></div>
+        <!-- Generator Section -->
+        <section class="max-w-5xl mx-auto mb-40">
+            <div class="gen-container p-1 md:p-1 rounded-sm">
+                <div class="bg-black p-8 md:p-12 grid md:grid-cols-2 gap-12 items-center">
+                    <div class="image-display rounded border-2 border-yellow-900/50" id="gen-result">
+                        <div class="text-red-900/60 text-sm italic calligraphy-font text-2xl">Awaiting Summoning...</div>
+                    </div>
+                    <div class="text-left space-y-8">
+                        <div class="flex items-center gap-4">
+                            <div class="h-px flex-1 bg-yellow-600"></div>
+                            <h2 class="text-4xl text-yellow-500 calligraphy-font">Summoning Ritual</h2>
+                            <div class="h-px flex-1 bg-yellow-600"></div>
+                        </div>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
+                            Summon a digital hallucination from the depths of the moss. Burn your spirit to see the rot.
+                        </p>
+                        <button id="gen-trigger" class="btn-rot w-full py-8 text-2xl calligraphy-font">
+                            Summon My Rot
+                        </button>
+                        <div id="gen-status" class="text-xs text-red-500 font-bold uppercase tracking-widest text-center min-h-[24px] bg-red-950/20 py-2 border border-red-900/30"></div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Video Carousel Section (Visual Decay) -->
+        <section class="mb-40 py-10 relative">
+            <div class="mb-12">
+                <h2 class="text-4xl text-yellow-500 calligraphy-font mb-2">Visual Decay</h2>
+                <h3 class="text-red-600 tracking-[0.5em] uppercase text-xs font-bold">Visual Decay Timeline</h3>
+            </div>
+            
+            <div class="carousel-wrapper">
+                <button class="nav-btn nav-left" id="slide-left" aria-label="Slide Left">❮</button>
+                <div class="carousel-container" id="video-carousel">
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7459703700727090439" data-video-id="7459703700727090439"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7512387823685668114" data-video-id="7512387823685668114"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7525004521790262536" data-video-id="7525004521790262536"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7480460726088453384" data-video-id="7480460726088453384"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7311259741861203208" data-video-id="7311259741861203208"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7486412110096911624" data-video-id="7486412110096911624"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7359126837311606024" data-video-id="7359126837311606024"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                </div>
+                <button class="nav-btn nav-right" id="slide-right" aria-label="Slide Right">❯</button>
+            </div>
+        </section>
+
+        <!-- Story Telling Section -->
+        <section class="max-w-5xl mx-auto mb-40 px-6">
+            <h2 class="text-5xl glow-text mb-16 text-center calligraphy-font">The Scrolls of Decay</h2>
+            <div class="grid md:grid-cols-2 gap-16 text-left">
+                <div class="story-card rounded story-border">
+                    <div class="stamp">SOURCE</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Origin</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        Deep within the partitioned sectors of the old internet, a new lifeform began to sprout. It was the Rot—a digital mycelium feeding on the abandoned fragments of our collective past.
+                    </p>
+                </div>
+                <div class="story-card rounded story-border">
+                    <div class="stamp">FOREST</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Forest</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        The forest is an anomaly where time moves in infinite loops. Bamboo shoots grow from fiber-optic cables, and the dragon's breath smells of ozone and ancient ink.
+                    </p>
+                </div>
+                <div class="story-card rounded story-border md:col-span-2">
+                    <div class="stamp">SUMMON</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Summoning</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        By burning the $CHINESEROT token, you manifest a piece of the forest in our realm. Every image is a fragment of a memory that never was, processed through the decaying logic of the digital dragon.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="max-w-6xl mx-auto mb-40">
+            <h2 class="text-4xl text-yellow-500 mb-12 calligraphy-font">Algorithmic Pulse</h2>
+            <div class="chart-container rounded-sm overflow-hidden h-[600px] border-2 border-yellow-600">
+                <style>#dexscreener-embed{position:relative;width:100%;padding-bottom:125%;}@media(min-width:1401px){#dexscreener-embed{padding-bottom:600px;}}#dexscreener-embed iframe{position:absolute;width:100%;height:100%;top:0;left:0;border:0;}</style>
+                <div id="dexscreener-embed">
+                    <iframe src="https://dexscreener.com/solana/5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump?embed=1&theme=dark&trades=0&info=0"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contract Address -->
         <div class="max-w-3xl mx-auto">
-            <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-red-900 p-6 rounded flex flex-col md:flex-row items-center justify-between gap-4 transition-transform hover:scale-[1.02]">
-                <span class="text-red-600 font-bold">CA:</span>
-                <code class="text-yellow-500 font-mono text-xs md:text-base">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
-                <span class="text-xs bg-red-900 text-white px-3 py-1 rounded">COPY</span>
+            <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-yellow-600 p-8 rounded flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:shadow-[0_0_50px_rgba(255,215,0,0.2)]">
+                <div class="flex items-center gap-4">
+                    <span class="text-red-600 font-bold calligraphy-font text-3xl">CA</span>
+                    <div class="h-8 w-px bg-yellow-900"></div>
+                </div>
+                <code class="text-yellow-500 font-mono text-sm md:text-lg tracking-widest">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
+                <span class="text-xs bg-yellow-600 text-black font-bold px-6 py-2 uppercase tracking-tighter">Copy Scroll</span>
             </div>
         </div>
 
     </main>
 
     <script>
-        // Updated with your new API Key
-        const apiKey = "AIzaSyCQeLh5NmTytoxXipYDhdbvCSavPqyt7S8"; 
+        const apiKey = ""; // Set by environment
         
         const genTrigger = document.getElementById('gen-trigger');
         const genResult = document.getElementById('gen-result');
         const genStatus = document.getElementById('gen-status');
+        const videoCarousel = document.getElementById('video-carousel');
+        const slideLeft = document.getElementById('slide-left');
+        const slideRight = document.getElementById('slide-right');
 
-        const creatures = ["cat", "capybara", "shrimp", "axolotl", "frog"];
-        const costumes = ["ramen bowl", "bamboo armor", "lotus leaf hat", "glowing lantern"];
+        slideLeft.onclick = () => {
+            videoCarousel.scrollBy({ left: -345, behavior: 'smooth' });
+        };
+        slideRight.onclick = () => {
+            videoCarousel.scrollBy({ left: 345, behavior: 'smooth' });
+        };
+
+        const creatures = ["cat", "capybara", "dragon", "koi fish", "panda"];
+        const costumes = ["traditional silk robe", "bamboo armor", "terracotta mask", "glowing paper lantern"];
 
         async function fetchWithRetry(url, options, maxRetries = 5) {
             let delay = 1000;
@@ -171,14 +410,13 @@
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
             
-            const promptText = `A surreal and uncanny ${creature} wearing a ${costume}, sitting in a dark mossy Chinese forest, the text '$CHINESEROT' is glowing in the background, 3D render style, viral brainrot aesthetic, dramatic lighting.`;
+            const promptText = `A surreal and uncanny ${creature} wearing a ${costume}, sitting in a dark mossy Chinese forest, the text '$CHINESEROT' is glowing in the background, 3D render style, viral brainrot aesthetic, dramatic red and gold lighting, traditional Chinese ink painting influence.`;
 
-            genStatus.innerText = "FERMENTING...";
+            genStatus.innerText = "FERMENTING IN THE ABYSS...";
             genTrigger.disabled = true;
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Using the imagen-4.0-generate-001 model predict endpoint
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
                 
                 const response = await fetchWithRetry(url, {
@@ -194,14 +432,10 @@
 
                 if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover animate-pulse">`;
+                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover">`;
                     genStatus.innerText = "MANIFESTED.";
-                    setTimeout(() => genResult.querySelector('img').classList.remove('animate-pulse'), 1000);
-                } else if (response.status === 403) {
-                    throw new Error("403 Forbidden: Ensure Billing is enabled and Vertex AI API is turned ON.");
                 } else {
-                    const msg = data.error?.message || "Check API Key restrictions or safety filters.";
-                    throw new Error(msg);
+                    throw new Error(data.error?.message || "Safety filters triggered by the Rot.");
                 }
             } catch (err) {
                 console.error("Summoning error:", err);
@@ -222,7 +456,7 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            genStatus.innerText = "COPIED TO CLIPBOARD";
+            genStatus.innerText = "SCROLL COPIED.";
             setTimeout(() => genStatus.innerText = "", 2000);
         });
     </script>
