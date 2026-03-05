@@ -346,7 +346,6 @@
 
     <script async src="https://www.tiktok.com/embed.js"></script>
     <script>
-        // Use provided API key for external use; environment will provide the actual runtime key internally.
         const providedKey = "AIzaSyBLZ_4El_UKsWL1H4OQGJekZjIesYkqpZg";
         const apiKey = (typeof __app_id !== 'undefined') ? "" : providedKey; 
         
@@ -366,7 +365,6 @@
             "the creature is wearing a small gold medallion that says '$CHINESEROT'"
         ];
 
-        // Mandatory Exponential Backoff helper
         async function fetchWithBackoff(url, options, maxRetries = 5) {
             let delay = 1000;
             for (let i = 0; i <= maxRetries; i++) {
@@ -374,6 +372,11 @@
                     const response = await fetch(url, options);
                     if (response.ok) return response;
                     
+                    if (response.status === 403) {
+                       // Direct 403 often means restricted access or wrong endpoint version
+                       throw new Error("Access Forbidden (403). Ensure API key is enabled for Generative Language API and endpoint is correct.");
+                    }
+
                     if (response.status === 429 || response.status >= 500) {
                         if (i === maxRetries) throw new Error(`HTTP ${response.status}`);
                         await new Promise(res => setTimeout(res, delay));
@@ -402,8 +405,8 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Correct model and endpoint for image generation
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+                // Use v1 endpoint for standard API keys to avoid 403/Unstable portal errors in some regions
+                const url = `https://generativelanguage.googleapis.com/v1/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
                 
                 const response = await fetchWithBackoff(url, {
                     method: 'POST',
@@ -427,7 +430,7 @@
                 }
             } catch (err) {
                 console.error("Summoning failed:", err);
-                genResult.innerHTML = `<div class="text-red-500 text-xs p-10">THE PORTAL IS UNSTABLE.<br><small>${err.message}</small></div>`;
+                genResult.innerHTML = `<div class="text-red-500 text-xs p-10 text-center uppercase">THE PORTAL IS CLOSED.<br><small>${err.message}</small></div>`;
                 genStatus.innerText = "ERROR IN THE MOSS.";
             } finally {
                 genTrigger.disabled = false;
@@ -436,7 +439,6 @@
 
         genTrigger.addEventListener('click', generateRot);
 
-        // Copy CA function
         document.getElementById('ca-copy').addEventListener('click', () => {
             const txt = "5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump";
             const el = document.createElement('textarea');
@@ -451,7 +453,6 @@
             setTimeout(() => msg.style.opacity = "0", 2000);
         });
 
-        // Lantern Animation
         function createLantern() {
             const container = document.getElementById('lantern-field');
             if (!container) return;
