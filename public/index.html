@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+SC:wght@300;700&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDKs (Compat Version for easiest integration) -->
+    <!-- Firebase SDKs (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
@@ -95,6 +95,12 @@
             color: var(--blood-red);
             box-shadow: 0 0 30px var(--neon-gold);
             transform: scale(1.05);
+        }
+
+        .btn-rot:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
         }
 
         .btn-axiom {
@@ -299,9 +305,6 @@
     <div class="dragon-container">
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 50C10 50 20 20 40 30C60 40 80 10 90 50C100 90 60 80 40 70C20 60 10 80 10 50Z" stroke="#8b0000" stroke-width="0.5" stroke-dasharray="2 2" />
-            <text font-family="Zhi Mang Xing" font-size="8" fill="#8b0000" opacity="0.8">
-                <textPath href="#dragon-path">DRAGON DRAGON DRAGON DRAGON DRAGON</textPath>
-            </text>
             <path id="dragon-path" d="M10 80 Q 25 10 50 50 T 90 20" fill="transparent" />
             <text x="75" y="25" fill="#ffd700" font-size="25">🐲</text>
         </svg>
@@ -334,7 +337,7 @@
 
         <!-- Generator Section -->
         <section class="max-w-5xl mx-auto mb-12">
-            <div class="gen-container p-1 md:p-1 rounded-sm">
+            <div class="gen-container p-1 rounded-sm">
                 <div class="bg-black p-8 md:p-12 grid md:grid-cols-2 gap-12 items-center">
                     <div class="image-display rounded border-2 border-yellow-900/50" id="gen-result">
                         <div class="text-red-900/60 text-sm italic calligraphy-font text-2xl">Awaiting Summoning...</div>
@@ -383,7 +386,7 @@
             <div class="carousel-wrapper">
                 <button class="nav-btn nav-left" id="gallery-left">❮</button>
                 <div id="community-gallery" class="carousel-container">
-                    <div class="text-red-900/40 calligraphy-font col-span-full py-20 text-xl italic tracking-widest w-full">Observing the roots...</div>
+                    <div class="text-red-900/40 calligraphy-font col-span-full py-20 text-xl italic tracking-widest w-full text-center">Observing the roots...</div>
                 </div>
                 <button class="nav-btn nav-right" id="gallery-right">❯</button>
             </div>
@@ -399,57 +402,14 @@
             <div class="carousel-wrapper">
                 <button class="nav-btn nav-left" id="slide-left" aria-label="Slide Left">❮</button>
                 <div class="carousel-container" id="video-carousel">
+                    <!-- TikTok Embeds... -->
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7459703700727090439" data-video-id="7459703700727090439"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7512387823685668114" data-video-id="7512387823685668114"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
-                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7525004521790262536" data-video-id="7525004521790262536"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
-                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7480460726088453384" data-video-id="7480460726088453384"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
-                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7311259741861203208" data-video-id="7311259741861203208"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
-                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7486412110096911624" data-video-id="7486412110096911624"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
-                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7359126837311606024" data-video-id="7359126837311606024"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                 </div>
                 <button class="nav-btn nav-right" id="slide-right" aria-label="Slide Right">❯</button>
-            </div>
-        </section>
-
-        <!-- Story Telling Section -->
-        <section class="max-w-5xl mx-auto mb-40 px-6">
-            <h2 class="text-5xl glow-text mb-16 text-center calligraphy-font">The Scrolls of Decay</h2>
-            <div class="grid md:grid-cols-2 gap-16 text-left">
-                <div class="story-card rounded story-border">
-                    <div class="stamp">SOURCE</div>
-                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Origin</h3>
-                    <p class="text-gray-400 italic leading-relaxed">
-                        Deep within the partitioned sectors of the old internet, a new lifeform began to sprout. It was the Rot—a digital mycelium feeding on the abandoned fragments of our collective past.
-                    </p>
-                </div>
-                <div class="story-card rounded story-border">
-                    <div class="stamp">FOREST</div>
-                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Forest</h3>
-                    <p class="text-gray-400 italic leading-relaxed">
-                        The forest is an anomaly where time moves in infinite loops. Bamboo shoots grow from fiber-optic cables, and the dragon's breath smells of ozone and ancient ink.
-                    </p>
-                </div>
-                <div class="story-card rounded story-border md:col-span-2">
-                    <div class="stamp">SUMMON</div>
-                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Summoning</h3>
-                    <p class="text-gray-400 italic leading-relaxed">
-                        By burning the $CHINESEROT token, you manifest a piece of the forest in our realm. Every image is a fragment of a memory that never was, processed through the decaying logic of the digital dragon.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Chart Section -->
-        <section class="max-w-6xl mx-auto mb-40">
-            <h2 class="text-4xl text-yellow-500 mb-12 calligraphy-font">Algorithmic Pulse</h2>
-            <div class="chart-container rounded-sm overflow-hidden h-[600px] border-2 border-yellow-600">
-                <style>#dexscreener-embed{position:relative;width:100%;padding-bottom:125%;}@media(min-width:1401px){#dexscreener-embed{padding-bottom:600px;}}#dexscreener-embed iframe{position:absolute;width:100%;height:100%;top:0;left:0;border:0;}</style>
-                <div id="dexscreener-embed">
-                    <iframe src="https://dexscreener.com/solana/5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump?embed=1&theme=dark&trades=0&info=0"></iframe>
-                </div>
             </div>
         </section>
 
@@ -484,7 +444,6 @@
 
         galleryLeft.onclick = () => { galleryCarousel.scrollBy({ left: -320, behavior: 'smooth' }); };
         galleryRight.onclick = () => { galleryCarousel.scrollBy({ left: 320, behavior: 'smooth' }); };
-
         slideLeft.onclick = () => { videoCarousel.scrollBy({ left: -345, behavior: 'smooth' }); };
         slideRight.onclick = () => { videoCarousel.scrollBy({ left: 345, behavior: 'smooth' }); };
 
@@ -492,8 +451,6 @@
         async function setupCommunity() {
             try {
                 await auth.signInAnonymously();
-                
-                const galleryEl = document.getElementById('community-gallery');
                 const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
                 
                 creationsRef.onSnapshot((snapshot) => {
@@ -501,11 +458,11 @@
                     docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
                     
                     if (docs.length === 0) {
-                        galleryEl.innerHTML = '<div class="text-gray-800 italic py-20 w-full text-center tracking-[1em] uppercase">THE FOREST IS SLEEPING</div>';
+                        galleryCarousel.innerHTML = '<div class="text-gray-800 italic py-20 w-full text-center tracking-[1em] uppercase">THE FOREST IS SLEEPING</div>';
                         return;
                     }
 
-                    galleryEl.innerHTML = docs.map(d => `
+                    galleryCarousel.innerHTML = docs.map(d => `
                         <div class="gallery-card group">
                             <div class="overflow-hidden bg-red-950/20">
                                 <img src="${d.imageUrl}" loading="lazy" alt="Rot Summon">
@@ -515,63 +472,77 @@
                             </div>
                         </div>
                     `).join('');
-                }, err => {
-                    console.error("Gallery Sync Fail", err);
-                });
-            } catch (err) {
-                console.error("Auth Fail", err);
-            }
+                }, err => console.error("Gallery Sync Fail", err));
+            } catch (err) { console.error("Auth Fail", err); }
         }
         setupCommunity();
 
-        // Updated Prompt Components for Gemini 3.0 / Imagen 3
-        const creatures = ["mythological dragon", "shiba inu", "giant panda", "capybara", "koi fish", "immortal crane", "qilin", "mechanical red panda", "cybernetic tiger", "mystical toad"];
-        const costumes = ["intricate silk hanfu", "bamboo battle armor", "golden emperor crown", "glowing neon opera mask", "traditional straw hat with floating charms", "jade-encrusted robes"];
-        const settings = ["a dark misty Chinese forest with glowing moss", "an ancient mountain temple at night", "a digital bamboo grove with fiber-optic shoots", "a crumbling red palace bridge under a crimson moon"];
-        const styles = ["surreal high-fidelity 3D", "cinematic concept art", "hyper-detailed digital decay", "traditional ink painting blended with futuristic glitch art"];
-        const lighting = ["dramatic gold and crimson lighting", "eerie bioluminescent jade glow", "shimmering purple moonlight and ozone", "volumetric fog with firefly light"];
-        const shareTexts = ["The algorithm decays. $CHINESEROT", "I have summoned the rot via Portal 3.0. $CHINESEROT", "Witness the high-fidelity summoning. $CHINESEROT"];
+        // --- GENERATOR LOGIC (ROBUST IMPLEMENTATION) ---
+        const creatures = ["mythological dragon", "shiba inu", "giant panda", "capybara", "koi fish", "qilin", "cybernetic tiger"];
+        const costumes = ["intricate silk hanfu", "bamboo battle armor", "golden crown", "glowing neon opera mask", "jade robes"];
+        const settings = ["a dark misty Chinese forest with glowing moss", "an ancient mountain temple", "a digital bamboo grove"];
+        const styles = ["surreal high-fidelity 3D", "cinematic concept art", "hyper-detailed digital decay"];
+        const lighting = ["dramatic gold and crimson lighting", "eerie bioluminescent jade glow"];
+
+        /**
+         * Robust fetch implementation to solve JSON parsing and 500 errors.
+         */
+        async function fetchWithRetry(url, options, retries = 5, backoff = 1000) {
+            try {
+                const response = await fetch(url, options);
+
+                // Handle server errors and rate limits with backoff
+                if (!response.ok) {
+                    if (retries > 0 && (response.status >= 500 || response.status === 429)) {
+                        await new Promise(r => setTimeout(r, backoff));
+                        return fetchWithRetry(url, options, retries - 1, backoff * 2);
+                    }
+                    throw new Error(`Portal status: ${response.status}`);
+                }
+
+                // Pre-check Content-Type
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new Error("Portal returned non-JSON data.");
+                }
+
+                // Safe parsing of text body
+                const rawBody = await response.text();
+                if (!rawBody) throw new Error("Empty response from the forest.");
+
+                try {
+                    return JSON.parse(rawBody);
+                } catch (e) {
+                    throw new Error("Malformed JSON: Unexpected end of input");
+                }
+            } catch (err) {
+                if (retries > 0) {
+                    await new Promise(r => setTimeout(r, backoff));
+                    return fetchWithRetry(url, options, retries - 1, backoff * 2);
+                }
+                throw err;
+            }
+        }
 
         async function generateRot() {
-            const creature = creatures[Math.floor(Math.random() * creatures.length)];
-            const costume = costumes[Math.floor(Math.random() * costumes.length)];
-            const setting = settings[Math.floor(Math.random() * settings.length)];
-            const style = styles[Math.floor(Math.random() * styles.length)];
-            const light = lighting[Math.floor(Math.random() * lighting.length)];
-            
-            // Refined prompt for Imagen 3.0 logic
-            const promptText = `A ${style} of a ${creature} wearing ${costume}, situated in ${setting}. ${light}, cinematic composition, 8k resolution, photorealistic textures, atmospheric perspective, '$CHINESEROT' etched into a stone in the foreground.`;
+            const promptText = `A ${styles[Math.floor(Math.random()*styles.length)]} of a ${creatures[Math.floor(Math.random()*creatures.length)]} wearing ${costumes[Math.floor(Math.random()*costumes.length)]}, in ${settings[Math.floor(Math.random()*settings.length)]}. ${lighting[Math.floor(Math.random()*lighting.length)]}, photorealistic textures, '$CHINESEROT' etched into stone.`;
 
             genStatus.innerText = "ACCESSING PORTAL 3.0...";
+            genStatus.style.color = "var(--neon-gold)";
             genTrigger.disabled = true;
             shareX.style.display = 'none';
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                const fetchWithRetry = async (retries = 3) => {
-                    const response = await fetch('/api/summon-rot', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: promptText })
-                    });
+                // Adjusting endpoint to match your environment expectations
+                // If using a local /api, ensure the server is responding correctly
+                const data = await fetchWithRetry('/api/summon-rot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: promptText })
+                });
 
-                    if (!response.ok) {
-                        if (response.status === 429 && retries > 0) {
-                            await new Promise(r => setTimeout(r, 2000));
-                            return fetchWithRetry(retries - 1);
-                        }
-                        throw new Error(`Portal status: ${response.status}`);
-                    }
-
-                    const rawText = await response.text();
-                    if (!rawText) throw new Error("The forest returned silence.");
-                    return JSON.parse(rawText);
-                };
-
-                const data = await fetchWithRetry();
-
-                // UPDATED FOR GEMINI 3.0 BACKEND STRUCTURE: res.json({ image: "data:..." })
-                if (data.image) {
+                if (data && data.image) {
                     genResult.innerHTML = `<img src="${data.image}" class="w-full h-full object-cover rounded shadow-lg animate-pulse" onload="this.classList.remove('animate-pulse')">`;
                     genStatus.innerText = "MANIFESTED VIA PORTAL 3.0.";
                     shareX.style.display = 'flex';
@@ -587,18 +558,20 @@
                         });
                     }
                 } else {
-                    throw new Error(data.error || "The Rot refused the connection.");
+                    throw new Error(data?.error || "The Rot refused the connection.");
                 }
             } catch (err) {
                 console.error("Summoning error:", err);
                 genResult.innerHTML = `<div class="text-red-500 text-[12px] p-6 text-center uppercase">Portal 3.0 Obscured:<br><span class="text-[10px] mt-2 block">${err.message}</span></div>`;
                 genStatus.innerText = "ACCESS RESTRICTED";
+                genStatus.style.color = "#ff4444";
             } finally {
                 genTrigger.disabled = false;
             }
         }
 
         function handleShare() {
+            const shareTexts = ["The algorithm decays. $CHINESEROT", "I have summoned the rot via Portal 3.0. $CHINESEROT"];
             const randomText = shareTexts[Math.floor(Math.random() * shareTexts.length)];
             const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(randomText + "\n\n" + window.location.href)}`;
             window.open(twitterUrl, '_blank');
