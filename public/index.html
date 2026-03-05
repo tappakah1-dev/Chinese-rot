@@ -476,12 +476,119 @@
         }
         setupCommunity();
 
-        // --- GENERATOR LOGIC (ROBUST IMPLEMENTATION) ---
-        const creatures = ["mythological dragon", "shiba inu", "giant panda", "capybara", "koi fish", "qilin", "cybernetic tiger"];
-        const costumes = ["intricate silk hanfu", "bamboo battle armor", "golden crown", "glowing neon opera mask", "jade robes"];
-        const settings = ["a dark misty Chinese forest with glowing moss", "an ancient mountain temple", "a digital bamboo grove"];
-        const styles = ["surreal high-fidelity 3D", "cinematic concept art", "hyper-detailed digital decay"];
-        const lighting = ["dramatic gold and crimson lighting", "eerie bioluminescent jade glow"];
+        // --- GENERATOR LOGIC (BRAINROT EXPANDED) ---
+        const subjects = [
+            "mythological dragon made of corrupted code",
+            "hyper-muscular Shiba Inu cultivator",
+            "giant cursed panda with glowing red eyes",
+            "levitating cyber-monk doomscrolling",
+            "sentient bowl of glowing radioactive hotpot",
+            "glitched terracotta warrior hitting the griddy",
+            "biblically accurate Qilin made of neon signs",
+            "jade statue of a crying cat meme",
+            "Sun Wukong holding a glowing smartphone",
+            "holographic carp trying to escape a simulation",
+            "buff red panda doing a backflip",
+            "T-posing Tibetan mastiff",
+            "levitating Chinese giant salamander screaming in auto-tune",
+            "four-dimensional water buffalo",
+            "cybernetic golden snub-nosed monkey",
+            "Biblically accurate Pixiu consuming crypto",
+            "Cursed dancing Chinese crested dog",
+            "giant glowing silk moth from the 5th dimension",
+            "sentient swarm of mechanical cicadas",
+            "jiangshi (hopping vampire) on a hoverboard",
+            "ancient bronze ding (cauldron) with spider legs",
+            "holographic immortal holding a vape",
+            "corrupted white tiger of the west",
+            "vermilion bird made of burning plastic"
+        ];
+
+        const attireModifiers = [
+            "wearing a Supreme-branded silk hanfu",
+            "dripping with toxic green cyber-sludge",
+            "covered in glowing cursed QR codes",
+            "wearing augmented reality clout goggles",
+            "fused with rusty cyberpunk cybernetics",
+            "holding a giant glowing radioactive boba tea",
+            "wrapped in burning paper money",
+            "wearing a bamboo hat made of motherboards",
+            "wearing a mecha-suit made entirely of durian spikes",
+            "dressed as a cursed sentient bok choy",
+            "trapped inside a giant glowing dragon fruit",
+            "wearing armor crafted from cursed lotus roots",
+            "wearing a hyper-realistic bitter melon mascot costume",
+            "holding a tactical assault lychee",
+            "wearing a winter melon as a helmet",
+            "dressed in a high-fashion daikon radish outfit",
+            "juggling flaming mooncakes",
+            "wearing an emperor's headdress made of broken LED screens",
+            "wrapped in thousands of red envelopes (hongbao)",
+            "riding a flying hover-wok",
+            "wearing a necklace of glowing mahjong tiles",
+            "holding a giant glowing incense stick like a lightsaber"
+        ];
+
+        const settings = [
+            "an abandoned cyber-temple filled with floating red text",
+            "the backrooms but it's an infinite dim sum restaurant",
+            "a dystopian night market raining digital blood",
+            "a void of infinite corrupted TikTok streams",
+            "the core of a melting crypto mining rig in Shenzhen",
+            "a cursed Daoist meditation chamber floating in cyberspace",
+            "a glowing mossy forest where the trees are rotting servers",
+            "an underground illegal jade-smuggling cyber-bazaar",
+            "a hyper-dense cyberpunk version of Chongqing layered with fog",
+            "an abandoned section of the Great Wall made entirely of glowing motherboards",
+            "a flooded Forbidden City reflecting a neon blood-moon",
+            "the terrifyingly infinite corridors of a glitching Kowloon Walled City",
+            "floating Zhangjiajie mountains made of compressed digital trash",
+            "a terrifyingly large neon Guanyin statue crying black oil",
+            "an infinite underground boba tea factory run by robots",
+            "a high-speed bullet train flying off the tracks into a digital black hole",
+            "a glowing cursed mahjong parlor in the 4th dimension",
+            "a futuristic Shanghai skyline melting into the ocean",
+            "a hyper-realistic WeChat mom-group digital landscape",
+            "inside a giant boiling hotpot filled with cybernetic ingredients",
+            "a digital bamboo forest where the bamboo is made of fiber optic cables",
+            "a flooded rice terrace glowing with bioluminescent nuclear waste"
+        ];
+
+        const styles = [
+            "deep-fried meme aesthetic",
+            "surreal high-fidelity 3D brainrot",
+            "hyper-stimulated max-dopamine visual vomit",
+            "corrupted VHS found footage",
+            "PS1 retro graphics mixed with 8k hyper-realism",
+            "cinematic dystopian rot",
+            "glitch art nightmare",
+            "uncanny valley Xiaohongshu beauty filter",
+            "cursed WeChat good morning greeting card aesthetic",
+            "hyper-pop cyberpunk render",
+            "early 2000s Chinese web forum graphic design",
+            "Y2K Frutiger Aero but corrupted"
+        ];
+
+        const brainrotVFX = [
+            "floating red text saying '-999 SOCIAL CREDIT'",
+            "blinding RGB gamer lights",
+            "sickly green digital matrix rain",
+            "unnecessary giant red arrows and circles pointing at nothing",
+            "glitching chromatic aberration and extreme motion blur",
+            "Subway Surfers gameplay faintly visible in the sky",
+            "random floating explosion emojis",
+            "a TikTok UI overlay melting off the screen",
+            "giant Mahjong tiles falling like meteorites",
+            "floating golden Chinese characters spinning uncontrollably",
+            "a Douyin watermark bouncing around like a DVD logo",
+            "Minecraft parkour gameplay playing in the corner",
+            "kinetic typography screaming 'SKIBIDI'",
+            "a corrupted livestream chat scrolling at lightspeed",
+            "floating red paper lanterns that are on fire",
+            "a barrage of flying virtual gifts and roses",
+            "distorted loud bass-boosted shockwaves visible in the air",
+            "flying digital dragons made of static"
+        ];
 
         /**
          * Robust fetch implementation to solve JSON parsing and 500 errors.
@@ -533,7 +640,8 @@
         }
 
         async function generateRot() {
-            const promptText = `A ${styles[Math.floor(Math.random()*styles.length)]} of a ${creatures[Math.floor(Math.random()*creatures.length)]} wearing ${costumes[Math.floor(Math.random()*costumes.length)]}, in ${settings[Math.floor(Math.random()*settings.length)]}. ${lighting[Math.floor(Math.random()*lighting.length)]}, photorealistic textures, '$CHINESEROT' etched into stone.`;
+            // Generating the chaotic brainrot prompt
+            const promptText = `A ${styles[Math.floor(Math.random()*styles.length)]} of a ${subjects[Math.floor(Math.random()*subjects.length)]} ${attireModifiers[Math.floor(Math.random()*attireModifiers.length)]}, in ${settings[Math.floor(Math.random()*settings.length)]}. ${brainrotVFX[Math.floor(Math.random()*brainrotVFX.length)]}, photorealistic textures, '$CHINESEROT' etched into the environment.`;
 
             genStatus.innerText = "ACCESSING PORTAL 3.0...";
             genStatus.style.color = "var(--neon-gold)";
