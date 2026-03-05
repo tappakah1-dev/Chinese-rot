@@ -1,3 +1,5 @@
+import sharp from 'sharp';
+
 export default async function handler(req, res) {
     // Add CORS headers to prevent cross-origin 500 blocks
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -69,9 +71,31 @@ export default async function handler(req, res) {
             });
         }
 
-        return res.status(200).json({
-            image: `data:image/png;base64,${imageBase64}`
-        });
+        try {
+            // Convert the raw base64 PNG string into a Buffer
+            const imageBuffer = Buffer.from(imageBase64, 'base64');
+            
+            // Compress and convert the image to WebP format
+            // We scale it down to a max width/height of 1024px and use 80% quality
+            // This easily brings the image size from >1MB down to ~100-200KB
+            const compressedBuffer = await sharp(imageBuffer)
+                .resize({ width: 1024, height: 1024, fit: 'inside', withoutEnlargement: true })
+                .webp({ quality: 80 })
+                .toBuffer();
+
+            const compressedBase64 = compressedBuffer.toString('base64');
+
+            // Send the smaller WebP back to the frontend instead of the PNG
+            return res.status(200).json({
+                image: `data:image/webp;base64,${compressedBase64}`
+            });
+            
+        } catch (compressionError) {
+            return res.status(500).json({
+                error: "Failed to compress image to WebP",
+                message: compressionError.message
+            });
+        }
 
     } catch (error) {
         return res.status(500).json({
