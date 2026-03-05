@@ -297,22 +297,29 @@
             margin: 0 !important;
             max-width: 100% !important;
         }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
     <div class="psychedelic-bg"></div>
-    <div class="ink-stain" style="top: -10%; left: -10%;"></div>
-    <div class="ink-stain" style="bottom: -10%; right: -10%;"></div>
+    <div class="ink-stain" id="stain-1" style="top: -10%; left: -10%;"></div>
+    <div class="ink-stain" id="stain-2" style="bottom: -10%; right: -10%;"></div>
 
     <!-- DRAGON LAYER -->
     <div class="dragon-layer">
-        <svg class="dragon-snake" style="--duration: 20s; --start-y: 20%; --mid-y: 40%; --end-y: 10%; --dir: 1;" viewBox="0 0 200 60">
-            <path d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" stroke="var(--neon-gold)" fill="none" stroke-width="2" stroke-dasharray="5,2" opacity="0.6"/>
-            <text font-family="Zhi Mang Xing" font-size="10" fill="red">
-                <textPath href="#path1">ROTTING DRAGON · ROTTING DRAGON</textPath>
+        <svg class="dragon-snake" style="--duration: 25s; --start-y: 20%; --mid-y: 45%; --end-y: 15%; --dir: 1;" viewBox="0 0 200 60">
+            <path id="path1" d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" stroke="var(--neon-gold)" fill="none" stroke-width="2" stroke-dasharray="5,2" opacity="0.6"/>
+            <text font-family="Zhi Mang Xing" font-size="6" fill="red">
+                <textPath href="#path1">ROTTING DRAGON · ROTTING DRAGON · ROTTING DRAGON</textPath>
             </text>
-            <path id="path1" d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" fill="none"/>
         </svg>
     </div>
 
@@ -323,9 +330,9 @@
 
     <div class="calligraphy-watermark" style="top: 25%; left: -5%;">CHINESE ROT</div>
 
-    <nav class="pt-24 pb-8 px-8 flex justify-between items-center relative z-10 border-b border-red-900/10">
+    <nav class="pt-24 pb-8 px-8 flex flex-col md:flex-row justify-between items-center relative z-10 border-b border-red-900/10 gap-4">
         <div class="text-3xl md:text-5xl glow-text calligraphy-font tracking-widest">【 FOREST OF DECAY 】</div>
-        <div class="flex gap-6 md:gap-10 text-xs md:text-sm font-bold uppercase tracking-widest text-yellow-500/90 mt-4 md:mt-0">
+        <div class="flex gap-6 md:gap-10 text-xs md:text-sm font-bold uppercase tracking-widest text-yellow-500/90">
             <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="hover:text-yellow-400 transition underline underline-offset-8 decoration-red-900">X Community</a>
             <a href="https://t.me/+vmw7T6AL9FZjMzRk" target="_blank" class="hover:text-yellow-400 transition underline underline-offset-8 decoration-red-900">Telegram</a>
         </div>
@@ -335,7 +342,7 @@
         
         <div class="mb-20">
             <p class="text-yellow-600 tracking-[0.8em] mb-4 text-xs font-bold uppercase">Digital Brain Rot</p>
-            <h1 class="text-7xl md:text-[11rem] glow-text leading-none calligraphy-font mb-4">Chinese Rot</h1>
+            <h1 class="text-7xl md:text-[11rem] glow-text leading-none calligraphy-font mb-4">$CHINESEROT</h1>
             <div class="w-40 h-1 bg-red-900 mx-auto mb-10 opacity-50"></div>
             <p class="text-xl md:text-3xl text-red-100/90 max-w-2xl mx-auto font-light leading-relaxed italic calligraphy-font">
                 “All beings decay, all things rot. In the deep forest, there is always an echo.”
@@ -347,7 +354,7 @@
             <h2 class="text-4xl md:text-6xl mb-12 glow-text calligraphy-font">Summon Rot Creature</h2>
             <div class="gen-container p-8 md:p-12 rounded-lg grid md:grid-cols-2 gap-12 items-center">
                 <div class="image-display rounded shadow-2xl overflow-hidden" id="gen-result">
-                    <div class="text-red-900/40 text-xs italic p-10">The portal is closed. Press the button to tear it open.</div>
+                    <div class="text-red-900/40 text-xs italic p-10 text-center">The portal is closed. Press the button to tear it open.</div>
                 </div>
                 <div class="text-left space-y-6">
                     <p class="text-yellow-500 calligraphy-font text-2xl">$CHINESEROT Generator</p>
@@ -376,7 +383,7 @@
         </div>
 
         <section class="max-w-4xl mx-auto mb-32 relative">
-            <h2 class="text-4xl md:text-5xl mb-12 text-yellow-500 calligraphy-font">—— VISIONS OF DECAY (Reels) ——</h2>
+            <h2 class="text-4xl md:text-5xl mb-12 text-yellow-500 calligraphy-font">—— VISIONS OF DECAY ——</h2>
             <div class="flex items-center justify-center gap-2 md:gap-8">
                 <button class="nav-btn" onclick="scrollCarousel(-1)">◀</button>
                 <div class="video-carousel" id="rot-carousel">
@@ -408,7 +415,7 @@
         <!-- Chart Section -->
         <section class="max-w-6xl mx-auto mb-32">
             <h2 class="text-5xl mb-12 glow-text calligraphy-font">Fate Tracker (Live Moss)</h2>
-            <div id="dexscreener-embed" class="rounded-lg overflow-hidden shadow-[0_0_60px_rgba(139,0,0,0.5)]">
+            <div id="dexscreener-embed" class="rounded-lg overflow-hidden border-4 border-red-900 shadow-[0_0_60px_rgba(139,0,0,0.5)] bg-black">
                 <iframe src="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartDefaultOnMobile=1&chartTheme=dark&theme=dark&chartStyle=1&chartType=marketCap&interval=5" style="width:100%; height:600px; border:none;"></iframe>
             </div>
         </section>
@@ -452,7 +459,6 @@
         const creatures = ["cat", "hamster", "axolotl", "capybara", "red panda", "blobfish", "shrimp", "alien gremlin", "pomeranian", "possum"];
         const costumes = ["avocado shell", "peeled banana", "carved pumpkin", "giant strawberry", "eggplant", "pineapple suit", "broccoli tree", "watermelon", "ramen bowl"];
         
-        // Randomization for ticker integration
         const tickerPlacements = [
             "the text '$CHINESEROT' is tattooed on the creature",
             "a neon sign in the background reads '$CHINESEROT'",
@@ -471,8 +477,7 @@
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
             const placement = tickerPlacements[Math.floor(Math.random() * tickerPlacements.length)];
             
-            // Ticker is now part of the prompt instead of a canvas overlay
-            const prompt = `A ${creature} wearing a ${costume}. ${placement}. ${baseStyles}. Bizarre and funny, high quality 3D.`;
+            const prompt = `A ${creature} wearing a ${costume}. ${placement}. ${baseStyles}. Bizarre and funny, high quality 3D render, digital rot aesthetic.`;
 
             genStatus.innerText = "DIGESTING REALITY...";
             genTrigger.disabled = true;
@@ -502,8 +507,8 @@
                     const delay = Math.pow(2, retries) * 1000;
                     setTimeout(() => generateRot(retries + 1), delay);
                 } else {
-                    genResult.innerHTML = '<div class="text-red-500 p-10 text-xs text-center">The forest refused your request. Try again later.</div>';
-                    genStatus.innerText = "CONNECTION DECAYED.";
+                    genResult.innerHTML = '<div class="text-red-500 p-10 text-xs text-center uppercase tracking-widest font-bold">The forest refused your request. Connection decayed.</div>';
+                    genStatus.innerText = "VOID REJECTION.";
                 }
             } finally {
                 genTrigger.disabled = false;
@@ -536,30 +541,39 @@
             carousel.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
         }
 
+        // Parallax Ink Stains
         document.addEventListener('mousemove', (e) => {
-            const stains = document.querySelectorAll('.ink-stain');
-            stains.forEach((stain, index) => {
-                const moveX = (e.clientX - window.innerWidth / 2) / (50 + index * 10);
-                const moveY = (e.clientY - window.innerHeight / 2) / (50 + index * 10);
-                stain.style.transform = `translate(${moveX}px, ${moveY}px)`;
-            });
+            const stain1 = document.getElementById('stain-1');
+            const stain2 = document.getElementById('stain-2');
+            
+            const moveX = (e.clientX - window.innerWidth / 2) / 60;
+            const moveY = (e.clientY - window.innerHeight / 2) / 60;
+            
+            stain1.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            stain2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
         });
 
+        // Lantern Generation
         const lanternContainer = document.getElementById('lantern-field');
-        const words = ["FATE", "VOID", "ROT", "DECAY", "DREAM", "ECHO", "FOREST", "SILENCE"];
+        const words = ["FATE", "VOID", "ROT", "DECAY", "DREAM", "ECHO", "FOREST", "SILENCE", "🀄", "MOSS"];
         
         function createLantern() {
             const l = document.createElement('div');
             l.className = 'kongming-lantern';
             l.style.left = Math.random() * 100 + 'vw';
-            l.style.setProperty('--duration', (Math.random() * 12 + 12) + 's');
-            l.style.setProperty('--drift', (Math.random() * 250 - 125) + 'px');
-            l.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
+            l.style.setProperty('--duration', (Math.random() * 15 + 15) + 's');
+            l.style.setProperty('--drift', (Math.random() * 300 - 150) + 'px');
+            l.style.setProperty('--rot', (Math.random() * 40 - 20) + 'deg');
             l.innerText = words[Math.floor(Math.random() * words.length)];
             lanternContainer.appendChild(l);
-            setTimeout(() => l.remove(), 25000);
+            setTimeout(() => l.remove(), 31000);
         }
-        setInterval(createLantern, 2200);
+        setInterval(createLantern, 3000);
+        
+        // Initial lanterns
+        for(let i=0; i<5; i++) {
+            setTimeout(createLantern, i * 1000);
+        }
     </script>
 </body>
 </html>
