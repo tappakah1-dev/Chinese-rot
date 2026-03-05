@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$CHINESEROT | The Forest of Decay</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Zhi Mang Xing for Calligraphy (Fancy but legible) and Noto Sans SC for UI -->
     <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+SC:wght@300;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,7 +23,6 @@
             line-height: 1.6;
         }
 
-        /* Rice paper texture & Ink smoke background */
         .psychedelic-bg {
             position: fixed;
             top: 0;
@@ -73,7 +71,6 @@
             100% { left: 110%; top: var(--end-y); transform: rotate(10deg) scaleX(var(--dir)); }
         }
 
-        /* --- KONGMING LANTERN ANIMATION --- */
         .kongming-container {
             position: fixed;
             bottom: -100px;
@@ -120,7 +117,6 @@
             font-family: 'Zhi Mang Xing', cursive;
         }
 
-        /* Fixed hanging lanterns at top */
         @keyframes sway {
             0%, 100% { transform: rotate(-5deg); }
             50% { transform: rotate(5deg); }
@@ -182,7 +178,7 @@
             box-shadow: 0 0 30px var(--neon-gold);
         }
 
-        /* Fixed Carousel Styling */
+        /* Video Carousel */
         .video-carousel {
             display: flex;
             overflow-x: scroll;
@@ -228,6 +224,77 @@
             color: var(--blood-red);
         }
 
+        /* --- GENERATOR UI --- */
+        .gen-container {
+            background: rgba(10, 2, 2, 0.85);
+            border: 3px solid var(--blood-red);
+            box-shadow: 0 0 50px rgba(139,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gen-container::before {
+            content: 'BRAIN ROT ENGINE';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 8px;
+            color: var(--blood-red);
+            letter-spacing: 3px;
+        }
+
+        .image-display {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #000;
+            border: 2px solid #220000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .image-display img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Watermark Overlay - Vertical on the Right Edge */
+        .watermark-overlay {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%) rotate(180deg);
+            writing-mode: vertical-rl;
+            white-space: nowrap;
+            color: rgba(255, 255, 255, 0.75); /* Increased opacity to 75% */
+            font-family: 'Noto Sans SC', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 2px;
+            pointer-events: none;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+            z-index: 10;
+            text-transform: uppercase;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--blood-red);
+            border-bottom-color: var(--neon-gold);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .calligraphy-watermark {
             position: absolute;
             font-family: 'Zhi Mang Xing', cursive;
@@ -237,11 +304,6 @@
             pointer-events: none;
             z-index: 1;
             white-space: nowrap;
-        }
-
-        #dexscreener-embed {
-            border: 4px solid var(--blood-red);
-            filter: sepia(0.5) hue-rotate(-50deg);
         }
 
         @keyframes spin-slow {
@@ -273,17 +335,13 @@
         </svg>
     </div>
 
-    <!-- KONGMING LANTERN LAYER -->
     <div class="kongming-container" id="lantern-field"></div>
 
-    <!-- Hanging Lanterns -->
     <div class="lantern-fixed" style="left: 10%;">ROT</div>
     <div class="lantern-fixed" style="right: 10%; animation-delay: 1s;">DECAY</div>
 
-    <!-- Calligraphy Background Decor -->
     <div class="calligraphy-watermark" style="top: 25%; left: -5%;">CHINESE ROT</div>
 
-    <!-- Pushed Down Navigation to clear lanterns -->
     <nav class="pt-24 pb-8 px-8 flex justify-between items-center relative z-10 border-b border-red-900/10">
         <div class="text-3xl md:text-5xl glow-text calligraphy-font tracking-widest">【 FOREST OF DECAY 】</div>
         <div class="flex gap-6 md:gap-10 text-xs md:text-sm font-bold uppercase tracking-widest text-yellow-500/90 mt-4 md:mt-0">
@@ -294,7 +352,6 @@
 
     <main class="container mx-auto px-4 pt-12 pb-40 text-center relative z-10">
         
-        <!-- Main Title Header -->
         <div class="mb-20">
             <p class="text-yellow-600 tracking-[0.8em] mb-4 text-xs font-bold uppercase">Digital Brain Rot</p>
             <h1 class="text-7xl md:text-[11rem] glow-text leading-none calligraphy-font mb-4">Chinese Rot</h1>
@@ -304,10 +361,27 @@
             </p>
         </div>
 
-        <!-- Contract Address -->
+        <!-- GENERATOR SECTION -->
+        <section class="max-w-4xl mx-auto mb-32">
+            <h2 class="text-4xl md:text-6xl mb-12 glow-text calligraphy-font">Summon Rot Creature</h2>
+            <div class="gen-container p-8 md:p-12 rounded-lg grid md:grid-cols-2 gap-12 items-center">
+                <div class="image-display rounded shadow-2xl overflow-hidden" id="gen-result">
+                    <div class="text-red-900/40 text-xs italic p-10">The portal is closed. Press the button to tear it open.</div>
+                </div>
+                <div class="text-left space-y-6">
+                    <p class="text-yellow-500 calligraphy-font text-2xl">$CHINESEROT Generator</p>
+                    <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
+                        We take a random creature and rot it inside a fruit or vegetable shell. 100% Brainrot guaranteed.
+                    </p>
+                    <button id="gen-trigger" class="btn-rot w-full py-6 text-xl">Generate your own chineserot</button>
+                    <p id="gen-status" class="text-[10px] text-red-800 uppercase tracking-widest font-bold text-center"></p>
+                </div>
+            </div>
+        </section>
+
         <div class="max-w-3xl mx-auto mb-20">
             <div id="ca-container" class="ca-box p-6 rounded-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                <span class="text-red-500 text-xs font-bold uppercase tracking-widest">Seal Code:</span>
+                <span class="text-red-500 text-xs font-bold uppercase tracking-widest">CA:</span>
                 <code id="ca-text" class="text-sm md:text-lg font-mono text-yellow-500 break-all bg-black/60 px-4 py-2 rounded border border-red-900/40">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
                 <button class="bg-red-950 border border-yellow-800 text-yellow-500 px-8 py-3 text-xs font-bold hover:bg-yellow-600 hover:text-black transition uppercase tracking-widest shadow-xl">COPY MARK</button>
             </div>
@@ -316,35 +390,30 @@
 
         <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-32">
             <a href="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH" target="_blank" class="btn-rot">Dex Chart</a>
+            <a href="https://axiom.trade/@dumacuk" target="_blank" class="btn-rot">Trade on Axiom</a>
             <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="btn-rot">X Community</a>
         </div>
 
-        <!-- Carousel Section -->
         <section class="max-w-4xl mx-auto mb-32 relative">
             <h2 class="text-4xl md:text-5xl mb-12 text-yellow-500 calligraphy-font">—— VISIONS OF DECAY (Reels) ——</h2>
-            
             <div class="flex items-center justify-center gap-2 md:gap-8">
                 <button class="nav-btn" onclick="scrollCarousel(-1)">◀</button>
                 <div class="video-carousel" id="rot-carousel">
-                    <!-- Video 1 -->
                     <div class="video-item">
                         <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215" style="width: 100%;">
                             <section></section>
                         </blockquote>
                     </div>
-                    <!-- Video 2 -->
                     <div class="video-item">
                         <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568" style="width: 100%;">
                             <section></section>
                         </blockquote>
                     </div>
-                    <!-- Video 3 -->
                     <div class="video-item">
                         <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7480460726088453384" data-video-id="7480460726088453384" style="width: 100%;">
                             <section></section>
                         </blockquote>
                     </div>
-                    <!-- Video 4 -->
                     <div class="video-item">
                         <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322" style="width: 100%;">
                             <section></section>
@@ -353,7 +422,6 @@
                 </div>
                 <button class="nav-btn" onclick="scrollCarousel(1)">▶</button>
             </div>
-            <p class="text-xs text-red-900 mt-8 uppercase tracking-[0.5em] font-bold">Gaze into the rot, feel the pulse</p>
         </section>
 
         <!-- Chart Section -->
@@ -384,7 +452,6 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <div class="mt-48 border-t border-red-950 pt-24 pb-12">
             <div class="opacity-20 text-[11px] tracking-[2em] uppercase text-yellow-600 mb-6 font-bold">
                 Brain Rot • Digital Decay • $CHINESEROT • Eternal Forest
@@ -393,10 +460,62 @@
         </div>
     </main>
 
-    <!-- TikTok Embed Script -->
     <script async src="https://www.tiktok.com/embed.js"></script>
     
     <script>
+        const apiKey = ""; // Runtime provides key
+        const genTrigger = document.getElementById('gen-trigger');
+        const genResult = document.getElementById('gen-result');
+        const genStatus = document.getElementById('gen-status');
+
+        const creatures = ["cat", "hamster", "axolotl", "capybara", "red panda", "blobfish", "shrimp", "alien gremlin", "pomeranian", "possum"];
+        const costumes = ["avocado shell", "peeled banana", "carved pumpkin", "giant strawberry", "eggplant", "pineapple suit", "broccoli tree", "watermelon", "ramen bowl"];
+        const styles = "brainrot style, hyper-saturated 3D render, surreal, cursed imagery, meme energy, floating sparkles, cinematic lighting, uncanny valley, vibrant colors";
+
+        async function generateRot(retries = 0) {
+            const creature = creatures[Math.floor(Math.random() * creatures.length)];
+            const costume = costumes[Math.floor(Math.random() * costumes.length)];
+            const prompt = `A ${creature} wearing a ${costume}, ${styles}, bizarre and funny, wide eyes, surreal background. High quality 3D.`;
+
+            genStatus.innerText = "DIGESTING REALITY...";
+            genTrigger.disabled = true;
+            genResult.innerHTML = '<span class="loader"></span>';
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        instances: [{ prompt: prompt }],
+                        parameters: { sampleCount: 1 }
+                    })
+                });
+
+                if (!response.ok) throw new Error('Generation failed');
+
+                const data = await response.json();
+                const b64 = data.predictions[0].bytesBase64Encoded;
+                
+                genResult.innerHTML = `
+                    <img src="data:image/png;base64,${b64}" class="fade-in w-full h-full object-cover" alt="Rot Creature">
+                    <div class="watermark-overlay">GENERATED ON $CHINESEROT</div>
+                `;
+                genStatus.innerText = "ROT MANIFESTED.";
+            } catch (err) {
+                if (retries < 5) {
+                    const delay = Math.pow(2, retries) * 1000;
+                    setTimeout(() => generateRot(retries + 1), delay);
+                } else {
+                    genResult.innerHTML = '<div class="text-red-500 p-10 text-xs text-center">The forest refused your request. Try again later.</div>';
+                    genStatus.innerText = "CONNECTION DECAYED.";
+                }
+            } finally {
+                genTrigger.disabled = false;
+            }
+        }
+
+        genTrigger.addEventListener('click', () => generateRot());
+
         // Copy logic
         const caContainer = document.getElementById('ca-container');
         const caText = document.getElementById('ca-text').innerText;
@@ -409,12 +528,10 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-
             copyMsg.style.opacity = '1';
             setTimeout(() => { copyMsg.style.opacity = '0'; }, 2000);
         });
 
-        // Carousel logic
         function scrollCarousel(direction) {
             const carousel = document.getElementById('rot-carousel');
             const items = carousel.querySelectorAll('.video-item');
@@ -423,7 +540,6 @@
             carousel.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
         }
 
-        // Ink movement effect
         document.addEventListener('mousemove', (e) => {
             const stains = document.querySelectorAll('.ink-stain');
             stains.forEach((stain, index) => {
@@ -433,7 +549,6 @@
             });
         });
 
-        // Generate Kongming Lanterns
         const lanternContainer = document.getElementById('lantern-field');
         const words = ["FATE", "VOID", "ROT", "DECAY", "DREAM", "ECHO", "FOREST", "SILENCE"];
         
@@ -445,11 +560,9 @@
             l.style.setProperty('--drift', (Math.random() * 250 - 125) + 'px');
             l.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
             l.innerText = words[Math.floor(Math.random() * words.length)];
-            
             lanternContainer.appendChild(l);
             setTimeout(() => l.remove(), 25000);
         }
-
         setInterval(createLantern, 2200);
     </script>
 </body>
