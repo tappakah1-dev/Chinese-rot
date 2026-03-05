@@ -402,7 +402,6 @@
             <div class="carousel-wrapper">
                 <button class="nav-btn nav-left" id="slide-left" aria-label="Slide Left">❮</button>
                 <div class="carousel-container" id="video-carousel">
-                    <!-- TikTok Embeds... -->
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
@@ -486,6 +485,7 @@
 
         /**
          * Robust fetch implementation to solve JSON parsing and 500 errors.
+         * MODIFIED to correctly bubble up explicit server errors to the UI.
          */
         async function fetchWithRetry(url, options, retries = 5, backoff = 1000) {
             try {
@@ -493,30 +493,38 @@
 
                 // Handle server errors and rate limits with backoff
                 if (!response.ok) {
+                    let errorMessage = `Portal status: ${response.status}`;
+                    
+                    // Attempt to parse the actual error sent by our serverless function
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.error) errorMessage = errorData.error;
+                        if (errorData.raw && errorData.raw.error) {
+                            errorMessage += ` - ${errorData.raw.error.message}`;
+                        }
+                    } catch (e) {
+                        // Not JSON, ignore
+                    }
+
                     if (retries > 0 && (response.status >= 500 || response.status === 429)) {
                         await new Promise(r => setTimeout(r, backoff));
                         return fetchWithRetry(url, options, retries - 1, backoff * 2);
                     }
-                    throw new Error(`Portal status: ${response.status}`);
+                    throw new Error(errorMessage);
                 }
 
-                // Pre-check Content-Type
                 const contentType = response.headers.get("content-type");
                 if (!contentType || !contentType.includes("application/json")) {
                     throw new Error("Portal returned non-JSON data.");
                 }
 
-                // Safe parsing of text body
                 const rawBody = await response.text();
                 if (!rawBody) throw new Error("Empty response from the forest.");
 
-                try {
-                    return JSON.parse(rawBody);
-                } catch (e) {
-                    throw new Error("Malformed JSON: Unexpected end of input");
-                }
+                return JSON.parse(rawBody);
+
             } catch (err) {
-                if (retries > 0) {
+                if (retries > 0 && err.message.includes("fetch")) {
                     await new Promise(r => setTimeout(r, backoff));
                     return fetchWithRetry(url, options, retries - 1, backoff * 2);
                 }
@@ -534,8 +542,6 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Adjusting endpoint to match your environment expectations
-                // If using a local /api, ensure the server is responding correctly
                 const data = await fetchWithRetry('/api/summon-rot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
