@@ -342,11 +342,11 @@
                     <div class="text-left space-y-8">
                         <div class="flex items-center gap-4">
                             <div class="h-px flex-1 bg-yellow-600"></div>
-                            <h2 class="text-4xl text-yellow-500 calligraphy-font">Summoning Ritual</h2>
+                            <h2 class="text-4xl text-yellow-500 calligraphy-font">Summoning Ritual 3.0</h2>
                             <div class="h-px flex-1 bg-yellow-600"></div>
                         </div>
                         <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
-                            Summon a digital hallucination from the depths of the moss. Burn your spirit to see the rot.
+                            Access the high-fidelity 3.0 Portal. Summon a digital hallucination from the depths of the moss. Burn your spirit to see the rot.
                         </p>
                         <button id="gen-trigger" class="btn-rot w-full py-8 text-2xl calligraphy-font">
                             Summon My Rot
@@ -524,33 +524,30 @@
         }
         setupCommunity();
 
-        const creatures = ["cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "golden monkey", "shiba inu", "chinese phoenix", "white tiger", "mystic toad", "immortal crane", "qilin", "baby elephant", "cyber-axolotl", "golden turtle", "emperor penguin", "feral raccoon", "celestial rabbit", "ghost dog"];
-        const costumes = ["traditional silk hanfu", "bamboo armor", "terracotta mask", "paper lantern headpiece", "imperial dragon robe", "monk shawl", "jade crown", "opera mask", "straw hat", "neon silk kimono"];
-        const settings = ["dark mossy Chinese forest", "misty mountain temple", "black lake with floating lotus", "red bridge with neon blossoms", "bamboo grove with fiber-optic cables", "crumbling stone dragon statue"];
-        const poses = ["meditating peacefully", "screaming into the void", "martial arts stance", "holding a mysterious digital artifact", "dissolving into pixels"];
-        const artifacts = ["glowing jade tablet", "floating digital orb", "massive red paper fan", "burning scroll of binary code"];
-        const styles = ["surreal uncanny", "hyper-realistic 3D", "brainrot aesthetic", "traditional ink with 3D glitch", "dark fantasy concept"];
-        const lighting = ["dramatic red and gold lighting", "eerie jade glow", "shimmering moonlit ozone", "bioluminescent purple moss"];
-        const shareTexts = ["The algorithm decays. $CHINESEROT", "I have summoned the rot. $CHINESEROT", "Witness the summoning. $CHINESEROT"];
+        // Updated Prompt Components for Gemini 3.0 / Imagen 3
+        const creatures = ["mythological dragon", "shiba inu", "giant panda", "capybara", "koi fish", "immortal crane", "qilin", "mechanical red panda", "cybernetic tiger", "mystical toad"];
+        const costumes = ["intricate silk hanfu", "bamboo battle armor", "golden emperor crown", "glowing neon opera mask", "traditional straw hat with floating charms", "jade-encrusted robes"];
+        const settings = ["a dark misty Chinese forest with glowing moss", "an ancient mountain temple at night", "a digital bamboo grove with fiber-optic shoots", "a crumbling red palace bridge under a crimson moon"];
+        const styles = ["surreal high-fidelity 3D", "cinematic concept art", "hyper-detailed digital decay", "traditional ink painting blended with futuristic glitch art"];
+        const lighting = ["dramatic gold and crimson lighting", "eerie bioluminescent jade glow", "shimmering purple moonlight and ozone", "volumetric fog with firefly light"];
+        const shareTexts = ["The algorithm decays. $CHINESEROT", "I have summoned the rot via Portal 3.0. $CHINESEROT", "Witness the high-fidelity summoning. $CHINESEROT"];
 
         async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
             const setting = settings[Math.floor(Math.random() * settings.length)];
-            const pose = poses[Math.floor(Math.random() * poses.length)];
-            const artifact = artifacts[Math.floor(Math.random() * artifacts.length)];
             const style = styles[Math.floor(Math.random() * styles.length)];
             const light = lighting[Math.floor(Math.random() * lighting.length)];
             
-            const promptText = `A ${style} ${creature} ${pose} while wearing a ${costume}, holding ${artifact}, ${setting}. '$CHINESEROT' text carved into background. ${light}, 512x512, high-speed render.`;
+            // Refined prompt for Imagen 3.0 logic
+            const promptText = `A ${style} of a ${creature} wearing ${costume}, situated in ${setting}. ${light}, cinematic composition, 8k resolution, photorealistic textures, atmospheric perspective, '$CHINESEROT' etched into a stone in the foreground.`;
 
-            genStatus.innerText = "FERMENTING IN THE ABYSS...";
+            genStatus.innerText = "ACCESSING PORTAL 3.0...";
             genTrigger.disabled = true;
             shareX.style.display = 'none';
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // FIXED FETCH: Exponential Backoff & Content Validation
                 const fetchWithRetry = async (retries = 3) => {
                     const response = await fetch('/api/summon-rot', {
                         method: 'POST',
@@ -558,7 +555,6 @@
                         body: JSON.stringify({ prompt: promptText })
                     });
 
-                    // 1. Check for success status
                     if (!response.ok) {
                         if (response.status === 429 && retries > 0) {
                             await new Promise(r => setTimeout(r, 2000));
@@ -567,36 +563,35 @@
                         throw new Error(`Portal status: ${response.status}`);
                     }
 
-                    // 2. Read as text first to prevent JSON parse error on empty response
                     const rawText = await response.text();
-                    if (!rawText) throw new Error("Empty response from the forest.");
-
+                    if (!rawText) throw new Error("The forest returned silence.");
                     return JSON.parse(rawText);
                 };
 
                 const data = await fetchWithRetry();
 
-                if (data.predictions && data.predictions[0]?.bytesBase64Encoded) {
-                    const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover rounded shadow-lg">`;
-                    genStatus.innerText = "MANIFESTED. RIGHT CLICK TO COPY.";
+                // UPDATED FOR GEMINI 3.0 BACKEND STRUCTURE: res.json({ image: "data:..." })
+                if (data.image) {
+                    genResult.innerHTML = `<img src="${data.image}" class="w-full h-full object-cover rounded shadow-lg animate-pulse" onload="this.classList.remove('animate-pulse')">`;
+                    genStatus.innerText = "MANIFESTED VIA PORTAL 3.0.";
                     shareX.style.display = 'flex';
 
                     if (auth.currentUser) {
                         const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
                         await creationsRef.add({
-                            imageUrl: b64,
+                            imageUrl: data.image,
                             prompt: promptText,
                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                            userId: auth.currentUser.uid
+                            userId: auth.currentUser.uid,
+                            modelVersion: "3.0"
                         });
                     }
                 } else {
-                    throw new Error(data.error?.message || "The Rot refused the connection.");
+                    throw new Error(data.error || "The Rot refused the connection.");
                 }
             } catch (err) {
                 console.error("Summoning error:", err);
-                genResult.innerHTML = `<div class="text-red-500 text-[12px] p-6 text-center uppercase">Portal Obscured:<br><span class="text-[10px] mt-2 block">${err.message}</span></div>`;
+                genResult.innerHTML = `<div class="text-red-500 text-[12px] p-6 text-center uppercase">Portal 3.0 Obscured:<br><span class="text-[10px] mt-2 block">${err.message}</span></div>`;
                 genStatus.innerText = "ACCESS RESTRICTED";
             } finally {
                 genTrigger.disabled = false;
