@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>$CHINESEROT | The Forest of Decay</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <!-- Zhi Mang Xing for Calligraphy (Fancy but legible) and Noto Sans SC for UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+SC:wght@300;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --blood-red: #8b0000;
@@ -16,10 +17,11 @@
 
         body {
             background-color: var(--ink-black);
-            color: #d1d1d1;
-            font-family: 'ZCOOL KuaiLe', cursive;
+            color: #e5e7eb;
+            font-family: 'Noto Sans SC', sans-serif;
             overflow-x: hidden;
             background: radial-gradient(circle at center, #1a0a0a 0%, #050505 100%);
+            line-height: 1.6;
         }
 
         /* Rice paper texture & Ink smoke background */
@@ -84,19 +86,22 @@
 
         .kongming-lantern {
             position: absolute;
-            width: 40px;
-            height: 55px;
+            width: 48px;
+            height: 62px;
             background: radial-gradient(circle at bottom, #ff9900 0%, var(--blood-red) 80%);
             border-radius: 10px 10px 50% 50% / 10px 10px 20% 20%;
             box-shadow: 0 0 20px rgba(255, 153, 0, 0.6);
-            opacity: 0.6;
+            opacity: 0.7;
             animation: riseUp var(--duration) linear infinite;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 215, 0, 0.8);
-            font-size: 10px;
+            color: rgba(255, 215, 0, 0.9);
+            font-size: 14px;
             border: 1px solid rgba(255, 215, 0, 0.3);
+            font-family: 'Zhi Mang Xing', cursive;
+            padding: 4px;
+            text-align: center;
         }
 
         @keyframes riseUp {
@@ -107,8 +112,12 @@
 
         .glow-text {
             color: var(--neon-gold);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(139, 0, 0, 0.8);
-            font-family: 'Ma Shan Zheng', cursive;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5), 0 0 30px rgba(139, 0, 0, 0.3);
+            font-family: 'Zhi Mang Xing', cursive;
+        }
+
+        .calligraphy-font {
+            font-family: 'Zhi Mang Xing', cursive;
         }
 
         /* Fixed hanging lanterns at top */
@@ -119,9 +128,9 @@
 
         .lantern-fixed {
             position: fixed;
-            top: -20px;
-            width: 60px;
-            height: 80px;
+            top: -15px;
+            width: 65px;
+            height: 85px;
             background: var(--blood-red);
             border-radius: 50% / 20%;
             box-shadow: 0 0 30px var(--blood-red);
@@ -132,7 +141,11 @@
             justify-content: center;
             color: var(--neon-gold);
             font-weight: bold;
+            font-size: 14px;
             border: 2px solid var(--neon-gold);
+            font-family: 'Zhi Mang Xing', cursive;
+            text-align: center;
+            line-height: 1.1;
         }
 
         .ca-box {
@@ -152,15 +165,15 @@
         .btn-rot {
             background: linear-gradient(45deg, var(--blood-red), #330000);
             color: var(--neon-gold);
-            font-weight: bold;
+            font-weight: 700;
             padding: 1rem 2rem;
             border-radius: 4px;
             border: 1px solid var(--neon-gold);
             text-transform: uppercase;
             box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
             transition: 0.3s;
-            font-family: 'Ma Shan Zheng', cursive;
             letter-spacing: 2px;
+            font-family: 'Noto Sans SC', sans-serif;
         }
 
         .btn-rot:hover {
@@ -180,7 +193,7 @@
             background: rgba(0,0,0,0.8);
             box-shadow: 0 0 40px rgba(139, 0, 0, 0.4);
             flex-grow: 1;
-            max-width: 450px; /* Optimal for TikTok vertical ratio */
+            max-width: 450px; 
             margin: 0 auto;
         }
 
@@ -217,9 +230,9 @@
 
         .calligraphy-watermark {
             position: absolute;
-            font-family: 'Ma Shan Zheng', cursive;
+            font-family: 'Zhi Mang Xing', cursive;
             font-size: 15rem;
-            opacity: 0.03;
+            opacity: 0.04;
             color: white;
             pointer-events: none;
             z-index: 1;
@@ -237,7 +250,6 @@
         }
         .animate-spin-slow { animation: spin-slow 15s linear infinite; }
 
-        /* Fix for tiktok embeds taking too much space */
         .tiktok-embed {
             margin: 0 !important;
             max-width: 100% !important;
@@ -254,18 +266,10 @@
     <div class="dragon-layer">
         <svg class="dragon-snake" style="--duration: 20s; --start-y: 20%; --mid-y: 40%; --end-y: 10%; --dir: 1;" viewBox="0 0 200 60">
             <path d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" stroke="var(--neon-gold)" fill="none" stroke-width="2" stroke-dasharray="5,2" opacity="0.6"/>
-            <text font-family="Ma Shan Zheng" font-size="8" fill="red">
-                <textPath href="#path1">腐烂之龙 ROTTING DRAGON</textPath>
+            <text font-family="Zhi Mang Xing" font-size="10" fill="red">
+                <textPath href="#path1">ROTTING DRAGON · ROTTING DRAGON</textPath>
             </text>
             <path id="path1" d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" fill="none"/>
-        </svg>
-
-        <svg class="dragon-snake" style="--duration: 25s; --start-y: 70%; --mid-y: 50%; --end-y: 80%; --dir: -1;" viewBox="0 0 200 60">
-            <path d="M0,30 C20,50 40,10 60,30 C80,50 100,10 120,30 C140,50 160,10 180,30" stroke="var(--blood-red)" fill="none" stroke-width="1.5" opacity="0.4"/>
-            <text font-family="Ma Shan Zheng" font-size="8" fill="gold">
-                <textPath href="#path2">混沌蛇 CHAOS SERPENT</textPath>
-            </text>
-            <path id="path2" d="M0,30 C20,50 40,10 60,30 C80,50 100,10 120,30 C140,50 160,10 180,30" fill="none"/>
         </svg>
     </div>
 
@@ -277,46 +281,47 @@
     <div class="lantern-fixed" style="right: 10%; animation-delay: 1s;">DECAY</div>
 
     <!-- Calligraphy Background Decor -->
-    <div class="calligraphy-watermark" style="top: 20%; left: -5%;">CHINESE ROT</div>
-    <div class="calligraphy-watermark" style="bottom: 10%; right: -5%;">FOREST SHADOW</div>
+    <div class="calligraphy-watermark" style="top: 25%; left: -5%;">CHINESE ROT</div>
 
-    <nav class="p-6 flex justify-between items-center relative z-10 border-b border-red-900/30">
-        <div class="text-2xl md:text-4xl font-bold glow-text tracking-widest">【 THE FOREST OF DECAY 】</div>
-        <div class="flex gap-4 md:gap-8 text-xs md:text-base">
-            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="hover:text-yellow-500 transition uppercase tracking-tighter">X Community</a>
-            <a href="#" class="hover:text-yellow-500 transition uppercase tracking-tighter">Telegram</a>
+    <!-- Pushed Down Navigation to clear lanterns -->
+    <nav class="pt-24 pb-8 px-8 flex justify-between items-center relative z-10 border-b border-red-900/10">
+        <div class="text-3xl md:text-5xl glow-text calligraphy-font tracking-widest">【 FOREST OF DECAY 】</div>
+        <div class="flex gap-6 md:gap-10 text-xs md:text-sm font-bold uppercase tracking-widest text-yellow-500/90 mt-4 md:mt-0">
+            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="hover:text-yellow-400 transition underline underline-offset-8 decoration-red-900">X Community</a>
+            <a href="https://t.me/+vmw7T6AL9FZjMzRk" target="_blank" class="hover:text-yellow-400 transition underline underline-offset-8 decoration-red-900">Telegram</a>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 pt-16 pb-40 text-center relative z-10">
+    <main class="container mx-auto px-4 pt-12 pb-40 text-center relative z-10">
         
-        <div class="mb-12">
-            <p class="text-yellow-600 tracking-[0.5em] mb-4">CYBER CHINESE DECAY</p>
-            <h1 class="text-6xl md:text-9xl font-black mb-6 glow-text italic uppercase">Chinese Rot</h1>
-            <div class="w-24 h-1 bg-red-800 mx-auto mb-6"></div>
-            <p class="text-lg md:text-2xl text-red-200 max-w-2xl mx-auto font-serif italic">
-                “ All beings decay, all things rot. In the deep forest, there is always an echo.”
+        <!-- Main Title Header -->
+        <div class="mb-20">
+            <p class="text-yellow-600 tracking-[0.8em] mb-4 text-xs font-bold uppercase">Digital Brain Rot</p>
+            <h1 class="text-7xl md:text-[11rem] glow-text leading-none calligraphy-font mb-4">Chinese Rot</h1>
+            <div class="w-40 h-1 bg-red-900 mx-auto mb-10 opacity-50"></div>
+            <p class="text-xl md:text-3xl text-red-100/90 max-w-2xl mx-auto font-light leading-relaxed italic calligraphy-font">
+                “All beings decay, all things rot. In the deep forest, there is always an echo.”
             </p>
         </div>
 
         <!-- Contract Address -->
         <div class="max-w-3xl mx-auto mb-20">
-            <div id="ca-container" class="ca-box p-5 rounded-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                <span class="text-red-500 text-xs font-serif uppercase tracking-widest">Seal Code:</span>
-                <code id="ca-text" class="text-sm md:text-lg font-mono text-yellow-500 break-all">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
-                <button class="bg-red-900/50 border border-yellow-700 text-yellow-500 px-4 py-1 text-xs hover:bg-yellow-600 hover:text-black transition">COPY SEAL</button>
+            <div id="ca-container" class="ca-box p-6 rounded-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-red-500 text-xs font-bold uppercase tracking-widest">Seal Code:</span>
+                <code id="ca-text" class="text-sm md:text-lg font-mono text-yellow-500 break-all bg-black/60 px-4 py-2 rounded border border-red-900/40">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
+                <button class="bg-red-950 border border-yellow-800 text-yellow-500 px-8 py-3 text-xs font-bold hover:bg-yellow-600 hover:text-black transition uppercase tracking-widest shadow-xl">COPY MARK</button>
             </div>
-            <p id="copy-msg" class="mt-2 text-yellow-500 font-bold opacity-0 transition-opacity uppercase text-xs">The contract is sealed. The mark is carved!</p>
+            <p id="copy-msg" class="mt-4 text-yellow-500 font-bold opacity-0 transition-opacity uppercase text-xs">The seal is applied to your soul.</p>
         </div>
 
-        <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-24">
-            <a href="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH" target="_blank" class="btn-rot">Divination (Chart)</a>
-            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="btn-rot">Enter the Realm (Socials)</a>
+        <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-32">
+            <a href="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH" target="_blank" class="btn-rot">Dex Chart</a>
+            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="btn-rot">X Community</a>
         </div>
 
         <!-- Carousel Section -->
         <section class="max-w-4xl mx-auto mb-32 relative">
-            <h2 class="text-3xl md:text-4xl mb-12 text-yellow-500 font-serif italic">—— Rot Reels (Visions) ——</h2>
+            <h2 class="text-4xl md:text-5xl mb-12 text-yellow-500 calligraphy-font">—— VISIONS OF DECAY (Reels) ——</h2>
             
             <div class="flex items-center justify-center gap-2 md:gap-8">
                 <button class="nav-btn" onclick="scrollCarousel(-1)">◀</button>
@@ -348,22 +353,22 @@
                 </div>
                 <button class="nav-btn" onclick="scrollCarousel(1)">▶</button>
             </div>
-            <p class="text-xs text-red-800 mt-4 uppercase tracking-widest">Swipe or click arrows to cycle the rot</p>
+            <p class="text-xs text-red-900 mt-8 uppercase tracking-[0.5em] font-bold">Gaze into the rot, feel the pulse</p>
         </section>
 
         <!-- Chart Section -->
         <section class="max-w-6xl mx-auto mb-32">
-            <h2 class="text-4xl mb-8 glow-text uppercase">Fate Tracker (Live Moss)</h2>
-            <div id="dexscreener-embed" class="rounded-lg overflow-hidden">
+            <h2 class="text-5xl mb-12 glow-text calligraphy-font">Fate Tracker (Live Moss)</h2>
+            <div id="dexscreener-embed" class="rounded-lg overflow-hidden shadow-[0_0_60px_rgba(139,0,0,0.5)]">
                 <iframe src="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartDefaultOnMobile=1&chartTheme=dark&theme=dark&chartStyle=1&chartType=marketCap&interval=5" style="width:100%; height:600px; border:none;"></iframe>
             </div>
         </section>
 
         <!-- Lore Section -->
-        <section class="mt-32 grid md:grid-cols-2 gap-16 text-left items-center">
-            <div class="p-10 border-l-4 border-red-800 bg-red-950/20 backdrop-blur-sm">
-                <h2 class="text-5xl mb-8 text-yellow-500 font-serif">Forest Secrets</h2>
-                <div class="space-y-6 text-lg text-gray-400 font-serif leading-loose">
+        <section class="mt-40 grid md:grid-cols-2 gap-20 text-left items-center">
+            <div class="p-12 border-l-4 border-red-800 bg-red-950/25 backdrop-blur-xl">
+                <h2 class="text-5xl mb-10 text-yellow-500 calligraphy-font">Forest Secrets</h2>
+                <div class="space-y-8 text-xl text-gray-300 font-light leading-relaxed">
                     <p>
                         In the unfathomable depths of the digital jungle, ancient emoji incantations are undergoing a silent "rot." This is not an end, but an unspeakable transcendence.
                     </p>
@@ -373,18 +378,18 @@
                 </div>
             </div>
             <div class="relative flex justify-center">
-                <div class="w-64 h-64 border-4 border-yellow-700/30 rounded-full flex items-center justify-center animate-spin-slow">
-                    <div class="text-[120px] filter drop-shadow-[0_0_30px_rgba(139,0,0,1)]">🀄</div>
+                <div class="w-80 h-80 border border-yellow-800/20 rounded-full flex items-center justify-center animate-spin-slow">
+                    <div class="text-[160px] filter drop-shadow-[0_0_50px_rgba(139,0,0,1)]">🀄</div>
                 </div>
             </div>
         </section>
 
         <!-- Footer -->
-        <div class="mt-40 border-t border-red-900/30 pt-20">
-            <div class="opacity-30 text-xs tracking-[1.5em] uppercase text-yellow-600 mb-4">
+        <div class="mt-48 border-t border-red-950 pt-24 pb-12">
+            <div class="opacity-20 text-[11px] tracking-[2em] uppercase text-yellow-600 mb-6 font-bold">
                 Brain Rot • Digital Decay • $CHINESEROT • Eternal Forest
             </div>
-            <p class="text-[10px] text-red-900 font-serif uppercase tracking-widest">© Year of Decay · Rot Research Institute</p>
+            <p class="text-[10px] text-red-950 uppercase tracking-widest font-bold">© Year of Infinite Decay · Rot Research Institute</p>
         </div>
     </main>
 
@@ -422,30 +427,30 @@
         document.addEventListener('mousemove', (e) => {
             const stains = document.querySelectorAll('.ink-stain');
             stains.forEach((stain, index) => {
-                const moveX = (e.clientX - window.innerWidth / 2) / (30 + index * 10);
-                const moveY = (e.clientY - window.innerHeight / 2) / (30 + index * 10);
+                const moveX = (e.clientX - window.innerWidth / 2) / (50 + index * 10);
+                const moveY = (e.clientY - window.innerHeight / 2) / (50 + index * 10);
                 stain.style.transform = `translate(${moveX}px, ${moveY}px)`;
             });
         });
 
         // Generate Kongming Lanterns
         const lanternContainer = document.getElementById('lantern-field');
-        const chars = ["命", "运", "腐", "朽", "梦", "虚"];
+        const words = ["FATE", "VOID", "ROT", "DECAY", "DREAM", "ECHO", "FOREST", "SILENCE"];
         
         function createLantern() {
             const l = document.createElement('div');
             l.className = 'kongming-lantern';
             l.style.left = Math.random() * 100 + 'vw';
-            l.style.setProperty('--duration', (Math.random() * 10 + 10) + 's');
-            l.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
-            l.style.setProperty('--rot', (Math.random() * 40 - 20) + 'deg');
-            l.innerText = chars[Math.floor(Math.random() * chars.length)];
+            l.style.setProperty('--duration', (Math.random() * 12 + 12) + 's');
+            l.style.setProperty('--drift', (Math.random() * 250 - 125) + 'px');
+            l.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
+            l.innerText = words[Math.floor(Math.random() * words.length)];
             
             lanternContainer.appendChild(l);
-            setTimeout(() => l.remove(), 20000);
+            setTimeout(() => l.remove(), 25000);
         }
 
-        setInterval(createLantern, 2000);
+        setInterval(createLantern, 2200);
     </script>
 </body>
 </html>
