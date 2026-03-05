@@ -4,13 +4,3 @@
     { "source": "/(.*)", "destination": "/public/$1" }
   ]
 }
-```
-
-### Your GitHub should look exactly like this:
-```text
-/ (Root)
-├── vercel.json
-├── api/
-│   └── summon-rot.js
-└── public/
-    └── index.html
