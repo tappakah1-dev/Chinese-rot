@@ -31,9 +31,9 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Fix 2: Changed to the stable model: imagen-3.0-generate-001
+        // Reverted to imagen-3.0-generate-002
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`,
             {
                 method: "POST",
                 headers: {
