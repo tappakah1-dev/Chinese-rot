@@ -24,86 +24,15 @@
         }
 
         .psychedelic-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.6;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6;
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
             background-color: var(--ink-black);
         }
 
         .ink-stain {
-            position: fixed;
-            width: 600px;
-            height: 600px;
+            position: fixed; width: 600px; height: 600px;
             background: radial-gradient(circle, rgba(139, 0, 0, 0.15) 0%, transparent 70%);
-            filter: blur(50px);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .dragon-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-            overflow: hidden;
-        }
-
-        .dragon-snake {
-            position: absolute;
-            width: 300px;
-            opacity: 0.3;
-            filter: drop-shadow(0 0 8px var(--blood-red));
-            animation: dragonSwim var(--duration) linear infinite;
-        }
-
-        @keyframes dragonSwim {
-            0% { left: -400px; top: var(--start-y); transform: rotate(10deg) scaleX(var(--dir)); }
-            50% { top: var(--mid-y); transform: rotate(-10deg) scaleX(var(--dir)); }
-            100% { left: 110%; top: var(--end-y); transform: rotate(10deg) scaleX(var(--dir)); }
-        }
-
-        .kongming-container {
-            position: fixed;
-            bottom: -100px;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 4;
-        }
-
-        .kongming-lantern {
-            position: absolute;
-            width: 48px;
-            height: 62px;
-            background: radial-gradient(circle at bottom, #ff9900 0%, var(--blood-red) 80%);
-            border-radius: 10px 10px 50% 50% / 10px 10px 20% 20%;
-            box-shadow: 0 0 20px rgba(255, 153, 0, 0.6);
-            opacity: 0.7;
-            animation: riseUp var(--duration) linear infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 215, 0, 0.9);
-            font-size: 14px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            font-family: 'Zhi Mang Xing', cursive;
-            padding: 4px;
-            text-align: center;
-        }
-
-        @keyframes riseUp {
-            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            100% { transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)); opacity: 0; }
+            filter: blur(50px); z-index: -1; pointer-events: none;
         }
 
         .glow-text {
@@ -112,231 +41,63 @@
             font-family: 'Zhi Mang Xing', cursive;
         }
 
-        .calligraphy-font {
-            font-family: 'Zhi Mang Xing', cursive;
-        }
-
-        @keyframes sway {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        .lantern-fixed {
-            position: fixed;
-            top: -15px;
-            width: 65px;
-            height: 85px;
-            background: var(--blood-red);
-            border-radius: 50% / 20%;
-            box-shadow: 0 0 30px var(--blood-red);
-            animation: sway 4s ease-in-out infinite;
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--neon-gold);
-            font-weight: bold;
-            font-size: 14px;
-            border: 2px solid var(--neon-gold);
-            font-family: 'Zhi Mang Xing', cursive;
-            text-align: center;
-            line-height: 1.1;
-        }
-
-        .ca-box {
-            background: rgba(20, 5, 5, 0.9);
-            border: 2px solid var(--blood-red);
-            box-shadow: inset 0 0 15px var(--blood-red);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .ca-box:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 25px var(--neon-gold);
-            border-color: var(--neon-gold);
-        }
+        .calligraphy-font { font-family: 'Zhi Mang Xing', cursive; }
 
         .btn-rot {
             background: linear-gradient(45deg, var(--blood-red), #330000);
             color: var(--neon-gold);
-            font-weight: 700;
-            padding: 1rem 2rem;
-            border-radius: 4px;
-            border: 1px solid var(--neon-gold);
-            text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
-            transition: 0.3s;
+            font-weight: 700; padding: 1rem 2rem; border-radius: 4px;
+            border: 1px solid var(--neon-gold); text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.5); transition: 0.3s;
             letter-spacing: 2px;
-            font-family: 'Noto Sans SC', sans-serif;
         }
 
         .btn-rot:hover {
-            background: var(--neon-gold);
-            color: var(--blood-red);
+            background: var(--neon-gold); color: var(--blood-red);
             box-shadow: 0 0 30px var(--neon-gold);
         }
 
-        .video-carousel {
-            display: flex;
-            overflow-x: scroll;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            border: 8px double var(--blood-red);
-            border-radius: 4px;
-            background: rgba(0,0,0,0.8);
-            box-shadow: 0 0 40px rgba(139, 0, 0, 0.4);
-            flex-grow: 1;
-            max-width: 450px; 
-            margin: 0 auto;
-        }
-
-        .video-carousel::-webkit-scrollbar { display: none; }
-        .video-item { 
-            scroll-snap-align: center; 
-            flex: 0 0 100%; 
-            width: 100%; 
-            min-height: 600px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-
-        .nav-btn {
-            background: var(--blood-red);
-            border: 1px solid var(--neon-gold);
-            color: var(--neon-gold);
-            width: 45px;
-            height: 60px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-            flex-shrink: 0;
-            z-index: 30;
-        }
-
-        .nav-btn:hover {
-            background: var(--neon-gold);
-            color: var(--blood-red);
-        }
-
         .gen-container {
-            background: rgba(10, 2, 2, 0.85);
-            border: 3px solid var(--blood-red);
-            box-shadow: 0 0 50px rgba(139,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .gen-container::before {
-            content: 'BRAIN ROT ENGINE V2.1 (STABLE)';
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            font-size: 8px;
-            color: var(--blood-red);
-            letter-spacing: 3px;
+            background: rgba(10, 2, 2, 0.85); border: 3px solid var(--blood-red);
+            box-shadow: 0 0 50px rgba(139,0,0,0.3); position: relative; overflow: hidden;
         }
 
         .image-display {
-            width: 100%;
-            aspect-ratio: 1;
-            background: #000;
-            border: 2px solid #220000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .image-display img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 100%; aspect-ratio: 1; background: #000; border: 2px solid #220000;
+            display: flex; align-items: center; justify-content: center; position: relative;
         }
 
         .loader {
-            width: 48px;
-            height: 48px;
-            border: 5px solid var(--blood-red);
-            border-bottom-color: var(--neon-gold);
-            border-radius: 50%;
-            display: inline-block;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
+            width: 48px; height: 48px; border: 5px solid var(--blood-red);
+            border-bottom-color: var(--neon-gold); border-radius: 50%;
+            display: inline-block; animation: rotation 1s linear infinite;
         }
 
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .calligraphy-watermark {
-            position: absolute;
-            font-family: 'Zhi Mang Xing', cursive;
-            font-size: 15rem;
-            opacity: 0.04;
-            color: white;
-            pointer-events: none;
-            z-index: 1;
-            white-space: nowrap;
-        }
-
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow { animation: spin-slow 15s linear infinite; }
-
-        .fade-in {
-            animation: fadeIn 0.8s ease-in forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; filter: blur(10px); }
-            to { opacity: 1; filter: blur(0px); }
-        }
+        .fade-in { animation: fadeIn 0.8s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; filter: blur(10px); } to { opacity: 1; filter: blur(0px); } }
     </style>
 </head>
 <body>
 
     <div class="psychedelic-bg"></div>
-    <div class="ink-stain" id="stain-1" style="top: -10%; left: -10%;"></div>
-    <div class="ink-stain" id="stain-2" style="bottom: -10%; right: -10%;"></div>
-
-    <div class="dragon-layer">
-        <svg class="dragon-snake" style="--duration: 25s; --start-y: 20%; --mid-y: 45%; --end-y: 15%; --dir: 1;" viewBox="0 0 200 60">
-            <path id="path1" d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" stroke="var(--neon-gold)" fill="none" stroke-width="2" stroke-dasharray="5,2" opacity="0.6"/>
-            <text font-family="Zhi Mang Xing" font-size="6" fill="red">
-                <textPath href="#path1">ROTTING DRAGON · ROTTING DRAGON · ROTTING DRAGON</textPath>
-            </text>
-        </svg>
-    </div>
-
-    <div class="kongming-container" id="lantern-field"></div>
-
-    <div class="lantern-fixed" style="left: 10%;">ROT</div>
-    <div class="lantern-fixed" style="right: 10%; animation-delay: 1s;">DECAY</div>
-
-    <div class="calligraphy-watermark" style="top: 25%; left: -5%;">CHINESE ROT</div>
+    <div class="ink-stain" style="top: -10%; left: -10%;"></div>
+    <div class="ink-stain" style="bottom: -10%; right: -10%;"></div>
 
     <nav class="pt-24 pb-8 px-8 flex flex-col md:flex-row justify-between items-center relative z-10 border-b border-red-900/10 gap-4">
         <div class="text-3xl md:text-5xl glow-text calligraphy-font tracking-widest">【 FOREST OF DECAY 】</div>
         <div class="flex gap-6 md:gap-10 text-xs md:text-sm font-bold uppercase tracking-widest text-yellow-500/90">
-            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="hover:text-yellow-400 transition underline underline-offset-8 decoration-red-900">X Community</a>
-            <a href="https://t.me/+vmw7T6AL9FZjMzRk" target="_blank" class="hover:text-yellow-400 transition underline underline-offset-8 decoration-red-900">Telegram</a>
+            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="hover:text-yellow-400 transition underline underline-offset-8">X Community</a>
+            <a href="https://t.me/+vmw7T6AL9FZjMzRk" target="_blank" class="hover:text-yellow-400 transition underline underline-offset-8">Telegram</a>
         </div>
     </nav>
 
     <main class="container mx-auto px-4 pt-12 pb-40 text-center relative z-10">
-        
         <div class="mb-20">
-            <p class="text-yellow-600 tracking-[0.8em] mb-4 text-xs font-bold uppercase">Digital Brain Rot</p>
             <h1 class="text-7xl md:text-[11rem] glow-text leading-none calligraphy-font mb-4">$CHINESEROT</h1>
-            <div class="w-40 h-1 bg-red-900 mx-auto mb-10 opacity-50"></div>
-            <p class="text-xl md:text-3xl text-red-100/90 max-w-2xl mx-auto font-light leading-relaxed italic calligraphy-font">
-                “Infinite randomization. Infinite rot. One singular ticker.”
+            <p class="text-xl md:text-3xl text-red-100/90 max-w-2xl mx-auto italic calligraphy-font">
+                “Infinite randomization. Infinite rot.”
             </p>
         </div>
 
@@ -344,255 +105,126 @@
             <h2 class="text-4xl md:text-6xl mb-12 glow-text calligraphy-font">Summon Random Rot</h2>
             <div class="gen-container p-8 md:p-12 rounded-lg grid md:grid-cols-2 gap-12 items-center">
                 <div class="image-display rounded shadow-2xl overflow-hidden" id="gen-result">
-                    <div class="text-red-900/40 text-xs italic p-10 text-center uppercase tracking-widest">Summoning Portal Ready...</div>
+                    <div class="text-red-900/40 text-xs italic p-10 text-center uppercase tracking-widest">Portal Closed. Waiting for Command.</div>
                 </div>
                 <div class="text-left space-y-6">
                     <p class="text-yellow-500 calligraphy-font text-2xl">Rot Engine V2.1</p>
                     <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
-                        We blend Chinese tradition with absolute brainrot. Animals in fruit, social credit memes, mukbangs, and chaotic situations. $CHINESEROT is inevitable.
+                        Combining Chinese tradition with chaotic brainrot. $CHINESEROT images generated in real-time.
                     </p>
                     <button id="gen-trigger" class="btn-rot w-full py-6 text-xl">MANIFEST ROT</button>
-                    <p id="gen-status" class="text-[10px] text-red-800 uppercase tracking-widest font-bold text-center"></p>
+                    <div id="gen-status-box" class="mt-4 p-3 bg-red-950/20 rounded border border-red-900/30">
+                        <p id="gen-status" class="text-[9px] text-red-700 uppercase tracking-widest font-bold break-words">Status: Idle</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <div class="max-w-3xl mx-auto mb-20">
-            <div id="ca-container" class="ca-box p-6 rounded-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                <span class="text-red-500 text-xs font-bold uppercase tracking-widest">CA:</span>
-                <code id="ca-text" class="text-sm md:text-lg font-mono text-yellow-500 break-all bg-black/60 px-4 py-2 rounded border border-red-900/40">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
-                <button class="bg-red-950 border border-yellow-800 text-yellow-500 px-8 py-3 text-xs font-bold hover:bg-yellow-600 hover:text-black transition uppercase tracking-widest shadow-xl">COPY MARK</button>
+            <div id="ca-container" class="cursor-pointer bg-red-950/40 border-2 border-red-900 p-6 rounded-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-red-500 text-xs font-bold uppercase">CA:</span>
+                <code id="ca-text" class="text-sm font-mono text-yellow-500">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
+                <button class="bg-red-900 text-yellow-500 px-4 py-2 text-xs font-bold uppercase">COPY</button>
             </div>
-            <p id="copy-msg" class="mt-4 text-yellow-500 font-bold opacity-0 transition-opacity uppercase text-xs">The seal is applied to your soul.</p>
         </div>
 
-        <div class="flex flex-wrap justify-center gap-6 md:gap-10 mb-32">
-            <a href="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH" target="_blank" class="btn-rot">Dex Chart</a>
-            <a href="https://axiom.trade/@dumacuk" target="_blank" class="btn-rot">Trade on Axiom</a>
-            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="btn-rot">X Community</a>
+        <div class="flex flex-wrap justify-center gap-6 mb-32">
+            <a href="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH" target="_blank" class="btn-rot">Chart</a>
+            <a href="https://axiom.trade/@dumacuk" target="_blank" class="btn-rot">Trade</a>
         </div>
 
-        <section class="max-w-4xl mx-auto mb-32 relative">
-            <h2 class="text-4xl md:text-5xl mb-12 text-yellow-500 calligraphy-font">—— VISIONS OF DECAY ——</h2>
-            <div class="flex items-center justify-center gap-2 md:gap-8">
-                <button class="nav-btn" onclick="scrollCarousel(-1)">◀</button>
-                <div class="video-carousel" id="rot-carousel">
-                    <div class="video-item">
-                        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215" style="width: 100%;">
-                            <section></section>
-                        </blockquote>
-                    </div>
-                    <div class="video-item">
-                        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568" style="width: 100%;">
-                            <section></section>
-                        </blockquote>
-                    </div>
-                    <div class="video-item">
-                        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7480460726088453384" data-video-id="7480460726088453384" style="width: 100%;">
-                            <section></section>
-                        </blockquote>
-                    </div>
-                    <div class="video-item">
-                        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322" style="width: 100%;">
-                            <section></section>
-                        </blockquote>
-                    </div>
-                </div>
-                <button class="nav-btn" onclick="scrollCarousel(1)">▶</button>
-            </div>
-        </section>
-
-        <!-- Chart Section -->
-        <section class="max-w-6xl mx-auto mb-32">
-            <h2 class="text-5xl mb-12 glow-text calligraphy-font">Fate Tracker (Live Moss)</h2>
-            <div id="dexscreener-embed" class="rounded-lg overflow-hidden border-4 border-red-900 shadow-[0_0_60px_rgba(139,0,0,0.5)] bg-black">
-                <iframe src="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartDefaultOnMobile=1&chartTheme=dark&theme=dark&chartStyle=1&chartType=marketCap&interval=5" style="width:100%; height:600px; border:none;"></iframe>
-            </div>
-        </section>
-
-        <!-- Lore Section -->
-        <section class="mt-40 grid md:grid-cols-2 gap-20 text-left items-center">
-            <div class="p-12 border-l-4 border-red-800 bg-red-950/25 backdrop-blur-xl">
-                <h2 class="text-5xl mb-10 text-yellow-500 calligraphy-font">Forest Secrets</h2>
-                <div class="space-y-8 text-xl text-gray-300 font-light leading-relaxed">
-                    <p>
-                        In the unfathomable depths of the digital jungle, ancient emoji incantations are undergoing a silent "rot." This is not an end, but an unspeakable transcendence.
-                    </p>
-                    <p>
-                        $CHINESEROT was born from surreal midnight fever dreams, the only currency flowing through the moss. When the brain melts into a repeating melody, we shall meet again in the dark red shadows.
-                    </p>
-                </div>
-            </div>
-            <div class="relative flex justify-center">
-                <div class="w-80 h-80 border border-yellow-800/20 rounded-full flex items-center justify-center animate-spin-slow">
-                    <div class="text-[160px] filter drop-shadow-[0_0_50px_rgba(139,0,0,1)]">🀄</div>
-                </div>
-            </div>
-        </section>
-
-        <div class="mt-48 border-t border-red-950 pt-24 pb-12">
-            <div class="opacity-20 text-[11px] tracking-[2em] uppercase text-yellow-600 mb-6 font-bold">
-                Brain Rot • Digital Decay • $CHINESEROT • Eternal Forest
-            </div>
-            <p class="text-[10px] text-red-950 uppercase tracking-widest font-bold">© Year of Infinite Decay · Rot Research Institute</p>
-        </div>
+        <div class="mt-48 text-red-950 uppercase tracking-widest text-[10px]">© Year of Infinite Decay</div>
     </main>
 
-    <script async src="https://www.tiktok.com/embed.js"></script>
-    
     <script>
-        const apiKey = ""; // Keep empty as per instructions; environment provides it
+        // API Key provided by user
+        const apiKey = "AIzaSyCEYxeTAGaakHcoWe_8tZt5LfG3u2uQ0M8"; 
         const genTrigger = document.getElementById('gen-trigger');
         const genResult = document.getElementById('gen-result');
         const genStatus = document.getElementById('gen-status');
 
-        // FALLBACK GALLERY
-        const fallbackImages = [
-            "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=1000&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1526318896980-cf78c088247c?q=80&w=1000&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518544801976-3e159e50e5bb?q=80&w=1000&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1000&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=1000&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=1000&auto=format&fit=crop"
+        const prompts = [
+            "A fat cat inside a giant dumpling, Social Credit background, chaotic 3D render, high saturation",
+            "Capybara playing mahjong with a red panda, neon lanterns, $CHINESEROT neon sign, hyper-vibrant",
+            "Giant shrimp wearing an emperor crown, eating spicy noodles, phone brainrot aesthetic",
+            "Dancing frogs with Social Credit emojis, bright red calligraphy background, chaotic energy",
+            "Surreal goldfish in a bubble tea cup, floating gold coins, digital decay aesthetic"
         ];
 
-        // POOLS
-        const creatures = ["fat cat", "giant hamster", "weird axolotl", "capybara wearing a suit", "red panda with shades", "cursed blobfish", "anthropomorphic shrimp", "shiba inu", "monkey", "pigeon", "smiling frog"];
-        const objects = ["inside an avocado shell", "peeled banana", "carved pumpkin lantern", "giant strawberry", "eggplant", "pineapple suit", "broccoli tree", "within a giant dumpling", "giant baozi", "steaming hot pot bowl", "sitting on a mahjong tile"];
-        const situations = ["doing a Mukbang", "playing Subway Surfers", "taking a Social Credit Test", "dancing to phonk", "staring intensely", "floating in digital void", "holding lucky cat", "surrounded by hongbao", "judged by laughing emoji", "trapped in 90s monitor", "wearing emperor crown", "crying milk"];
-        const chineseElements = ["Calligraphy background", "Neon red lanterns", "Mahjong tiles", "Jelly Great Wall", "Gold coins", "Ink cyberpunk", "Slime Yin Yang", "Streetwear Terracotta"];
-        const tickerPlacements = ["$CHINESEROT forehead tattoo", "neon $CHINESEROT sign", "$CHINESEROT fan", "$CHINESEROT carved in fruit", "graffiti $CHINESEROT", "floating $CHINESEROT letters"];
-
-        // Exponential backoff helper
         async function fetchWithBackoff(url, options, retries = 5) {
             let delay = 1000;
             for (let i = 0; i < retries; i++) {
                 try {
                     const response = await fetch(url, options);
-                    if (response.ok) return response;
+                    const data = await response.json();
                     
-                    const data = await response.json().catch(() => ({}));
-                    // If project/API not enabled, don't retry, just return the error
-                    if (response.status === 403) {
-                        return { ok: false, status: 403, error: data.error };
+                    if (response.ok) return { ok: true, data };
+                    
+                    // If project/API not enabled or key error, return immediately
+                    if (response.status === 403 || response.status === 400) {
+                        return { ok: false, status: response.status, error: data.error };
                     }
                 } catch (err) {
                     if (i === retries - 1) throw err;
                 }
-                await new Promise(resolve => setTimeout(resolve, delay));
+                await new Promise(r => setTimeout(r, delay));
                 delay *= 2;
             }
-            throw new Error('All retries failed');
+            return { ok: false, status: 500, error: { message: "Network or Server Timeout" } };
         }
 
         async function generateRot() {
-            const creature = creatures[Math.floor(Math.random() * creatures.length)];
-            const obj = objects[Math.floor(Math.random() * objects.length)];
-            const sit = situations[Math.floor(Math.random() * situations.length)];
-            const elem = chineseElements[Math.floor(Math.random() * chineseElements.length)];
-            const placement = tickerPlacements[Math.floor(Math.random() * tickerPlacements.length)];
-            
-            const prompt = `A ${creature} ${obj}, ${sit}. ${elem}. ${placement}. hyper-saturated brainrot aesthetic, high quality 3D render, chaotic energy.`;
-
-            genStatus.innerText = "OVERLOADING SENSES...";
+            const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+            genStatus.innerText = "OPENING PORTAL...";
             genTrigger.disabled = true;
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Use the correct supported model for image generation
+                // Endpoint for Imagen 4 on Generative Language API
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
                 
-                const response = await fetchWithBackoff(url, {
+                const result = await fetchWithBackoff(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        instances: { prompt: prompt },
+                        instances: [{ prompt: prompt }],
                         parameters: { sampleCount: 1 }
                     })
                 });
 
-                if (!response.ok) {
-                    const error = response.error;
-                    if (response.status === 403) {
-                        genStatus.innerHTML = `API NOT ENABLED. VISIT: <a href="https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview" target="_blank" class="underline text-yellow-400">GOOGLE CONSOLE</a>`;
-                    } else {
-                        genStatus.innerText = `PORTAL ERROR (${response.status}). TRYING ARCHIVE...`;
-                    }
-                    throw new Error(error?.message || 'API Error');
+                if (!result.ok) {
+                    const msg = result.error?.message || "Unknown portal failure";
+                    genStatus.innerHTML = `DECAY ERROR: ${msg}`;
+                    genResult.innerHTML = `<div class="text-red-900 text-[10px] p-10 uppercase tracking-widest">Portal Obstructed</div>`;
+                    console.error("API Error Details:", result.error);
+                    return;
                 }
 
-                const data = await response.json();
-                const b64Raw = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                
-                genResult.innerHTML = `<img src="${b64Raw}" class="fade-in w-full h-full object-cover" alt="Rot Creature">`;
-                genStatus.innerText = "ROT MANIFESTED.";
+                if (result.data.predictions && result.data.predictions[0]) {
+                    const b64 = result.data.predictions[0].bytesBase64Encoded;
+                    genResult.innerHTML = `<img src="data:image/png;base64,${b64}" class="fade-in w-full h-full object-cover">`;
+                    genStatus.innerText = "ROT MANIFESTED.";
+                } else {
+                    throw new Error("No image data in response");
+                }
+
             } catch (err) {
-                console.warn("Generation failed. Reason:", err.message);
-                const randomImg = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
-                setTimeout(() => {
-                    // Only show fallback if we didn't just display a hard 403 error link
-                    if (!genStatus.innerHTML.includes("CONSOLE")) {
-                        genResult.innerHTML = `<img src="${randomImg}" class="fade-in w-full h-full object-cover blur-[1px] contrast-125" alt="Static Rot">`;
-                        genStatus.innerText = "ROT ARCHIVE ACCESSED (STABLE MODE).";
-                    }
-                }, 1000);
+                genStatus.innerText = "FATAL DECAY: " + err.message;
+                genResult.innerHTML = `<div class="text-red-900 text-[10px] p-10">THE VOID IS UNSTABLE</div>`;
             } finally {
                 genTrigger.disabled = false;
             }
         }
 
-        genTrigger.addEventListener('click', () => generateRot());
+        genTrigger.addEventListener('click', generateRot);
 
-        // Copy logic
-        const caContainer = document.getElementById('ca-container');
-        const caText = document.getElementById('ca-text').innerText;
-        const copyMsg = document.getElementById('copy-msg');
-
-        caContainer.addEventListener('click', () => {
+        document.getElementById('ca-container').onclick = () => {
+            const t = document.getElementById('ca-text').innerText;
             const el = document.createElement('textarea');
-            el.value = caText;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            copyMsg.style.opacity = '1';
-            setTimeout(() => { copyMsg.style.opacity = '0'; }, 2000);
-        });
-
-        function scrollCarousel(direction) {
-            const carousel = document.getElementById('rot-carousel');
-            const items = carousel.querySelectorAll('.video-item');
-            if (items.length === 0) return;
-            const itemWidth = items[0].offsetWidth;
-            carousel.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
-        }
-
-        document.addEventListener('mousemove', (e) => {
-            const stain1 = document.getElementById('stain-1');
-            const stain2 = document.getElementById('stain-2');
-            if(!stain1 || !stain2) return;
-            const moveX = (e.clientX - window.innerWidth / 2) / 80;
-            const moveY = (e.clientY - window.innerHeight / 2) / 80;
-            stain1.style.transform = `translate(${moveX}px, ${moveY}px)`;
-            stain2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
-        });
-
-        const lanternContainer = document.getElementById('lantern-field');
-        const words = ["FATE", "VOID", "ROT", "DECAY", "DREAM", "ECHO", "FOREST", "SILENCE", "🀄", "MOSS", "SOCIAL CREDIT"];
-        
-        function createLantern() {
-            if(!lanternContainer) return;
-            const l = document.createElement('div');
-            l.className = 'kongming-lantern';
-            l.style.left = Math.random() * 100 + 'vw';
-            l.style.setProperty('--duration', (Math.random() * 15 + 15) + 's');
-            l.style.setProperty('--drift', (Math.random() * 300 - 150) + 'px');
-            l.style.setProperty('--rot', (Math.random() * 40 - 20) + 'deg');
-            l.innerText = words[Math.floor(Math.random() * words.length)];
-            lanternContainer.appendChild(l);
-            setTimeout(() => l.remove(), 31000);
-        }
-        setInterval(createLantern, 4000);
+            el.value = t; document.body.appendChild(el); el.select();
+            document.execCommand('copy'); document.body.removeChild(el);
+            alert("The Mark has been copied.");
+        };
     </script>
 </body>
 </html>
