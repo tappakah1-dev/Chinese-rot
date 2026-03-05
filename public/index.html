@@ -91,6 +91,26 @@
             transform: scale(1.05);
         }
 
+        .btn-share {
+            background: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            display: none; /* Hidden until image is generated */
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-share:hover {
+            background: #fff;
+            color: #000;
+        }
+
         .gen-container, .chart-container, .story-card {
             background: rgba(15, 2, 2, 0.9);
             border: 1px solid var(--neon-gold);
@@ -115,6 +135,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
 
         .loader {
@@ -283,6 +304,10 @@
                         <button id="gen-trigger" class="btn-rot w-full py-8 text-2xl calligraphy-font">
                             Summon My Rot
                         </button>
+                        <button id="share-x" class="btn-share w-full">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            Share on X
+                        </button>
                         <div id="gen-status" class="text-xs text-red-500 font-bold uppercase tracking-widest text-center min-h-[24px] bg-red-950/20 py-2 border border-red-900/30"></div>
                     </div>
                 </div>
@@ -369,6 +394,7 @@
 
     <script>
         const genTrigger = document.getElementById('gen-trigger');
+        const shareX = document.getElementById('share-x');
         const genResult = document.getElementById('gen-result');
         const genStatus = document.getElementById('gen-status');
         const videoCarousel = document.getElementById('video-carousel');
@@ -384,6 +410,13 @@
 
         const creatures = ["cat", "capybara", "dragon", "koi fish", "panda"];
         const costumes = ["traditional silk robe", "bamboo armor", "terracotta mask", "glowing paper lantern"];
+        const shareTexts = [
+            "The algorithm decays. The forest provides. I have summoned the rot. $CHINESEROT",
+            "Manifesting pure digital brainrot from the deep forest. Witness the summoning. $CHINESEROT",
+            "The dragon's breath smells of ozone and ancient ink. I am the Rot. $CHINESEROT",
+            "I saw the future in the moss. It was beautiful and decaying. $CHINESEROT",
+            "Burn the spirit. Feed the forest. $CHINESEROT"
+        ];
 
         async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
@@ -393,6 +426,7 @@
 
             genStatus.innerText = "FERMENTING IN THE ABYSS...";
             genTrigger.disabled = true;
+            shareX.style.display = 'none';
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
@@ -406,10 +440,10 @@
 
                 if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover">`;
-                    genStatus.innerText = "MANIFESTED.";
+                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover rounded shadow-lg">`;
+                    genStatus.innerText = "MANIFESTED. RIGHT CLICK IMAGE TO COPY.";
+                    shareX.style.display = 'flex';
                 } else {
-                    // Extract exact error message from API response to help debugging
                     const errorMsg = data.error?.message || data.error || "The Rot refused the connection.";
                     throw new Error(errorMsg);
                 }
@@ -422,7 +456,16 @@
             }
         }
 
+        function handleShare() {
+            const randomText = shareTexts[Math.floor(Math.random() * shareTexts.length)];
+            const currentUrl = window.location.href;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(randomText + "\n\n" + currentUrl)}`;
+            window.open(twitterUrl, '_blank');
+            genStatus.innerText = "PASTE YOUR IMAGE IN THE POST.";
+        }
+
         genTrigger.addEventListener('click', generateRot);
+        shareX.addEventListener('click', handleShare);
 
         document.getElementById('ca-copy').addEventListener('click', () => {
             const txt = "5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump";
