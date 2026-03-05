@@ -473,7 +473,8 @@
 
         function startMatrixRain() {
             initMatrix();
-            matrixCanvas.style.opacity = '0.7';
+            // Lowered opacity to 0.35 so it's a persistent background that doesn't overwhelm the text
+            matrixCanvas.style.opacity = '0.35';
             if (matrixInterval) clearInterval(matrixInterval);
             matrixInterval = setInterval(drawMatrix, 50);
         }
@@ -488,6 +489,9 @@
         window.addEventListener('resize', () => {
             if(matrixCanvas.style.opacity !== '0') initMatrix();
         });
+
+        // Start the matrix rain immediately on load
+        startMatrixRain();
 
 
         // --- FIREBASE INITIALIZATION ---
@@ -725,9 +729,6 @@
             shareX.style.display = 'none';
             genResult.innerHTML = '<span class="loader"></span>';
 
-            // TRIGGER THE MATRIX RAIN
-            startMatrixRain();
-
             try {
                 const data = await fetchWithRetry('/api/summon-rot', {
                     method: 'POST',
@@ -775,9 +776,6 @@
                 genStatus.style.color = "#ff4444";
             } finally {
                 genTrigger.disabled = false;
-                
-                // STOP THE MATRIX RAIN
-                stopMatrixRain();
             }
         }
 
