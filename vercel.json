@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/summon-rot", "destination": "/api/summon-rot.js" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
+}
