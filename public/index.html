@@ -6,6 +6,10 @@
     <title>$CHINESEROT | The Forest of Decay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+SC:wght@300;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs (Compat version for easier single-file integration) -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
     <style>
         :root {
             --blood-red: #8b0000;
@@ -129,19 +133,16 @@
             color: #000;
         }
 
-        .gen-container, .chart-container, .story-card {
+        .gen-container, .chart-container, .story-card, .community-container {
             background: rgba(15, 2, 2, 0.9);
             border: 1px solid var(--neon-gold);
             position: relative;
-            clip-path: polygon(
-                0 10%, 10% 0, 90% 0, 100% 10%, 
-                100% 90%, 90% 100%, 10% 100%, 0 90%
-            );
         }
 
         .gen-container {
             border: 2px solid var(--neon-gold);
             box-shadow: 0 0 40px rgba(139,0,0,0.5);
+            clip-path: polygon(0 10%, 10% 0, 90% 0, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0 90%);
         }
 
         .image-display {
@@ -263,6 +264,43 @@
             from { transform: rotate(-5deg); }
             to { transform: rotate(5deg); }
         }
+
+        /* Community Specific Styles */
+        .community-card {
+            min-width: 250px;
+            height: 250px;
+            position: relative;
+            border: 1px solid var(--blood-red);
+            overflow: hidden;
+            background: #000;
+        }
+        .community-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: 0.5s;
+        }
+        .community-card:hover img {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .community-card .info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, black);
+            padding: 10px;
+            font-size: 10px;
+            color: var(--neon-gold);
+            transform: translateY(100%);
+            transition: 0.3s;
+        }
+        .community-card:hover .info {
+            transform: translateY(0);
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
     <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
@@ -329,6 +367,19 @@
                         </button>
                         <div id="gen-status" class="text-xs text-red-500 font-bold uppercase tracking-widest text-center min-h-[24px] bg-red-950/20 py-2 border border-red-900/30"></div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section class="max-w-6xl mx-auto mb-40">
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-4xl text-yellow-500 calligraphy-font">Community ROT Creations</h2>
+                <div class="h-px flex-1 bg-red-900/50"></div>
+            </div>
+            <div class="carousel-wrapper">
+                <div id="community-gallery" class="flex overflow-x-auto gap-4 py-4 scrollbar-hide">
+                    <div class="text-zinc-700 italic py-10 w-full text-center uppercase tracking-widest">Scanning the Mycelium...</div>
                 </div>
             </div>
         </section>
@@ -412,6 +463,38 @@
     </main>
 
     <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNu6OysHLjFDrLha87TUI7rJT2q0AGK1Y",
+            authDomain: "chineserot-67bb3.firebaseapp.com",
+            projectId: "chineserot-67bb3",
+            storageBucket: "chineserot-67bb3.firebasestorage.app",
+            messagingSenderId: "231858192926",
+            appId: "1:231858192926:web:152533918c847f2e54e40f",
+            measurementId: "G-X9VQEVHWPV"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const appId = "chineserot-67bb3"; // Using Project ID for path consistency
+
+        // 1. Auth Setup (Required for Rule 1 & 3)
+        async function initAuth() {
+            try {
+                // Prioritize environment token, fallback to anonymous
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await auth.signInWithCustomToken(__initial_auth_token);
+                } else {
+                    await auth.signInAnonymously();
+                }
+            } catch (e) {
+                console.error("Auth failed:", e);
+            }
+        }
+        initAuth();
+
         const genTrigger = document.getElementById('gen-trigger');
         const shareX = document.getElementById('share-x');
         const genResult = document.getElementById('gen-result');
@@ -419,13 +502,43 @@
         const videoCarousel = document.getElementById('video-carousel');
         const slideLeft = document.getElementById('slide-left');
         const slideRight = document.getElementById('slide-right');
+        const communityGallery = document.getElementById('community-gallery');
 
-        slideLeft.onclick = () => {
-            videoCarousel.scrollBy({ left: -345, behavior: 'smooth' });
-        };
-        slideRight.onclick = () => {
-            videoCarousel.scrollBy({ left: 345, behavior: 'smooth' });
-        };
+        slideLeft.onclick = () => { videoCarousel.scrollBy({ left: -345, behavior: 'smooth' }); };
+        slideRight.onclick = () => { videoCarousel.scrollBy({ left: 345, behavior: 'smooth' }); };
+
+        // --- Data Listener (Community Gallery) ---
+        function loadCommunity() {
+            // Rule 1: Strict collection path for Firebase environment compatibility
+            const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
+            
+            // Rule 2: Simple query, memory-based filtering/sorting
+            creationsRef.onSnapshot((snapshot) => {
+                const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Sort by timestamp descending in memory
+                const sorted = docs.sort((a, b) => {
+                    const timeA = a.createdAt?.seconds || 0;
+                    const timeB = b.createdAt?.seconds || 0;
+                    return timeB - timeA;
+                });
+                
+                if (sorted.length > 0) {
+                    communityGallery.innerHTML = sorted.map(item => `
+                        <div class="community-card">
+                            <img src="${item.imageUrl}" loading="lazy">
+                            <div class="info">
+                                <p class="line-clamp-2 italic">"${item.prompt.substring(0, 80)}..."</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    communityGallery.innerHTML = '<div class="text-zinc-800 italic py-10 w-full text-center">THE FOREST IS STILL GROWING...</div>';
+                }
+            }, (error) => {
+                console.error("Gallery Sync Error:", error);
+            });
+        }
+        loadCommunity();
 
         const creatures = [
             "cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "golden monkey", "shiba inu", 
@@ -504,10 +617,14 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                const response = await fetch('/api/summon-rot', {
+                const apiKey = ""; // API Key handled by environment
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: promptText })
+                    body: JSON.stringify({
+                        instances: { prompt: promptText },
+                        parameters: { sampleCount: 1 }
+                    })
                 });
 
                 const data = await response.json();
@@ -515,10 +632,22 @@
                 if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
                     genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover rounded shadow-lg">`;
-                    genStatus.innerText = "MANIFESTED. RIGHT CLICK IMAGE TO COPY.";
+                    genStatus.innerText = "MANIFESTED. UPLOADING TO MYCELIUM...";
                     shareX.style.display = 'flex';
+
+                    // Rule 3: Guard Firestore operation with Auth check
+                    if (auth.currentUser) {
+                        const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
+                        await creationsRef.add({
+                            imageUrl: b64,
+                            prompt: promptText,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            userId: auth.currentUser.uid
+                        });
+                        genStatus.innerText = "MANIFESTED. SHARED WITH THE FOREST.";
+                    }
                 } else {
-                    const errorMsg = data.error?.message || data.error || "The Rot refused the connection.";
+                    const errorMsg = data.error?.message || "The Rot refused the connection.";
                     throw new Error(errorMsg);
                 }
             } catch (err) {
