@@ -260,25 +260,6 @@
             object-fit: cover;
         }
 
-        /* Watermark Overlay - Vertical on the Right Edge */
-        .watermark-overlay {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%) rotate(180deg);
-            writing-mode: vertical-rl;
-            white-space: nowrap;
-            color: rgba(255, 255, 255, 0.75); /* Increased opacity to 75% */
-            font-family: 'Noto Sans SC', sans-serif;
-            font-weight: 700;
-            font-size: 12px;
-            letter-spacing: 2px;
-            pointer-events: none;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
-            z-index: 10;
-            text-transform: uppercase;
-        }
-
         .loader {
             width: 48px;
             height: 48px;
@@ -470,12 +451,28 @@
 
         const creatures = ["cat", "hamster", "axolotl", "capybara", "red panda", "blobfish", "shrimp", "alien gremlin", "pomeranian", "possum"];
         const costumes = ["avocado shell", "peeled banana", "carved pumpkin", "giant strawberry", "eggplant", "pineapple suit", "broccoli tree", "watermelon", "ramen bowl"];
-        const styles = "brainrot style, hyper-saturated 3D render, surreal, cursed imagery, meme energy, floating sparkles, cinematic lighting, uncanny valley, vibrant colors";
+        
+        // Randomization for ticker integration
+        const tickerPlacements = [
+            "the text '$CHINESEROT' is tattooed on the creature",
+            "a neon sign in the background reads '$CHINESEROT'",
+            "the creature is holding a sign that says '$CHINESEROT'",
+            "the word '$CHINESEROT' is carved into the fruit shell",
+            "the ticker '$CHINESEROT' is written in graffiti on a nearby mossy stone",
+            "floating holographic letters spelling '$CHINESEROT' surround the creature",
+            "the sticker '$CHINESEROT' is plastered on the side of the creature's costume",
+            "the creature's nameplate says '$CHINESEROT'"
+        ];
+
+        const baseStyles = "brainrot style, hyper-saturated 3D render, surreal, cursed imagery, meme energy, floating sparkles, cinematic lighting, uncanny valley, vibrant colors";
 
         async function generateRot(retries = 0) {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
-            const prompt = `A ${creature} wearing a ${costume}, ${styles}, bizarre and funny, wide eyes, surreal background. High quality 3D.`;
+            const placement = tickerPlacements[Math.floor(Math.random() * tickerPlacements.length)];
+            
+            // Ticker is now part of the prompt instead of a canvas overlay
+            const prompt = `A ${creature} wearing a ${costume}. ${placement}. ${baseStyles}. Bizarre and funny, high quality 3D.`;
 
             genStatus.innerText = "DIGESTING REALITY...";
             genTrigger.disabled = true;
@@ -494,11 +491,10 @@
                 if (!response.ok) throw new Error('Generation failed');
 
                 const data = await response.json();
-                const b64 = data.predictions[0].bytesBase64Encoded;
+                const b64Raw = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
                 
                 genResult.innerHTML = `
-                    <img src="data:image/png;base64,${b64}" class="fade-in w-full h-full object-cover" alt="Rot Creature">
-                    <div class="watermark-overlay">GENERATED ON $CHINESEROT</div>
+                    <img src="${b64Raw}" class="fade-in w-full h-full object-cover" alt="Rot Creature">
                 `;
                 genStatus.innerText = "ROT MANIFESTED.";
             } catch (err) {
