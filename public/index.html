@@ -368,7 +368,7 @@
     </main>
 
     <script>
-        const apiKey = "api.anymeme.fun"; // Set by environment
+        // NO API KEY HERE ANYMORE. SECURE.
         
         const genTrigger = document.getElementById('gen-trigger');
         const genResult = document.getElementById('gen-result');
@@ -387,25 +387,6 @@
         const creatures = ["cat", "capybara", "dragon", "koi fish", "panda"];
         const costumes = ["traditional silk robe", "bamboo armor", "terracotta mask", "glowing paper lantern"];
 
-        async function fetchWithRetry(url, options, maxRetries = 5) {
-            let delay = 1000;
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.status === 429 || response.status >= 500) {
-                        await new Promise(res => setTimeout(res, delay));
-                        delay *= 2;
-                        continue;
-                    }
-                    return response;
-                } catch (err) {
-                    if (i === maxRetries - 1) throw err;
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
-            }
-        }
-
         async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
@@ -417,15 +398,11 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
-                
-                const response = await fetchWithRetry(url, {
+                // Pointing to YOUR serverless function instead of Google directly
+                const response = await fetch('/api/summon-rot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        instances: [{ prompt: promptText }],
-                        parameters: { sampleCount: 1 }
-                    })
+                    body: JSON.stringify({ prompt: promptText })
                 });
 
                 const data = await response.json();
@@ -435,7 +412,7 @@
                     genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover">`;
                     genStatus.innerText = "MANIFESTED.";
                 } else {
-                    throw new Error(data.error?.message || "Safety filters triggered by the Rot.");
+                    throw new Error(data.error || "Safety filters triggered by the Rot.");
                 }
             } catch (err) {
                 console.error("Summoning error:", err);
@@ -456,11 +433,11 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
+            
+            const originalStatus = genStatus.innerText;
             genStatus.innerText = "SCROLL COPIED.";
-            setTimeout(() => genStatus.innerText = "", 2000);
+            setTimeout(() => genStatus.innerText = originalStatus, 2000);
         });
     </script>
 </body>
 </html>
-
-
