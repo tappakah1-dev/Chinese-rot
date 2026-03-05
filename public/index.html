@@ -6,10 +6,12 @@
     <title>$CHINESEROT | The Forest of Decay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+SC:wght@300;700&display=swap" rel="stylesheet">
-    <!-- Firebase SDKs (Compat version for easier single-file integration) -->
+    
+    <!-- Firebase SDKs (Compat Version for easiest integration) -->
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
+
     <style>
         :root {
             --blood-red: #8b0000;
@@ -133,16 +135,19 @@
             color: #000;
         }
 
-        .gen-container, .chart-container, .story-card, .community-container {
+        .gen-container, .chart-container, .story-card, .gallery-card {
             background: rgba(15, 2, 2, 0.9);
             border: 1px solid var(--neon-gold);
             position: relative;
+            clip-path: polygon(
+                0 10%, 10% 0, 90% 0, 100% 10%, 
+                100% 90%, 90% 100%, 10% 100%, 0 90%
+            );
         }
 
         .gen-container {
             border: 2px solid var(--neon-gold);
             box-shadow: 0 0 40px rgba(139,0,0,0.5);
-            clip-path: polygon(0 10%, 10% 0, 90% 0, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0 90%);
         }
 
         .image-display {
@@ -265,42 +270,23 @@
             to { transform: rotate(5deg); }
         }
 
-        /* Community Specific Styles */
-        .community-card {
-            min-width: 250px;
-            height: 250px;
-            position: relative;
-            border: 1px solid var(--blood-red);
-            overflow: hidden;
-            background: #000;
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
         }
-        .community-card img {
+        
+        .gallery-card img {
             width: 100%;
-            height: 100%;
+            aspect-ratio: 1;
             object-fit: cover;
-            opacity: 0.7;
+            filter: grayscale(0.5) contrast(1.2);
             transition: 0.5s;
         }
-        .community-card:hover img {
-            opacity: 1;
-            transform: scale(1.1);
+        
+        .gallery-card:hover img {
+            filter: grayscale(0) contrast(1);
         }
-        .community-card .info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, black);
-            padding: 10px;
-            font-size: 10px;
-            color: var(--neon-gold);
-            transform: translateY(100%);
-            transition: 0.3s;
-        }
-        .community-card:hover .info {
-            transform: translateY(0);
-        }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
     </style>
     <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
@@ -371,19 +357,6 @@
             </div>
         </section>
 
-        <!-- Community Section -->
-        <section class="max-w-6xl mx-auto mb-40">
-            <div class="flex items-center gap-4 mb-8">
-                <h2 class="text-4xl text-yellow-500 calligraphy-font">Community ROT Creations</h2>
-                <div class="h-px flex-1 bg-red-900/50"></div>
-            </div>
-            <div class="carousel-wrapper">
-                <div id="community-gallery" class="flex overflow-x-auto gap-4 py-4 scrollbar-hide">
-                    <div class="text-zinc-700 italic py-10 w-full text-center uppercase tracking-widest">Scanning the Mycelium...</div>
-                </div>
-            </div>
-        </section>
-
         <!-- Contract Address -->
         <div class="max-w-5xl mx-auto mb-40">
             <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-yellow-600 p-8 rounded-sm flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:shadow-[0_0_50px_rgba(255,215,0,0.2)]">
@@ -395,6 +368,18 @@
                 <span class="text-xs bg-yellow-600 text-black font-bold px-6 py-2 uppercase tracking-tighter">Copy Scroll</span>
             </div>
         </div>
+
+        <!-- NEW: Community Gallery Section -->
+        <section class="max-w-6xl mx-auto mb-40">
+            <div class="mb-12">
+                <h2 class="text-5xl text-yellow-500 calligraphy-font mb-4">The Community Forest</h2>
+                <div class="h-px w-32 bg-red-600 mx-auto mb-8"></div>
+            </div>
+            <div id="community-gallery" class="gallery-grid">
+                <!-- Injected via Firebase -->
+                <div class="text-red-900/40 calligraphy-font col-span-full py-20 text-xl italic tracking-widest">Observing the roots...</div>
+            </div>
+        </section>
 
         <!-- Video Carousel Section -->
         <section class="mb-40 py-10 relative">
@@ -463,38 +448,59 @@
     </main>
 
     <script>
-        // --- Firebase Configuration ---
+        // --- FIREBASE INITIALIZATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyDNu6OysHLjFDrLha87TUI7rJT2q0AGK1Y",
             authDomain: "chineserot-67bb3.firebaseapp.com",
             projectId: "chineserot-67bb3",
             storageBucket: "chineserot-67bb3.firebasestorage.app",
             messagingSenderId: "231858192926",
-            appId: "1:231858192926:web:152533918c847f2e54e40f",
-            measurementId: "G-X9VQEVHWPV"
+            appId: "1:231858192926:web:152533918c847f2e54e40f"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
-        const appId = "chineserot-67bb3"; // Using Project ID for path consistency
+        const appId = "chineserot-67bb3";
 
-        // 1. Auth Setup (Required for Rule 1 & 3)
-        async function initAuth() {
+        // --- AUTH & GALLERY SETUP ---
+        async function setupCommunity() {
             try {
-                // Prioritize environment token, fallback to anonymous
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await auth.signInWithCustomToken(__initial_auth_token);
-                } else {
-                    await auth.signInAnonymously();
-                }
-            } catch (e) {
-                console.error("Auth failed:", e);
+                await auth.signInAnonymously();
+                
+                const galleryEl = document.getElementById('community-gallery');
+                const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
+                
+                // Real-time listener for the gallery
+                creationsRef.onSnapshot((snapshot) => {
+                    const docs = snapshot.docs.map(doc => doc.data());
+                    // Sort locally since we can't use complex queries without indexes
+                    docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+                    
+                    if (docs.length === 0) {
+                        galleryEl.innerHTML = '<div class="text-gray-800 italic py-20 w-full text-center tracking-[1em] uppercase">THE FOREST IS SLEEPING</div>';
+                        return;
+                    }
+
+                    galleryEl.innerHTML = docs.map(d => `
+                        <div class="gallery-card group">
+                            <div class="overflow-hidden bg-red-950/20">
+                                <img src="${d.imageUrl}" loading="lazy" alt="Rot Summon">
+                            </div>
+                            <div class="p-3 text-[10px] text-yellow-600/50 uppercase font-bold tracking-tighter truncate">
+                                ${d.prompt.substring(0, 50)}...
+                            </div>
+                        </div>
+                    `).join('');
+                }, err => {
+                    console.error("Gallery Sync Fail", err);
+                });
+            } catch (err) {
+                console.error("Auth Fail", err);
             }
         }
-        initAuth();
+        setupCommunity();
 
+        // --- UI ELEMENTS ---
         const genTrigger = document.getElementById('gen-trigger');
         const shareX = document.getElementById('share-x');
         const genResult = document.getElementById('gen-result');
@@ -502,103 +508,18 @@
         const videoCarousel = document.getElementById('video-carousel');
         const slideLeft = document.getElementById('slide-left');
         const slideRight = document.getElementById('slide-right');
-        const communityGallery = document.getElementById('community-gallery');
 
         slideLeft.onclick = () => { videoCarousel.scrollBy({ left: -345, behavior: 'smooth' }); };
         slideRight.onclick = () => { videoCarousel.scrollBy({ left: 345, behavior: 'smooth' }); };
 
-        // --- Data Listener (Community Gallery) ---
-        function loadCommunity() {
-            // Rule 1: Strict collection path for Firebase environment compatibility
-            const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
-            
-            // Rule 2: Simple query, memory-based filtering/sorting
-            creationsRef.onSnapshot((snapshot) => {
-                const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                // Sort by timestamp descending in memory
-                const sorted = docs.sort((a, b) => {
-                    const timeA = a.createdAt?.seconds || 0;
-                    const timeB = b.createdAt?.seconds || 0;
-                    return timeB - timeA;
-                });
-                
-                if (sorted.length > 0) {
-                    communityGallery.innerHTML = sorted.map(item => `
-                        <div class="community-card">
-                            <img src="${item.imageUrl}" loading="lazy">
-                            <div class="info">
-                                <p class="line-clamp-2 italic">"${item.prompt.substring(0, 80)}..."</p>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    communityGallery.innerHTML = '<div class="text-zinc-800 italic py-10 w-full text-center">THE FOREST IS STILL GROWING...</div>';
-                }
-            }, (error) => {
-                console.error("Gallery Sync Error:", error);
-            });
-        }
-        loadCommunity();
-
-        const creatures = [
-            "cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "golden monkey", "shiba inu", 
-            "chinese phoenix", "white tiger", "mystic toad", "immortal crane", "qilin", "baby elephant", 
-            "cyber-axolotl", "golden turtle", "emperor penguin", "feral raccoon", "celestial rabbit", "ghost dog"
-        ];
-        
-        const costumes = [
-            "traditional silk hanfu with intricate embroidery", "ancient bamboo samurai armor", "weathered terracotta mask", 
-            "glowing paper lantern headpiece", "imperial dragon robe", "monk's saffron-colored shawl", 
-            "heavy jade jewelry and crown", "vibrant red Beijing opera mask", "straw conical farmer's hat", 
-            "futuristic neon-trim silk kimono", "ancient general's war plates", "taoist priest vestments",
-            "concubine's floral head-dress", "shadow assassin's cowl", "cyber-enhanced traditional armor"
-        ];
-
-        const settings = [
-            "in a dark mossy Chinese forest with glowing roots", "inside a misty mountain temple with burning incense", 
-            "floating on a giant lotus leaf in a pitch-black lake", "sitting on a red bridge under neon cherry blossoms", 
-            "beside a waterfall of liquid molten gold", "surrounded by a thousand floating red lanterns", 
-            "in a bamboo grove where trees are fiber-optic cables", "atop a crumbling stone dragon statue covered in moss",
-            "within a dense cloud of purple incense smoke", "in a rainy cyberpunk alley in Old Shanghai",
-            "inside a digital void filled with floating chinese calligraphy scrolls", "on a mountain peak piercing through a sea of red clouds"
-        ];
-
-        const poses = [
-            "meditating peacefully", "screaming into the void", "staring directly at the viewer with glowing eyes", 
-            "performing a martial arts stance", "holding a mysterious digital artifact", "dissolving into pixels", 
-            "emerging from a puddle of black ink", "surrounded by a swirl of magical energy", "sleeping on a pile of gold coins",
-            "pointing a jade staff towards the sky"
-        ];
-
-        const artifacts = [
-            "a glowing jade tablet", "a floating digital orb", "a cracked ancient vase leaking light", 
-            "a massive red paper fan", "a traditional pipa instrument made of glass", "a burning scroll of binary code",
-            "a golden coin with a square hole", "a cluster of glowing red mushrooms"
-        ];
-
-        const styles = [
-            "surreal and uncanny", "hyper-realistic 3D render", "viral brainrot aesthetic", 
-            "traditional Chinese ink painting mixed with modern 3D", "dark fantasy concept art", 
-            "glitch art with ancient paper textures", "psychedelic digital hallucination", 
-            "cinematic wide shot with dramatic volumetrics", "stylized claymation", "90s vhs recording style"
-        ];
-
-        const lighting = [
-            "dramatic red and gold lighting", "eerie green jade glow", "shimmering moonlit ozone", 
-            "harsh flickering neon light", "warm candlelight with long dramatic shadows", "bioluminescent purple moss glow",
-            "blinding golden sunbeams through thick fog"
-        ];
-
-        const shareTexts = [
-            "The algorithm decays. The forest provides. I have summoned the rot. $CHINESEROT",
-            "Manifesting pure digital brainrot from the deep forest. Witness the summoning. $CHINESEROT",
-            "The dragon's breath smells of ozone and ancient ink. I am the Rot. $CHINESEROT",
-            "I saw the future in the moss. It was beautiful and decaying. $CHINESEROT",
-            "Burn the spirit. Feed the forest. $CHINESEROT",
-            "A fragment of the collective digital unconscious has appeared. $CHINESEROT",
-            "The moss is winning. Join the rot. $CHINESEROT",
-            "My soul is currently 74% bamboo and 26% fiber optics. $CHINESEROT"
-        ];
+        const creatures = ["cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "golden monkey", "shiba inu", "chinese phoenix", "white tiger", "mystic toad", "immortal crane", "qilin", "baby elephant", "cyber-axolotl", "golden turtle", "emperor penguin", "feral raccoon", "celestial rabbit", "ghost dog"];
+        const costumes = ["traditional silk hanfu with intricate embroidery", "ancient bamboo samurai armor", "weathered terracotta mask", "glowing paper lantern headpiece", "imperial dragon robe", "monk's saffron-colored shawl", "heavy jade jewelry and crown", "vibrant red Beijing opera mask", "straw conical farmer's hat", "futuristic neon-trim silk kimono", "ancient general's war plates", "taoist priest vestments", "concubine's floral head-dress", "shadow assassin's cowl", "cyber-enhanced traditional armor"];
+        const settings = ["in a dark mossy Chinese forest with glowing roots", "inside a misty mountain temple with burning incense", "floating on a giant lotus leaf in a pitch-black lake", "sitting on a red bridge under neon cherry blossoms", "beside a waterfall of liquid molten gold", "surrounded by a thousand floating red lanterns", "in a bamboo grove where trees are fiber-optic cables", "atop a crumbling stone dragon statue covered in moss", "within a dense cloud of purple incense smoke", "in a rainy cyberpunk alley in Old Shanghai", "inside a digital void filled with floating chinese calligraphy scrolls", "on a mountain peak piercing through a sea of red clouds"];
+        const poses = ["meditating peacefully", "screaming into the void", "staring directly at the viewer with glowing eyes", "performing a martial arts stance", "holding a mysterious digital artifact", "dissolving into pixels", "emerging from a puddle of black ink", "surrounded by a swirl of magical energy", "sleeping on a pile of gold coins", "pointing a jade staff towards the sky"];
+        const artifacts = ["a glowing jade tablet", "a floating digital orb", "a cracked ancient vase leaking light", "a massive red paper fan", "a traditional pipa instrument made of glass", "a burning scroll of binary code", "a golden coin with a square hole", "a cluster of glowing red mushrooms"];
+        const styles = ["surreal and uncanny", "hyper-realistic 3D render", "viral brainrot aesthetic", "traditional Chinese ink painting mixed with modern 3D", "dark fantasy concept art", "glitch art with ancient paper textures", "psychedelic digital hallucination", "cinematic wide shot with dramatic volumetrics", "stylized claymation", "90s vhs recording style"];
+        const lighting = ["dramatic red and gold lighting", "eerie green jade glow", "shimmering moonlit ozone", "harsh flickering neon light", "warm candlelight with long dramatic shadows", "bioluminescent purple moss glow", "blinding golden sunbeams through thick fog"];
+        const shareTexts = ["The algorithm decays. The forest provides. I have summoned the rot. $CHINESEROT", "Manifesting pure digital brainrot from the deep forest. Witness the summoning. $CHINESEROT", "The dragon's breath smells of ozone and ancient ink. I am the Rot. $CHINESEROT", "I saw the future in the moss. It was beautiful and decaying. $CHINESEROT", "Burn the spirit. Feed the forest. $CHINESEROT"];
 
         async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
@@ -617,14 +538,10 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                const apiKey = ""; // API Key handled by environment
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+                const response = await fetch('/api/summon-rot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        instances: { prompt: promptText },
-                        parameters: { sampleCount: 1 }
-                    })
+                    body: JSON.stringify({ prompt: promptText })
                 });
 
                 const data = await response.json();
@@ -632,22 +549,21 @@
                 if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
                     genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover rounded shadow-lg">`;
-                    genStatus.innerText = "MANIFESTED. UPLOADING TO MYCELIUM...";
+                    genStatus.innerText = "MANIFESTED. RIGHT CLICK IMAGE TO COPY.";
                     shareX.style.display = 'flex';
 
-                    // Rule 3: Guard Firestore operation with Auth check
+                    // SAVE TO FIREBASE
                     if (auth.currentUser) {
                         const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
                         await creationsRef.add({
                             imageUrl: b64,
                             prompt: promptText,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             userId: auth.currentUser.uid
                         });
-                        genStatus.innerText = "MANIFESTED. SHARED WITH THE FOREST.";
                     }
                 } else {
-                    const errorMsg = data.error?.message || "The Rot refused the connection.";
+                    const errorMsg = data.error?.message || data.error || "The Rot refused the connection.";
                     throw new Error(errorMsg);
                 }
             } catch (err) {
@@ -678,7 +594,6 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            
             const originalStatus = genStatus.innerText;
             genStatus.innerText = "SCROLL COPIED.";
             setTimeout(() => genStatus.innerText = originalStatus, 2000);
