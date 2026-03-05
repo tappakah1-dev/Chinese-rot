@@ -45,7 +45,6 @@
             pointer-events: none;
         }
 
-        /* --- DRAGON ANIMATION --- */
         .dragon-layer {
             position: fixed;
             top: 0;
@@ -178,7 +177,6 @@
             box-shadow: 0 0 30px var(--neon-gold);
         }
 
-        /* Video Carousel */
         .video-carousel {
             display: flex;
             overflow-x: scroll;
@@ -224,7 +222,6 @@
             color: var(--blood-red);
         }
 
-        /* --- GENERATOR UI --- */
         .gen-container {
             background: rgba(10, 2, 2, 0.85);
             border: 3px solid var(--blood-red);
@@ -234,7 +231,7 @@
         }
 
         .gen-container::before {
-            content: 'BRAIN ROT ENGINE';
+            content: 'BRAIN ROT ENGINE V2.1 (STABLE)';
             position: absolute;
             top: 5px;
             right: 10px;
@@ -293,17 +290,12 @@
         }
         .animate-spin-slow { animation: spin-slow 15s linear infinite; }
 
-        .tiktok-embed {
-            margin: 0 !important;
-            max-width: 100% !important;
-        }
-
         .fade-in {
-            animation: fadeIn 1s ease-in forwards;
+            animation: fadeIn 0.8s ease-in forwards;
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; filter: blur(10px); }
+            to { opacity: 1; filter: blur(0px); }
         }
     </style>
 </head>
@@ -313,7 +305,6 @@
     <div class="ink-stain" id="stain-1" style="top: -10%; left: -10%;"></div>
     <div class="ink-stain" id="stain-2" style="bottom: -10%; right: -10%;"></div>
 
-    <!-- DRAGON LAYER -->
     <div class="dragon-layer">
         <svg class="dragon-snake" style="--duration: 25s; --start-y: 20%; --mid-y: 45%; --end-y: 15%; --dir: 1;" viewBox="0 0 200 60">
             <path id="path1" d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" stroke="var(--neon-gold)" fill="none" stroke-width="2" stroke-dasharray="5,2" opacity="0.6"/>
@@ -345,23 +336,22 @@
             <h1 class="text-7xl md:text-[11rem] glow-text leading-none calligraphy-font mb-4">$CHINESEROT</h1>
             <div class="w-40 h-1 bg-red-900 mx-auto mb-10 opacity-50"></div>
             <p class="text-xl md:text-3xl text-red-100/90 max-w-2xl mx-auto font-light leading-relaxed italic calligraphy-font">
-                “All beings decay, all things rot. In the deep forest, there is always an echo.”
+                “Infinite randomization. Infinite rot. One singular ticker.”
             </p>
         </div>
 
-        <!-- GENERATOR SECTION -->
         <section class="max-w-4xl mx-auto mb-32">
-            <h2 class="text-4xl md:text-6xl mb-12 glow-text calligraphy-font">Summon Rot Creature</h2>
+            <h2 class="text-4xl md:text-6xl mb-12 glow-text calligraphy-font">Summon Random Rot</h2>
             <div class="gen-container p-8 md:p-12 rounded-lg grid md:grid-cols-2 gap-12 items-center">
                 <div class="image-display rounded shadow-2xl overflow-hidden" id="gen-result">
-                    <div class="text-red-900/40 text-xs italic p-10 text-center">The portal is closed. Press the button to tear it open.</div>
+                    <div class="text-red-900/40 text-xs italic p-10 text-center uppercase tracking-widest">Summoning Portal Ready...</div>
                 </div>
                 <div class="text-left space-y-6">
-                    <p class="text-yellow-500 calligraphy-font text-2xl">$CHINESEROT Generator</p>
+                    <p class="text-yellow-500 calligraphy-font text-2xl">Rot Engine V2.1</p>
                     <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
-                        We take a random creature and rot it inside a fruit or vegetable shell. 100% Brainrot guaranteed.
+                        We blend Chinese tradition with absolute brainrot. Animals in fruit, social credit memes, mukbangs, and chaotic situations. $CHINESEROT is inevitable.
                     </p>
-                    <button id="gen-trigger" class="btn-rot w-full py-6 text-xl">Generate your own chineserot</button>
+                    <button id="gen-trigger" class="btn-rot w-full py-6 text-xl">MANIFEST ROT</button>
                     <p id="gen-status" class="text-[10px] text-red-800 uppercase tracking-widest font-bold text-center"></p>
                 </div>
             </div>
@@ -451,65 +441,101 @@
     <script async src="https://www.tiktok.com/embed.js"></script>
     
     <script>
-        const apiKey = ""; // Runtime provides key
+        const apiKey = ""; // Keep empty as per instructions; environment provides it
         const genTrigger = document.getElementById('gen-trigger');
         const genResult = document.getElementById('gen-result');
         const genStatus = document.getElementById('gen-status');
 
-        const creatures = ["cat", "hamster", "axolotl", "capybara", "red panda", "blobfish", "shrimp", "alien gremlin", "pomeranian", "possum"];
-        const costumes = ["avocado shell", "peeled banana", "carved pumpkin", "giant strawberry", "eggplant", "pineapple suit", "broccoli tree", "watermelon", "ramen bowl"];
-        
-        const tickerPlacements = [
-            "the text '$CHINESEROT' is tattooed on the creature",
-            "a neon sign in the background reads '$CHINESEROT'",
-            "the creature is holding a sign that says '$CHINESEROT'",
-            "the word '$CHINESEROT' is carved into the fruit shell",
-            "the ticker '$CHINESEROT' is written in graffiti on a nearby mossy stone",
-            "floating holographic letters spelling '$CHINESEROT' surround the creature",
-            "the sticker '$CHINESEROT' is plastered on the side of the creature's costume",
-            "the creature's nameplate says '$CHINESEROT'"
+        // FALLBACK GALLERY
+        const fallbackImages = [
+            "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=1000&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1526318896980-cf78c088247c?q=80&w=1000&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1518544801976-3e159e50e5bb?q=80&w=1000&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1000&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=1000&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=1000&auto=format&fit=crop"
         ];
 
-        const baseStyles = "brainrot style, hyper-saturated 3D render, surreal, cursed imagery, meme energy, floating sparkles, cinematic lighting, uncanny valley, vibrant colors";
+        // POOLS
+        const creatures = ["fat cat", "giant hamster", "weird axolotl", "capybara wearing a suit", "red panda with shades", "cursed blobfish", "anthropomorphic shrimp", "shiba inu", "monkey", "pigeon", "smiling frog"];
+        const objects = ["inside an avocado shell", "peeled banana", "carved pumpkin lantern", "giant strawberry", "eggplant", "pineapple suit", "broccoli tree", "within a giant dumpling", "giant baozi", "steaming hot pot bowl", "sitting on a mahjong tile"];
+        const situations = ["doing a Mukbang", "playing Subway Surfers", "taking a Social Credit Test", "dancing to phonk", "staring intensely", "floating in digital void", "holding lucky cat", "surrounded by hongbao", "judged by laughing emoji", "trapped in 90s monitor", "wearing emperor crown", "crying milk"];
+        const chineseElements = ["Calligraphy background", "Neon red lanterns", "Mahjong tiles", "Jelly Great Wall", "Gold coins", "Ink cyberpunk", "Slime Yin Yang", "Streetwear Terracotta"];
+        const tickerPlacements = ["$CHINESEROT forehead tattoo", "neon $CHINESEROT sign", "$CHINESEROT fan", "$CHINESEROT carved in fruit", "graffiti $CHINESEROT", "floating $CHINESEROT letters"];
 
-        async function generateRot(retries = 0) {
+        // Exponential backoff helper
+        async function fetchWithBackoff(url, options, retries = 5) {
+            let delay = 1000;
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return response;
+                    
+                    const data = await response.json().catch(() => ({}));
+                    // If project/API not enabled, don't retry, just return the error
+                    if (response.status === 403) {
+                        return { ok: false, status: 403, error: data.error };
+                    }
+                } catch (err) {
+                    if (i === retries - 1) throw err;
+                }
+                await new Promise(resolve => setTimeout(resolve, delay));
+                delay *= 2;
+            }
+            throw new Error('All retries failed');
+        }
+
+        async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
-            const costume = costumes[Math.floor(Math.random() * costumes.length)];
+            const obj = objects[Math.floor(Math.random() * objects.length)];
+            const sit = situations[Math.floor(Math.random() * situations.length)];
+            const elem = chineseElements[Math.floor(Math.random() * chineseElements.length)];
             const placement = tickerPlacements[Math.floor(Math.random() * tickerPlacements.length)];
             
-            const prompt = `A ${creature} wearing a ${costume}. ${placement}. ${baseStyles}. Bizarre and funny, high quality 3D render, digital rot aesthetic.`;
+            const prompt = `A ${creature} ${obj}, ${sit}. ${elem}. ${placement}. hyper-saturated brainrot aesthetic, high quality 3D render, chaotic energy.`;
 
-            genStatus.innerText = "DIGESTING REALITY...";
+            genStatus.innerText = "OVERLOADING SENSES...";
             genTrigger.disabled = true;
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+                // Use the correct supported model for image generation
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+                
+                const response = await fetchWithBackoff(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        instances: [{ prompt: prompt }],
+                        instances: { prompt: prompt },
                         parameters: { sampleCount: 1 }
                     })
                 });
 
-                if (!response.ok) throw new Error('Generation failed');
+                if (!response.ok) {
+                    const error = response.error;
+                    if (response.status === 403) {
+                        genStatus.innerHTML = `API NOT ENABLED. VISIT: <a href="https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview" target="_blank" class="underline text-yellow-400">GOOGLE CONSOLE</a>`;
+                    } else {
+                        genStatus.innerText = `PORTAL ERROR (${response.status}). TRYING ARCHIVE...`;
+                    }
+                    throw new Error(error?.message || 'API Error');
+                }
 
                 const data = await response.json();
                 const b64Raw = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
                 
-                genResult.innerHTML = `
-                    <img src="${b64Raw}" class="fade-in w-full h-full object-cover" alt="Rot Creature">
-                `;
+                genResult.innerHTML = `<img src="${b64Raw}" class="fade-in w-full h-full object-cover" alt="Rot Creature">`;
                 genStatus.innerText = "ROT MANIFESTED.";
             } catch (err) {
-                if (retries < 5) {
-                    const delay = Math.pow(2, retries) * 1000;
-                    setTimeout(() => generateRot(retries + 1), delay);
-                } else {
-                    genResult.innerHTML = '<div class="text-red-500 p-10 text-xs text-center uppercase tracking-widest font-bold">The forest refused your request. Connection decayed.</div>';
-                    genStatus.innerText = "VOID REJECTION.";
-                }
+                console.warn("Generation failed. Reason:", err.message);
+                const randomImg = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+                setTimeout(() => {
+                    // Only show fallback if we didn't just display a hard 403 error link
+                    if (!genStatus.innerHTML.includes("CONSOLE")) {
+                        genResult.innerHTML = `<img src="${randomImg}" class="fade-in w-full h-full object-cover blur-[1px] contrast-125" alt="Static Rot">`;
+                        genStatus.innerText = "ROT ARCHIVE ACCESSED (STABLE MODE).";
+                    }
+                }, 1000);
             } finally {
                 genTrigger.disabled = false;
             }
@@ -541,23 +567,21 @@
             carousel.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
         }
 
-        // Parallax Ink Stains
         document.addEventListener('mousemove', (e) => {
             const stain1 = document.getElementById('stain-1');
             const stain2 = document.getElementById('stain-2');
-            
-            const moveX = (e.clientX - window.innerWidth / 2) / 60;
-            const moveY = (e.clientY - window.innerHeight / 2) / 60;
-            
+            if(!stain1 || !stain2) return;
+            const moveX = (e.clientX - window.innerWidth / 2) / 80;
+            const moveY = (e.clientY - window.innerHeight / 2) / 80;
             stain1.style.transform = `translate(${moveX}px, ${moveY}px)`;
             stain2.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
         });
 
-        // Lantern Generation
         const lanternContainer = document.getElementById('lantern-field');
-        const words = ["FATE", "VOID", "ROT", "DECAY", "DREAM", "ECHO", "FOREST", "SILENCE", "🀄", "MOSS"];
+        const words = ["FATE", "VOID", "ROT", "DECAY", "DREAM", "ECHO", "FOREST", "SILENCE", "🀄", "MOSS", "SOCIAL CREDIT"];
         
         function createLantern() {
+            if(!lanternContainer) return;
             const l = document.createElement('div');
             l.className = 'kongming-lantern';
             l.style.left = Math.random() * 100 + 'vw';
@@ -568,12 +592,7 @@
             lanternContainer.appendChild(l);
             setTimeout(() => l.remove(), 31000);
         }
-        setInterval(createLantern, 3000);
-        
-        // Initial lanterns
-        for(let i=0; i<5; i++) {
-            setTimeout(createLantern, i * 1000);
-        }
+        setInterval(createLantern, 4000);
     </script>
 </body>
 </html>
