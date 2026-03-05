@@ -329,6 +329,9 @@
 </head>
 <body>
 
+    <!-- Chinese Matrix Rain Canvas -->
+    <canvas id="matrix-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[2] opacity-0 transition-opacity duration-500"></canvas>
+
     <div class="dragon-container">
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 50C10 50 20 20 40 30C60 40 80 10 90 50C100 90 60 80 40 70C20 60 10 80 10 50Z" stroke="#8b0000" stroke-width="0.5" stroke-dasharray="2 2" />
@@ -442,6 +445,69 @@
     </main>
 
     <script>
+        // --- MATRIX RAIN SETUP ---
+        const matrixCanvas = document.getElementById('matrix-canvas');
+        const mCtx = matrixCanvas.getContext('2d');
+        let matrixInterval;
+        let matrixDrops = [];
+        
+        // Chinese Crypto Slang: Hold, Moon, Pump, Dump, Zero, Leek, Rich, Brainrot, Rot
+        const matrixChars = '拿住冲月拉盘砸归零韭菜暴富脑腐烂'.split('');
+        const matrixFontSize = 24;
+        
+        function initMatrix() {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+            const columns = matrixCanvas.width / matrixFontSize;
+            matrixDrops = [];
+            for (let x = 0; x < columns; x++) {
+                matrixDrops[x] = Math.random() * -100; // Start at random negative offsets
+            }
+        }
+
+        function drawMatrix() {
+            // Semi-transparent black to create fading trail effect
+            mCtx.fillStyle = 'rgba(5, 5, 5, 0.15)';
+            mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            
+            mCtx.font = matrixFontSize + 'px "Zhi Mang Xing", monospace';
+            
+            for (let i = 0; i < matrixDrops.length; i++) {
+                const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                
+                // Randomly highlight some characters in gold, mostly blood red
+                mCtx.fillStyle = Math.random() > 0.9 ? '#ffd700' : '#8b0000';
+                
+                // Draw character
+                mCtx.fillText(text, i * matrixFontSize, matrixDrops[i] * matrixFontSize);
+                
+                // Reset drop to top randomly when it hits bottom
+                if (matrixDrops[i] * matrixFontSize > matrixCanvas.height && Math.random() > 0.95) {
+                    matrixDrops[i] = 0;
+                }
+                matrixDrops[i]++;
+            }
+        }
+
+        function startMatrixRain() {
+            initMatrix();
+            matrixCanvas.style.opacity = '0.7';
+            if (matrixInterval) clearInterval(matrixInterval);
+            matrixInterval = setInterval(drawMatrix, 50);
+        }
+
+        function stopMatrixRain() {
+            matrixCanvas.style.opacity = '0';
+            setTimeout(() => { 
+                if (matrixInterval) clearInterval(matrixInterval); 
+            }, 500); // Wait for CSS transition to finish fading out
+        }
+
+        window.addEventListener('resize', () => {
+            if(matrixCanvas.style.opacity !== '0') initMatrix();
+        });
+
+
         // --- FIREBASE INITIALIZATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyDNu6OysHLjFDrLha87TUI7rJT2q0AGK1Y",
@@ -677,8 +743,9 @@
             shareX.style.display = 'none';
             genResult.innerHTML = '<span class="loader"></span>';
 
-            // TRIGGER THE BRAINROT SHAKE
+            // TRIGGER THE BRAINROT SHAKE AND MATRIX RAIN
             document.body.classList.add('shake-active');
+            startMatrixRain();
 
             try {
                 const data = await fetchWithRetry('/api/summon-rot', {
@@ -713,8 +780,9 @@
             } finally {
                 genTrigger.disabled = false;
                 
-                // STOP THE SHAKE
+                // STOP THE SHAKE AND MATRIX RAIN
                 document.body.classList.remove('shake-active');
+                stopMatrixRain();
             }
         }
 
