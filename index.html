@@ -346,8 +346,9 @@
 
     <script async src="https://www.tiktok.com/embed.js"></script>
     <script>
-        const providedKey = "AIzaSyBLZ_4El_UKsWL1H4OQGJekZjIesYkqpZg";
-        const apiKey = (typeof __app_id !== 'undefined') ? "" : providedKey; 
+        // Use your brand-new, working API key
+        const prodKey = "AIzaSyCxHO8s_g8ScXq3qDPe-cA-UCMy7OTK6oQ";
+        const apiKey = (typeof __app_id !== 'undefined') ? "" : prodKey; 
         
         const genTrigger = document.getElementById('gen-trigger');
         const genResult = document.getElementById('gen-result');
@@ -370,11 +371,14 @@
             for (let i = 0; i <= maxRetries; i++) {
                 try {
                     const response = await fetch(url, options);
+                    
                     if (response.ok) return response;
                     
+                    const errorBody = await response.json().catch(() => ({}));
+                    console.error(`Attempt ${i+1} failed:`, errorBody);
+
                     if (response.status === 403) {
-                       // Direct 403 often means restricted access or wrong endpoint version
-                       throw new Error("Access Forbidden (403). Ensure API key is enabled for Generative Language API and endpoint is correct.");
+                       throw new Error(`Forbidden (403): ${errorBody.error?.message || "Check Generative Language API is enabled."}`);
                     }
 
                     if (response.status === 429 || response.status >= 500) {
@@ -405,8 +409,8 @@
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Use v1 endpoint for standard API keys to avoid 403/Unstable portal errors in some regions
-                const url = `https://generativelanguage.googleapis.com/v1/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+                // v1beta predict endpoint for standard API keys
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
                 
                 const response = await fetchWithBackoff(url, {
                     method: 'POST',
@@ -423,14 +427,12 @@
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
                     genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover">`;
                     genStatus.innerText = "MANIFESTED.";
-                } else if (data.error) {
-                    throw new Error(data.error.message || "API Error");
                 } else {
-                    throw new Error("No image generated in response");
+                    throw new Error(data.error?.message || "Summoning failed. Check API dashboard.");
                 }
             } catch (err) {
-                console.error("Summoning failed:", err);
-                genResult.innerHTML = `<div class="text-red-500 text-xs p-10 text-center uppercase">THE PORTAL IS CLOSED.<br><small>${err.message}</small></div>`;
+                console.error("Critical summoning error:", err);
+                genResult.innerHTML = `<div class="text-red-500 text-[10px] p-6 text-center uppercase">THE PORTAL IS CLOSED.<br><br>${err.message}</div>`;
                 genStatus.innerText = "ERROR IN THE MOSS.";
             } finally {
                 genTrigger.disabled = false;
