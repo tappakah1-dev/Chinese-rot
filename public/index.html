@@ -49,6 +49,25 @@
             font-family: 'Zhi Mang Xing', cursive;
         }
 
+        .dragon-container {
+            position: fixed;
+            top: 20%;
+            right: -100px;
+            width: 400px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+            animation: dragonFloat 15s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--blood-red));
+        }
+
+        @keyframes dragonFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-50px, 100px) rotate(5deg); }
+            50% { transform: translate(-100px, -50px) rotate(-5deg); }
+            75% { transform: translate(-50px, 50px) rotate(2deg); }
+        }
+
         .btn-rot {
             background: linear-gradient(45deg, var(--blood-red), #330000);
             color: var(--neon-gold);
@@ -87,12 +106,24 @@
             gap: 8px;
         }
 
-        .gen-container {
+        .btn-share:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .gen-container, .chart-container, .story-card {
             background: rgba(15, 2, 2, 0.9);
-            border: 2px solid var(--neon-gold);
+            border: 1px solid var(--neon-gold);
             position: relative;
+            clip-path: polygon(
+                0 10%, 10% 0, 90% 0, 100% 10%, 
+                100% 90%, 90% 100%, 10% 100%, 0 90%
+            );
+        }
+
+        .gen-container {
+            border: 2px solid var(--neon-gold);
             box-shadow: 0 0 40px rgba(139,0,0,0.5);
-            clip-path: polygon(0 5%, 5% 0, 95% 0, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0 95%);
         }
 
         .image-display {
@@ -183,25 +214,72 @@
             background-image: radial-gradient(circle at top right, rgba(139, 0, 0, 0.2), transparent);
             padding: 2.5rem;
         }
+
+        .stamp {
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--blood-red);
+            color: var(--blood-red);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Zhi Mang Xing';
+            font-size: 1.2rem;
+            transform: rotate(-15deg);
+            margin-bottom: 1rem;
+            font-weight: bold;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .lantern {
+            position: absolute;
+            color: var(--blood-red);
+            font-size: 3rem;
+            opacity: 0.6;
+            animation: swing 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes swing {
+            from { transform: rotate(-5deg); }
+            to { transform: rotate(5deg); }
+        }
     </style>
     <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
 <body>
+
+    <div class="dragon-container">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50C10 50 20 20 40 30C60 40 80 10 90 50C100 90 60 80 40 70C20 60 10 80 10 50Z" stroke="#8b0000" stroke-width="0.5" stroke-dasharray="2 2" />
+            <text font-family="Zhi Mang Xing" font-size="8" fill="#8b0000" opacity="0.8">
+                <textPath href="#dragon-path">DRAGON DRAGON DRAGON DRAGON DRAGON</textPath>
+            </text>
+            <path id="dragon-path" d="M10 80 Q 25 10 50 50 T 90 20" fill="transparent" />
+            <text x="75" y="25" fill="#ffd700" font-size="25">🐲</text>
+        </svg>
+    </div>
+
+    <div class="lantern top-10 left-10">🏮</div>
+    <div class="lantern top-10 right-10">🏮</div>
 
     <nav class="pt-16 pb-8 px-8 flex justify-between items-center relative z-10 border-b border-red-900/30">
         <div class="text-4xl md:text-6xl glow-text calligraphy-font">
             <span class="text-red-600 mr-2">ROT</span> $CHINESEROT
         </div>
         <div class="flex gap-8 text-sm font-bold uppercase tracking-widest text-yellow-500">
-            <a href="#" target="_blank" class="hover:text-white transition-colors">Twitter</a>
-            <a href="#" target="_blank" class="hover:text-white transition-colors">Telegram</a>
+            <a href="https://x.com" target="_blank" class="hover:text-white transition-colors">Twitter (X)</a>
+            <a href="https://t.me" target="_blank" class="hover:text-white transition-colors">Telegram</a>
         </div>
     </nav>
 
     <main class="container mx-auto px-4 pt-16 text-center relative z-10 pb-40">
         
         <div class="mb-24">
-            <h1 class="text-7xl md:text-[10rem] glow-text calligraphy-font leading-none mb-6">Chinese Rot</h1>
+            <div class="inline-block border-y-2 border-yellow-600 py-4 px-12 mb-6">
+                <h1 class="text-7xl md:text-[10rem] glow-text calligraphy-font leading-none">Chinese Rot</h1>
+            </div>
             <p class="text-2xl text-red-100/80 italic calligraphy-font max-w-2xl mx-auto tracking-widest">
                 "The algorithm decays. The forest provides. The dragon watches."
             </p>
@@ -209,7 +287,7 @@
 
         <!-- Generator Section -->
         <section class="max-w-5xl mx-auto mb-12">
-            <div class="gen-container p-1 rounded-sm">
+            <div class="gen-container p-1 md:p-1 rounded-sm">
                 <div class="bg-black p-8 md:p-12 grid md:grid-cols-2 gap-12 items-center">
                     <div class="image-display rounded border-2 border-yellow-900/50" id="gen-result">
                         <div class="text-red-900/60 text-sm italic calligraphy-font text-2xl">Awaiting Summoning...</div>
@@ -217,13 +295,17 @@
                     <div class="text-left space-y-8">
                         <div class="flex items-center gap-4">
                             <div class="h-px flex-1 bg-yellow-600"></div>
-                            <h2 class="text-4xl text-yellow-500 calligraphy-font">Summon Ritual</h2>
+                            <h2 class="text-4xl text-yellow-500 calligraphy-font">Summoning Ritual</h2>
                             <div class="h-px flex-1 bg-yellow-600"></div>
                         </div>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
+                            Summon a digital hallucination from the depths of the moss. Burn your spirit to see the rot.
+                        </p>
                         <button id="gen-trigger" class="btn-rot w-full py-8 text-2xl calligraphy-font">
                             Summon My Rot
                         </button>
                         <button id="share-x" class="btn-share w-full">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                             Share on X
                         </button>
                         <div id="gen-status" class="text-xs text-red-500 font-bold uppercase tracking-widest text-center min-h-[24px] bg-red-950/20 py-2 border border-red-900/30"></div>
@@ -232,7 +314,7 @@
             </div>
         </section>
 
-        <!-- CA Section -->
+        <!-- Contract Address (Moved straight below generator) -->
         <div class="max-w-5xl mx-auto mb-40">
             <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-yellow-600 p-8 rounded-sm flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:shadow-[0_0_50px_rgba(255,215,0,0.2)]">
                 <div class="flex items-center gap-4">
@@ -248,7 +330,7 @@
         <section class="mb-40 py-10 relative">
             <div class="mb-12">
                 <h2 class="text-4xl text-yellow-500 calligraphy-font mb-2">Visual Decay</h2>
-                <h3 class="text-red-600 tracking-[0.5em] uppercase text-xs font-bold">Historical Data Stream</h3>
+                <h3 class="text-red-600 tracking-[0.5em] uppercase text-xs font-bold">Visual Decay Timeline</h3>
             </div>
             
             <div class="carousel-wrapper">
@@ -260,15 +342,57 @@
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7459703700727090439" data-video-id="7459703700727090439"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7512387823685668114" data-video-id="7512387823685668114"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                     <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7525004521790262536" data-video-id="7525004521790262536"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7480460726088453384" data-video-id="7480460726088453384"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7311259741861203208" data-video-id="7311259741861203208"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7486412110096911624" data-video-id="7486412110096911624"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7359126837311606024" data-video-id="7359126837311606024"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                 </div>
                 <button class="nav-btn nav-right" id="slide-right" aria-label="Slide Right">❯</button>
+            </div>
+        </section>
+
+        <!-- Story Telling Section -->
+        <section class="max-w-5xl mx-auto mb-40 px-6">
+            <h2 class="text-5xl glow-text mb-16 text-center calligraphy-font">The Scrolls of Decay</h2>
+            <div class="grid md:grid-cols-2 gap-16 text-left">
+                <div class="story-card rounded story-border">
+                    <div class="stamp">SOURCE</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Origin</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        Deep within the partitioned sectors of the old internet, a new lifeform began to sprout. It was the Rot—a digital mycelium feeding on the abandoned fragments of our collective past.
+                    </p>
+                </div>
+                <div class="story-card rounded story-border">
+                    <div class="stamp">FOREST</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Forest</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        The forest is an anomaly where time moves in infinite loops. Bamboo shoots grow from fiber-optic cables, and the dragon's breath smells of ozone and ancient ink.
+                    </p>
+                </div>
+                <div class="story-card rounded story-border md:col-span-2">
+                    <div class="stamp">SUMMON</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Summoning</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        By burning the $CHINESEROT token, you manifest a piece of the forest in our realm. Every image is a fragment of a memory that never was, processed through the decaying logic of the digital dragon.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="max-w-6xl mx-auto mb-40">
+            <h2 class="text-4xl text-yellow-500 mb-12 calligraphy-font">Algorithmic Pulse</h2>
+            <div class="chart-container rounded-sm overflow-hidden h-[600px] border-2 border-yellow-600">
+                <style>#dexscreener-embed{position:relative;width:100%;padding-bottom:125%;}@media(min-width:1401px){#dexscreener-embed{padding-bottom:600px;}}#dexscreener-embed iframe{position:absolute;width:100%;height:100%;top:0;left:0;border:0;}</style>
+                <div id="dexscreener-embed">
+                    <iframe src="https://dexscreener.com/solana/5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump?embed=1&theme=dark&trades=0&info=0"></iframe>
+                </div>
             </div>
         </section>
 
     </main>
 
     <script>
-        const apiKey = ""; // Provided by environment
         const genTrigger = document.getElementById('gen-trigger');
         const shareX = document.getElementById('share-x');
         const genResult = document.getElementById('gen-result');
@@ -277,7 +401,6 @@
         const slideLeft = document.getElementById('slide-left');
         const slideRight = document.getElementById('slide-right');
 
-        // Navigation for Carousel
         slideLeft.onclick = () => {
             videoCarousel.scrollBy({ left: -345, behavior: 'smooth' });
         };
@@ -285,65 +408,120 @@
             videoCarousel.scrollBy({ left: 345, behavior: 'smooth' });
         };
 
+        const creatures = [
+            "cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "golden monkey", "shiba inu", 
+            "chinese phoenix", "white tiger", "mystic toad", "immortal crane", "qilin", "baby elephant", 
+            "cyber-axolotl", "golden turtle", "emperor penguin", "feral raccoon", "celestial rabbit", "ghost dog"
+        ];
+        
+        const costumes = [
+            "traditional silk hanfu with intricate embroidery", "ancient bamboo samurai armor", "weathered terracotta mask", 
+            "glowing paper lantern headpiece", "imperial dragon robe", "monk's saffron-colored shawl", 
+            "heavy jade jewelry and crown", "vibrant red Beijing opera mask", "straw conical farmer's hat", 
+            "futuristic neon-trim silk kimono", "ancient general's war plates", "taoist priest vestments",
+            "concubine's floral head-dress", "shadow assassin's cowl", "cyber-enhanced traditional armor"
+        ];
+
+        const settings = [
+            "in a dark mossy Chinese forest with glowing roots", "inside a misty mountain temple with burning incense", 
+            "floating on a giant lotus leaf in a pitch-black lake", "sitting on a red bridge under neon cherry blossoms", 
+            "beside a waterfall of liquid molten gold", "surrounded by a thousand floating red lanterns", 
+            "in a bamboo grove where trees are fiber-optic cables", "atop a crumbling stone dragon statue covered in moss",
+            "within a dense cloud of purple incense smoke", "in a rainy cyberpunk alley in Old Shanghai",
+            "inside a digital void filled with floating chinese calligraphy scrolls", "on a mountain peak piercing through a sea of red clouds"
+        ];
+
+        const poses = [
+            "meditating peacefully", "screaming into the void", "staring directly at the viewer with glowing eyes", 
+            "performing a martial arts stance", "holding a mysterious digital artifact", "dissolving into pixels", 
+            "emerging from a puddle of black ink", "surrounded by a swirl of magical energy", "sleeping on a pile of gold coins",
+            "pointing a jade staff towards the sky"
+        ];
+
+        const artifacts = [
+            "a glowing jade tablet", "a floating digital orb", "a cracked ancient vase leaking light", 
+            "a massive red paper fan", "a traditional pipa instrument made of glass", "a burning scroll of binary code",
+            "a golden coin with a square hole", "a cluster of glowing red mushrooms"
+        ];
+
+        const styles = [
+            "surreal and uncanny", "hyper-realistic 3D render", "viral brainrot aesthetic", 
+            "traditional Chinese ink painting mixed with modern 3D", "dark fantasy concept art", 
+            "glitch art with ancient paper textures", "psychedelic digital hallucination", 
+            "cinematic wide shot with dramatic volumetrics", "stylized claymation", "90s vhs recording style"
+        ];
+
+        const lighting = [
+            "dramatic red and gold lighting", "eerie green jade glow", "shimmering moonlit ozone", 
+            "harsh flickering neon light", "warm candlelight with long dramatic shadows", "bioluminescent purple moss glow",
+            "blinding golden sunbeams through thick fog"
+        ];
+
+        const shareTexts = [
+            "The algorithm decays. The forest provides. I have summoned the rot. $CHINESEROT",
+            "Manifesting pure digital brainrot from the deep forest. Witness the summoning. $CHINESEROT",
+            "The dragon's breath smells of ozone and ancient ink. I am the Rot. $CHINESEROT",
+            "I saw the future in the moss. It was beautiful and decaying. $CHINESEROT",
+            "Burn the spirit. Feed the forest. $CHINESEROT",
+            "A fragment of the collective digital unconscious has appeared. $CHINESEROT",
+            "The moss is winning. Join the rot. $CHINESEROT",
+            "My soul is currently 74% bamboo and 26% fiber optics. $CHINESEROT"
+        ];
+
         async function generateRot() {
-            const creatures = ["cat", "capybara", "dragon", "koi", "shiba"];
-            const styles = ["surreal brainrot", "dark fantasy", "cyber-traditional", "ink calligraphy"];
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
+            const costume = costumes[Math.floor(Math.random() * costumes.length)];
+            const setting = settings[Math.floor(Math.random() * settings.length)];
+            const pose = poses[Math.floor(Math.random() * poses.length)];
+            const artifact = artifacts[Math.floor(Math.random() * artifacts.length)];
             const style = styles[Math.floor(Math.random() * styles.length)];
+            const light = lighting[Math.floor(Math.random() * lighting.length)];
             
-            const prompt = `A ${style} ${creature} in a dark mossy Chinese forest with glowing red lanterns and gold accents, 8k, cinematic, uncanny.`;
+            const promptText = `A ${style} ${creature} ${pose} while wearing a ${costume}, holding ${artifact}, ${setting}. The text '$CHINESEROT' is carved into the background. ${light}, 8k resolution, highly detailed textures, mixing ancient history with modern digital brainrot.`;
 
-            genTrigger.disabled = true;
             genStatus.innerText = "FERMENTING IN THE ABYSS...";
-            genResult.innerHTML = '<span class="loader"></span>';
+            genTrigger.disabled = true;
             shareX.style.display = 'none';
+            genResult.innerHTML = '<span class="loader"></span>';
 
-            let retries = 0;
-            const maxRetries = 5;
-
-            const callApi = async () => {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+            try {
+                const response = await fetch('/api/summon-rot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        instances: [{ prompt: prompt }],
-                        parameters: { sampleCount: 1 }
-                    })
+                    body: JSON.stringify({ prompt: promptText })
                 });
 
-                if (!response.ok) throw new Error('Generation failed');
-                return await response.json();
-            };
+                const data = await response.json();
 
-            const attempt = async () => {
-                try {
-                    const result = await callApi();
-                    const bytes = result.predictions?.[0]?.bytesBase64Encoded;
-                    if (!bytes) throw new Error('No image returned');
-
-                    const imageUrl = `data:image/png;base64,${bytes}`;
-                    genResult.innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover">`;
-                    genStatus.innerText = "MANIFESTED.";
+                if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
+                    const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
+                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover rounded shadow-lg">`;
+                    genStatus.innerText = "MANIFESTED. RIGHT CLICK IMAGE TO COPY.";
                     shareX.style.display = 'flex';
-                } catch (error) {
-                    if (retries < maxRetries) {
-                        retries++;
-                        const delay = Math.pow(2, retries) * 500;
-                        setTimeout(attempt, delay);
-                    } else {
-                        genResult.innerHTML = `<div class="p-4 text-red-500 text-xs">SUMMONING FAILED. THE FOREST IS UNSTABLE.</div>`;
-                        genStatus.innerText = "ERROR";
-                    }
-                } finally {
-                    if (retries === 0 || retries === maxRetries) genTrigger.disabled = false;
+                } else {
+                    const errorMsg = data.error?.message || data.error || "The Rot refused the connection.";
+                    throw new Error(errorMsg);
                 }
-            };
+            } catch (err) {
+                console.error("Summoning error:", err);
+                genResult.innerHTML = `<div class="text-red-500 text-[12px] p-6 text-center uppercase">Portal Closed:<br><span class="text-[10px] mt-2 block">${err.message}</span></div>`;
+                genStatus.innerText = "ACCESS RESTRICTED";
+            } finally {
+                genTrigger.disabled = false;
+            }
+        }
 
-            attempt();
+        function handleShare() {
+            const randomText = shareTexts[Math.floor(Math.random() * shareTexts.length)];
+            const currentUrl = window.location.href;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(randomText + "\n\n" + currentUrl)}`;
+            window.open(twitterUrl, '_blank');
+            genStatus.innerText = "PASTE YOUR IMAGE IN THE POST.";
         }
 
         genTrigger.addEventListener('click', generateRot);
-        
+        shareX.addEventListener('click', handleShare);
+
         document.getElementById('ca-copy').addEventListener('click', () => {
             const txt = "5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump";
             const el = document.createElement('textarea');
@@ -352,7 +530,10 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
+            
+            const originalStatus = genStatus.innerText;
             genStatus.innerText = "SCROLL COPIED.";
+            setTimeout(() => genStatus.innerText = originalStatus, 2000);
         });
     </script>
 </body>
