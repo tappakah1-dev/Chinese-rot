@@ -122,7 +122,7 @@
                         Summon a digital hallucination from the depths of the moss.
                     </p>
                     <button id="gen-trigger" class="btn-rot w-full py-6 text-xl">Summon My Rot</button>
-                    <p id="gen-status" class="text-[10px] text-red-800 uppercase tracking-widest text-center h-4"></p>
+                    <div id="gen-status" class="text-[10px] text-red-500 font-bold uppercase tracking-widest text-center min-h-[20px] bg-black/40 p-1 rounded mt-2"></div>
                 </div>
             </div>
         </section>
@@ -138,7 +138,6 @@
     </main>
 
     <script>
-        // Updated with the latest provided API Key
         const apiKey = "AIzaSyCxHO8s_g8ScXq3qDPe-cA-UCMy7OTK6oQ"; 
         
         const genTrigger = document.getElementById('gen-trigger');
@@ -152,14 +151,14 @@
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
             
-            const prompt = `A surreal and uncanny ${creature} wearing a ${costume}, sitting in a dark mossy Chinese forest, the text '$CHINESEROT' is glowing in the background, 3D render style, viral brainrot aesthetic, dramatic lighting.`;
+            const promptText = `A surreal and uncanny ${creature} wearing a ${costume}, sitting in a dark mossy Chinese forest, the text '$CHINESEROT' is glowing in the background, 3D render style, viral brainrot aesthetic, dramatic lighting.`;
 
             genStatus.innerText = "FERMENTING...";
             genTrigger.disabled = true;
             genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                // Endpoint for imagen-4.0-generate-001
+                // Using the specific predict endpoint with the provided key
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
                 
                 const response = await fetch(url, {
@@ -168,9 +167,10 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        instances: [{ prompt: prompt }],
+                        instances: [{ prompt: promptText }],
                         parameters: { 
-                            sampleCount: 1
+                            sampleCount: 1,
+                            aspectRatio: "1:1"
                         }
                     })
                 });
@@ -179,8 +179,11 @@
 
                 if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
                     const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover">`;
+                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover animate-pulse shadow-[0_0_20px_rgba(255,215,0,0.2)]">`;
                     genStatus.innerText = "MANIFESTED.";
+                    setTimeout(() => genResult.querySelector('img').classList.remove('animate-pulse'), 1000);
+                } else if (response.status === 403) {
+                    throw new Error("403 Forbidden: Key restricted or Billing not enabled.");
                 } else {
                     const errorDetails = data.error?.message || "Check API Key restrictions or safety filters.";
                     throw new Error(errorDetails);
@@ -188,7 +191,7 @@
             } catch (err) {
                 console.error("Summoning error:", err);
                 genResult.innerHTML = `<div class="text-red-500 text-[10px] p-6 text-center uppercase">Portal Closed:<br>${err.message}</div>`;
-                genStatus.innerText = "ERROR.";
+                genStatus.innerText = "ACCESS RESTRICTED";
             } finally {
                 genTrigger.disabled = false;
             }
