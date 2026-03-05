@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$CHINESEROT | The Forest of Decay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blood-red: #8b0000;
+            --neon-gold: #ffd700;
+            --jade-green: #00a86b;
+            --ink-black: #050505;
+        }
+
+        body {
+            background-color: var(--ink-black);
+            color: #d1d1d1;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            overflow-x: hidden;
+            background: radial-gradient(circle at center, #1a0a0a 0%, #050505 100%);
+        }
+
+        /* Rice paper texture & Ink smoke background */
+        .psychedelic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            background-color: var(--ink-black);
+        }
+
+        .ink-stain {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 0, 0, 0.15) 0%, transparent 70%);
+            filter: blur(50px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- DRAGON ANIMATION --- */
+        .dragon-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .dragon-snake {
+            position: absolute;
+            width: 300px;
+            opacity: 0.3;
+            filter: drop-shadow(0 0 8px var(--blood-red));
+            animation: dragonSwim var(--duration) linear infinite;
+        }
+
+        @keyframes dragonSwim {
+            0% { left: -400px; top: var(--start-y); transform: rotate(10deg) scaleX(var(--dir)); }
+            50% { top: var(--mid-y); transform: rotate(-10deg) scaleX(var(--dir)); }
+            100% { left: 110%; top: var(--end-y); transform: rotate(10deg) scaleX(var(--dir)); }
+        }
+
+        /* --- KONGMING LANTERN ANIMATION --- */
+        .kongming-container {
+            position: fixed;
+            bottom: -100px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .kongming-lantern {
+            position: absolute;
+            width: 40px;
+            height: 55px;
+            background: radial-gradient(circle at bottom, #ff9900 0%, var(--blood-red) 80%);
+            border-radius: 10px 10px 50% 50% / 10px 10px 20% 20%;
+            box-shadow: 0 0 20px rgba(255, 153, 0, 0.6);
+            opacity: 0.6;
+            animation: riseUp var(--duration) linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 215, 0, 0.8);
+            font-size: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        @keyframes riseUp {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            100% { transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)); opacity: 0; }
+        }
+
+        .glow-text {
+            color: var(--neon-gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(139, 0, 0, 0.8);
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        /* Fixed hanging lanterns at top */
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .lantern-fixed {
+            position: fixed;
+            top: -20px;
+            width: 60px;
+            height: 80px;
+            background: var(--blood-red);
+            border-radius: 50% / 20%;
+            box-shadow: 0 0 30px var(--blood-red);
+            animation: sway 4s ease-in-out infinite;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-gold);
+            font-weight: bold;
+            border: 2px solid var(--neon-gold);
+        }
+
+        .ca-box {
+            background: rgba(20, 5, 5, 0.9);
+            border: 2px solid var(--blood-red);
+            box-shadow: inset 0 0 15px var(--blood-red);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ca-box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px var(--neon-gold);
+            border-color: var(--neon-gold);
+        }
+
+        .btn-rot {
+            background: linear-gradient(45deg, var(--blood-red), #330000);
+            color: var(--neon-gold);
+            font-weight: bold;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            border: 1px solid var(--neon-gold);
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
+            transition: 0.3s;
+            font-family: 'Ma Shan Zheng', cursive;
+            letter-spacing: 2px;
+        }
+
+        .btn-rot:hover {
+            background: var(--neon-gold);
+            color: var(--blood-red);
+            box-shadow: 0 0 30px var(--neon-gold);
+        }
+
+        /* Fixed Carousel Styling */
+        .video-carousel {
+            display: flex;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            border: 8px double var(--blood-red);
+            border-radius: 4px;
+            background: rgba(0,0,0,0.8);
+            box-shadow: 0 0 40px rgba(139, 0, 0, 0.4);
+            flex-grow: 1;
+            max-width: 450px; /* Optimal for TikTok vertical ratio */
+            margin: 0 auto;
+        }
+
+        .video-carousel::-webkit-scrollbar { display: none; }
+        .video-item { 
+            scroll-snap-align: center; 
+            flex: 0 0 100%; 
+            width: 100%; 
+            min-height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .nav-btn {
+            background: var(--blood-red);
+            border: 1px solid var(--neon-gold);
+            color: var(--neon-gold);
+            width: 45px;
+            height: 60px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            flex-shrink: 0;
+            z-index: 30;
+        }
+
+        .nav-btn:hover {
+            background: var(--neon-gold);
+            color: var(--blood-red);
+        }
+
+        .calligraphy-watermark {
+            position: absolute;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 15rem;
+            opacity: 0.03;
+            color: white;
+            pointer-events: none;
+            z-index: 1;
+            white-space: nowrap;
+        }
+
+        #dexscreener-embed {
+            border: 4px solid var(--blood-red);
+            filter: sepia(0.5) hue-rotate(-50deg);
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow { animation: spin-slow 15s linear infinite; }
+
+        /* Fix for tiktok embeds taking too much space */
+        .tiktok-embed {
+            margin: 0 !important;
+            max-width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="psychedelic-bg"></div>
+    <div class="ink-stain" style="top: -10%; left: -10%;"></div>
+    <div class="ink-stain" style="bottom: -10%; right: -10%;"></div>
+
+    <!-- DRAGON LAYER -->
+    <div class="dragon-layer">
+        <svg class="dragon-snake" style="--duration: 20s; --start-y: 20%; --mid-y: 40%; --end-y: 10%; --dir: 1;" viewBox="0 0 200 60">
+            <path d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" stroke="var(--neon-gold)" fill="none" stroke-width="2" stroke-dasharray="5,2" opacity="0.6"/>
+            <text font-family="Ma Shan Zheng" font-size="8" fill="red">
+                <textPath href="#path1">腐烂之龙 ROTTING DRAGON</textPath>
+            </text>
+            <path id="path1" d="M0,30 C20,10 40,50 60,30 C80,10 100,50 120,30 C140,10 160,50 180,30" fill="none"/>
+        </svg>
+
+        <svg class="dragon-snake" style="--duration: 25s; --start-y: 70%; --mid-y: 50%; --end-y: 80%; --dir: -1;" viewBox="0 0 200 60">
+            <path d="M0,30 C20,50 40,10 60,30 C80,50 100,10 120,30 C140,50 160,10 180,30" stroke="var(--blood-red)" fill="none" stroke-width="1.5" opacity="0.4"/>
+            <text font-family="Ma Shan Zheng" font-size="8" fill="gold">
+                <textPath href="#path2">混沌蛇 CHAOS SERPENT</textPath>
+            </text>
+            <path id="path2" d="M0,30 C20,50 40,10 60,30 C80,50 100,10 120,30 C140,50 160,10 180,30" fill="none"/>
+        </svg>
+    </div>
+
+    <!-- KONGMING LANTERN LAYER -->
+    <div class="kongming-container" id="lantern-field"></div>
+
+    <!-- Hanging Lanterns -->
+    <div class="lantern-fixed" style="left: 10%;">ROT</div>
+    <div class="lantern-fixed" style="right: 10%; animation-delay: 1s;">DECAY</div>
+
+    <!-- Calligraphy Background Decor -->
+    <div class="calligraphy-watermark" style="top: 20%; left: -5%;">CHINESE ROT</div>
+    <div class="calligraphy-watermark" style="bottom: 10%; right: -5%;">FOREST SHADOW</div>
+
+    <nav class="p-6 flex justify-between items-center relative z-10 border-b border-red-900/30">
+        <div class="text-2xl md:text-4xl font-bold glow-text tracking-widest">【 THE FOREST OF DECAY 】</div>
+        <div class="flex gap-4 md:gap-8 text-xs md:text-base">
+            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="hover:text-yellow-500 transition uppercase tracking-tighter">X Community</a>
+            <a href="#" class="hover:text-yellow-500 transition uppercase tracking-tighter">Telegram</a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 pt-16 pb-40 text-center relative z-10">
+        
+        <div class="mb-12">
+            <p class="text-yellow-600 tracking-[0.5em] mb-4">CYBER CHINESE DECAY</p>
+            <h1 class="text-6xl md:text-9xl font-black mb-6 glow-text italic uppercase">Chinese Rot</h1>
+            <div class="w-24 h-1 bg-red-800 mx-auto mb-6"></div>
+            <p class="text-lg md:text-2xl text-red-200 max-w-2xl mx-auto font-serif italic">
+                “ All beings decay, all things rot. In the deep forest, there is always an echo.”
+            </p>
+        </div>
+
+        <!-- Contract Address -->
+        <div class="max-w-3xl mx-auto mb-20">
+            <div id="ca-container" class="ca-box p-5 rounded-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-red-500 text-xs font-serif uppercase tracking-widest">Seal Code:</span>
+                <code id="ca-text" class="text-sm md:text-lg font-mono text-yellow-500 break-all">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
+                <button class="bg-red-900/50 border border-yellow-700 text-yellow-500 px-4 py-1 text-xs hover:bg-yellow-600 hover:text-black transition">COPY SEAL</button>
+            </div>
+            <p id="copy-msg" class="mt-2 text-yellow-500 font-bold opacity-0 transition-opacity uppercase text-xs">The contract is sealed. The mark is carved!</p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-24">
+            <a href="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH" target="_blank" class="btn-rot">Divination (Chart)</a>
+            <a href="http://x.com/i/communities/2029289508680941990" target="_blank" class="btn-rot">Enter the Realm (Socials)</a>
+        </div>
+
+        <!-- Carousel Section -->
+        <section class="max-w-4xl mx-auto mb-32 relative">
+            <h2 class="text-3xl md:text-4xl mb-12 text-yellow-500 font-serif italic">—— Rot Reels (Visions) ——</h2>
+            
+            <div class="flex items-center justify-center gap-2 md:gap-8">
+                <button class="nav-btn" onclick="scrollCarousel(-1)">◀</button>
+                <div class="video-carousel" id="rot-carousel">
+                    <!-- Video 1 -->
+                    <div class="video-item">
+                        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215" style="width: 100%;">
+                            <section></section>
+                        </blockquote>
+                    </div>
+                    <!-- Video 2 -->
+                    <div class="video-item">
+                        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568" style="width: 100%;">
+                            <section></section>
+                        </blockquote>
+                    </div>
+                    <!-- Video 3 -->
+                    <div class="video-item">
+                        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7480460726088453384" data-video-id="7480460726088453384" style="width: 100%;">
+                            <section></section>
+                        </blockquote>
+                    </div>
+                    <!-- Video 4 -->
+                    <div class="video-item">
+                        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322" style="width: 100%;">
+                            <section></section>
+                        </blockquote>
+                    </div>
+                </div>
+                <button class="nav-btn" onclick="scrollCarousel(1)">▶</button>
+            </div>
+            <p class="text-xs text-red-800 mt-4 uppercase tracking-widest">Swipe or click arrows to cycle the rot</p>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="max-w-6xl mx-auto mb-32">
+            <h2 class="text-4xl mb-8 glow-text uppercase">Fate Tracker (Live Moss)</h2>
+            <div id="dexscreener-embed" class="rounded-lg overflow-hidden">
+                <iframe src="https://dexscreener.com/solana/EzTQaNUZSB71gvTKiMP9xSqT6oLK8BUxy1fQgcutLRgH?embed=1&loadChartSettings=0&trades=0&tabs=0&info=0&chartLeftToolbar=0&chartDefaultOnMobile=1&chartTheme=dark&theme=dark&chartStyle=1&chartType=marketCap&interval=5" style="width:100%; height:600px; border:none;"></iframe>
+            </div>
+        </section>
+
+        <!-- Lore Section -->
+        <section class="mt-32 grid md:grid-cols-2 gap-16 text-left items-center">
+            <div class="p-10 border-l-4 border-red-800 bg-red-950/20 backdrop-blur-sm">
+                <h2 class="text-5xl mb-8 text-yellow-500 font-serif">Forest Secrets</h2>
+                <div class="space-y-6 text-lg text-gray-400 font-serif leading-loose">
+                    <p>
+                        In the unfathomable depths of the digital jungle, ancient emoji incantations are undergoing a silent "rot." This is not an end, but an unspeakable transcendence.
+                    </p>
+                    <p>
+                        $CHINESEROT was born from surreal midnight fever dreams, the only currency flowing through the moss. When the brain melts into a repeating melody, we shall meet again in the dark red shadows.
+                    </p>
+                </div>
+            </div>
+            <div class="relative flex justify-center">
+                <div class="w-64 h-64 border-4 border-yellow-700/30 rounded-full flex items-center justify-center animate-spin-slow">
+                    <div class="text-[120px] filter drop-shadow-[0_0_30px_rgba(139,0,0,1)]">🀄</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="mt-40 border-t border-red-900/30 pt-20">
+            <div class="opacity-30 text-xs tracking-[1.5em] uppercase text-yellow-600 mb-4">
+                Brain Rot • Digital Decay • $CHINESEROT • Eternal Forest
+            </div>
+            <p class="text-[10px] text-red-900 font-serif uppercase tracking-widest">© Year of Decay · Rot Research Institute</p>
+        </div>
+    </main>
+
+    <!-- TikTok Embed Script -->
+    <script async src="https://www.tiktok.com/embed.js"></script>
+    
+    <script>
+        // Copy logic
+        const caContainer = document.getElementById('ca-container');
+        const caText = document.getElementById('ca-text').innerText;
+        const copyMsg = document.getElementById('copy-msg');
+
+        caContainer.addEventListener('click', () => {
+            const el = document.createElement('textarea');
+            el.value = caText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            copyMsg.style.opacity = '1';
+            setTimeout(() => { copyMsg.style.opacity = '0'; }, 2000);
+        });
+
+        // Carousel logic
+        function scrollCarousel(direction) {
+            const carousel = document.getElementById('rot-carousel');
+            const items = carousel.querySelectorAll('.video-item');
+            if (items.length === 0) return;
+            const itemWidth = items[0].offsetWidth;
+            carousel.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
+        }
+
+        // Ink movement effect
+        document.addEventListener('mousemove', (e) => {
+            const stains = document.querySelectorAll('.ink-stain');
+            stains.forEach((stain, index) => {
+                const moveX = (e.clientX - window.innerWidth / 2) / (30 + index * 10);
+                const moveY = (e.clientY - window.innerHeight / 2) / (30 + index * 10);
+                stain.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+
+        // Generate Kongming Lanterns
+        const lanternContainer = document.getElementById('lantern-field');
+        const chars = ["命", "运", "腐", "朽", "梦", "虚"];
+        
+        function createLantern() {
+            const l = document.createElement('div');
+            l.className = 'kongming-lantern';
+            l.style.left = Math.random() * 100 + 'vw';
+            l.style.setProperty('--duration', (Math.random() * 10 + 10) + 's');
+            l.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
+            l.style.setProperty('--rot', (Math.random() * 40 - 20) + 'deg');
+            l.innerText = chars[Math.floor(Math.random() * chars.length)];
+            
+            lanternContainer.appendChild(l);
+            setTimeout(() => l.remove(), 20000);
+        }
+
+        setInterval(createLantern, 2000);
+    </script>
+</body>
+</html>
