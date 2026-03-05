@@ -100,7 +100,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: 0.3s;
-            display: none; /* Hidden until image is generated */
+            display: none; 
             align-items: center;
             justify-content: center;
             gap: 8px;
@@ -286,7 +286,7 @@
         </div>
 
         <!-- Generator Section -->
-        <section class="max-w-5xl mx-auto mb-40">
+        <section class="max-w-5xl mx-auto mb-12">
             <div class="gen-container p-1 md:p-1 rounded-sm">
                 <div class="bg-black p-8 md:p-12 grid md:grid-cols-2 gap-12 items-center">
                     <div class="image-display rounded border-2 border-yellow-900/50" id="gen-result">
@@ -314,7 +314,19 @@
             </div>
         </section>
 
-        <!-- Video Carousel Section (Visual Decay) -->
+        <!-- Contract Address (Moved straight below generator) -->
+        <div class="max-w-5xl mx-auto mb-40">
+            <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-yellow-600 p-8 rounded-sm flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:shadow-[0_0_50px_rgba(255,215,0,0.2)]">
+                <div class="flex items-center gap-4">
+                    <span class="text-red-600 font-bold calligraphy-font text-3xl">CA</span>
+                    <div class="h-8 w-px bg-yellow-900"></div>
+                </div>
+                <code class="text-yellow-500 font-mono text-sm md:text-lg tracking-widest">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
+                <span class="text-xs bg-yellow-600 text-black font-bold px-6 py-2 uppercase tracking-tighter">Copy Scroll</span>
+            </div>
+        </div>
+
+        <!-- Video Carousel Section -->
         <section class="mb-40 py-10 relative">
             <div class="mb-12">
                 <h2 class="text-4xl text-yellow-500 calligraphy-font mb-2">Visual Decay</h2>
@@ -378,18 +390,6 @@
             </div>
         </section>
 
-        <!-- Contract Address -->
-        <div class="max-w-3xl mx-auto">
-            <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-yellow-600 p-8 rounded flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:shadow-[0_0_50px_rgba(255,215,0,0.2)]">
-                <div class="flex items-center gap-4">
-                    <span class="text-red-600 font-bold calligraphy-font text-3xl">CA</span>
-                    <div class="h-8 w-px bg-yellow-900"></div>
-                </div>
-                <code class="text-yellow-500 font-mono text-sm md:text-lg tracking-widest">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
-                <span class="text-xs bg-yellow-600 text-black font-bold px-6 py-2 uppercase tracking-tighter">Copy Scroll</span>
-            </div>
-        </div>
-
     </main>
 
     <script>
@@ -408,21 +408,76 @@
             videoCarousel.scrollBy({ left: 345, behavior: 'smooth' });
         };
 
-        const creatures = ["cat", "capybara", "dragon", "koi fish", "panda"];
-        const costumes = ["traditional silk robe", "bamboo armor", "terracotta mask", "glowing paper lantern"];
+        const creatures = [
+            "cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "golden monkey", "shiba inu", 
+            "chinese phoenix", "white tiger", "mystic toad", "immortal crane", "qilin", "baby elephant", 
+            "cyber-axolotl", "golden turtle", "emperor penguin", "feral raccoon", "celestial rabbit", "ghost dog"
+        ];
+        
+        const costumes = [
+            "traditional silk hanfu with intricate embroidery", "ancient bamboo samurai armor", "weathered terracotta mask", 
+            "glowing paper lantern headpiece", "imperial dragon robe", "monk's saffron-colored shawl", 
+            "heavy jade jewelry and crown", "vibrant red Beijing opera mask", "straw conical farmer's hat", 
+            "futuristic neon-trim silk kimono", "ancient general's war plates", "taoist priest vestments",
+            "concubine's floral head-dress", "shadow assassin's cowl", "cyber-enhanced traditional armor"
+        ];
+
+        const settings = [
+            "in a dark mossy Chinese forest with glowing roots", "inside a misty mountain temple with burning incense", 
+            "floating on a giant lotus leaf in a pitch-black lake", "sitting on a red bridge under neon cherry blossoms", 
+            "beside a waterfall of liquid molten gold", "surrounded by a thousand floating red lanterns", 
+            "in a bamboo grove where trees are fiber-optic cables", "atop a crumbling stone dragon statue covered in moss",
+            "within a dense cloud of purple incense smoke", "in a rainy cyberpunk alley in Old Shanghai",
+            "inside a digital void filled with floating chinese calligraphy scrolls", "on a mountain peak piercing through a sea of red clouds"
+        ];
+
+        const poses = [
+            "meditating peacefully", "screaming into the void", "staring directly at the viewer with glowing eyes", 
+            "performing a martial arts stance", "holding a mysterious digital artifact", "dissolving into pixels", 
+            "emerging from a puddle of black ink", "surrounded by a swirl of magical energy", "sleeping on a pile of gold coins",
+            "pointing a jade staff towards the sky"
+        ];
+
+        const artifacts = [
+            "a glowing jade tablet", "a floating digital orb", "a cracked ancient vase leaking light", 
+            "a massive red paper fan", "a traditional pipa instrument made of glass", "a burning scroll of binary code",
+            "a golden coin with a square hole", "a cluster of glowing red mushrooms"
+        ];
+
+        const styles = [
+            "surreal and uncanny", "hyper-realistic 3D render", "viral brainrot aesthetic", 
+            "traditional Chinese ink painting mixed with modern 3D", "dark fantasy concept art", 
+            "glitch art with ancient paper textures", "psychedelic digital hallucination", 
+            "cinematic wide shot with dramatic volumetrics", "stylized claymation", "90s vhs recording style"
+        ];
+
+        const lighting = [
+            "dramatic red and gold lighting", "eerie green jade glow", "shimmering moonlit ozone", 
+            "harsh flickering neon light", "warm candlelight with long dramatic shadows", "bioluminescent purple moss glow",
+            "blinding golden sunbeams through thick fog"
+        ];
+
         const shareTexts = [
             "The algorithm decays. The forest provides. I have summoned the rot. $CHINESEROT",
             "Manifesting pure digital brainrot from the deep forest. Witness the summoning. $CHINESEROT",
             "The dragon's breath smells of ozone and ancient ink. I am the Rot. $CHINESEROT",
             "I saw the future in the moss. It was beautiful and decaying. $CHINESEROT",
-            "Burn the spirit. Feed the forest. $CHINESEROT"
+            "Burn the spirit. Feed the forest. $CHINESEROT",
+            "A fragment of the collective digital unconscious has appeared. $CHINESEROT",
+            "The moss is winning. Join the rot. $CHINESEROT",
+            "My soul is currently 74% bamboo and 26% fiber optics. $CHINESEROT"
         ];
 
         async function generateRot() {
             const creature = creatures[Math.floor(Math.random() * creatures.length)];
             const costume = costumes[Math.floor(Math.random() * costumes.length)];
+            const setting = settings[Math.floor(Math.random() * settings.length)];
+            const pose = poses[Math.floor(Math.random() * poses.length)];
+            const artifact = artifacts[Math.floor(Math.random() * artifacts.length)];
+            const style = styles[Math.floor(Math.random() * styles.length)];
+            const light = lighting[Math.floor(Math.random() * lighting.length)];
             
-            const promptText = `A surreal and uncanny ${creature} wearing a ${costume}, sitting in a dark mossy Chinese forest, the text '$CHINESEROT' is glowing in the background, 3D render style, viral brainrot aesthetic, dramatic red and gold lighting, traditional Chinese ink painting influence.`;
+            const promptText = `A ${style} ${creature} ${pose} while wearing a ${costume}, holding ${artifact}, ${setting}. The text '$CHINESEROT' is carved into the background. ${light}, 8k resolution, highly detailed textures, mixing ancient history with modern digital brainrot.`;
 
             genStatus.innerText = "FERMENTING IN THE ABYSS...";
             genTrigger.disabled = true;
