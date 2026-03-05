@@ -91,6 +91,24 @@
             transform: scale(1.05);
         }
 
+        .btn-axiom {
+            background: transparent;
+            color: var(--neon-gold);
+            border: 1px solid var(--neon-gold);
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-axiom:hover {
+            background: var(--neon-gold);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-gold);
+        }
+
         .btn-share {
             background: #000;
             color: #fff;
@@ -264,11 +282,12 @@
     <div class="lantern top-10 left-10">🏮</div>
     <div class="lantern top-10 right-10">🏮</div>
 
-    <nav class="pt-16 pb-8 px-8 flex justify-between items-center relative z-10 border-b border-red-900/30">
+    <nav class="pt-16 pb-8 px-8 flex flex-col md:flex-row justify-between items-center relative z-10 border-b border-red-900/30 gap-6">
         <div class="text-4xl md:text-6xl glow-text calligraphy-font">
             <span class="text-red-600 mr-2">ROT</span> $CHINESEROT
         </div>
-        <div class="flex gap-8 text-sm font-bold uppercase tracking-widest text-yellow-500">
+        <div class="flex items-center gap-6 text-sm font-bold uppercase tracking-widest text-yellow-500">
+            <a href="https://axiom.trade/@dumacuk" target="_blank" class="btn-axiom">BUY ON AXIOM</a>
             <a href="https://x.com" target="_blank" class="hover:text-white transition-colors">Twitter (X)</a>
             <a href="https://t.me" target="_blank" class="hover:text-white transition-colors">Telegram</a>
         </div>
@@ -314,7 +333,7 @@
             </div>
         </section>
 
-        <!-- Contract Address (Moved straight below generator) -->
+        <!-- Contract Address -->
         <div class="max-w-5xl mx-auto mb-40">
             <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-yellow-600 p-8 rounded-sm flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:shadow-[0_0_50px_rgba(255,215,0,0.2)]">
                 <div class="flex items-center gap-4">
