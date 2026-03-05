@@ -6,12 +6,6 @@
     <title>$CHINESEROT | The Forest of Decay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+SC:wght@300;700&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDKs (Compat Version) -->
-    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
-
     <style>
         :root {
             --blood-red: #8b0000;
@@ -32,6 +26,19 @@
             line-height: 1.6;
         }
 
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(90deg, var(--blood-red) 2px, transparent 2px) 0 0,
+                linear-gradient(0deg, var(--blood-red) 2px, transparent 2px) 0 0;
+            background-size: 40px 40px;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 1;
+        }
+
         .glow-text {
             color: var(--neon-gold);
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.5), 0 0 30px rgba(139, 0, 0, 0.3);
@@ -42,89 +49,112 @@
             font-family: 'Zhi Mang Xing', cursive;
         }
 
+        .dragon-container {
+            position: fixed;
+            top: 20%;
+            right: -100px;
+            width: 400px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+            animation: dragonFloat 15s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--blood-red));
+        }
+
+        @keyframes dragonFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-50px, 100px) rotate(5deg); }
+            50% { transform: translate(-100px, -50px) rotate(-5deg); }
+            75% { transform: translate(-50px, 50px) rotate(2deg); }
+        }
+
         .btn-rot {
             background: linear-gradient(45deg, var(--blood-red), #330000);
             color: var(--neon-gold);
             font-weight: 700;
             padding: 1rem 2rem;
+            border-radius: 2px;
             border: 2px solid var(--neon-gold);
             text-transform: uppercase;
             box-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
             transition: 0.3s;
             letter-spacing: 2px;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-rot:hover:not(:disabled) {
             background: var(--neon-gold);
             color: var(--blood-red);
             box-shadow: 0 0 30px var(--neon-gold);
-            transform: scale(1.02);
+            transform: scale(1.05);
         }
 
-        /* Carousel Styles */
-        .carousel-wrapper {
-            position: relative;
-            width: 100%;
-            padding: 0 60px;
-        }
-
-        .carousel-scroll {
-            display: flex;
-            overflow-x: auto;
-            gap: 24px;
-            scroll-behavior: smooth;
-            scroll-snap-type: x mandatory;
-            padding: 20px 0;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .carousel-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .carousel-item {
-            min-width: 300px;
-            max-width: 300px;
-            scroll-snap-align: center;
-            background: rgba(15, 2, 2, 0.9);
-            border: 1px solid var(--blood-red);
-            transition: 0.4s;
-        }
-
-        .carousel-item:hover {
-            border-color: var(--neon-gold);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
-        }
-
-        .carousel-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
-            background: var(--blood-red);
+        .btn-axiom {
+            background: transparent;
             color: var(--neon-gold);
-            border: 2px solid var(--neon-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 30;
+            border: 1px solid var(--neon-gold);
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
             transition: 0.3s;
             font-weight: bold;
         }
 
-        .carousel-nav:hover {
+        .btn-axiom:hover {
             background: var(--neon-gold);
-            color: var(--blood-red);
-            box-shadow: 0 0 20px var(--neon-gold);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-gold);
         }
 
-        .carousel-nav.prev { left: 0; }
-        .carousel-nav.next { right: 0; }
+        .btn-share {
+            background: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            display: none; 
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-share:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .gen-container, .chart-container, .story-card {
+            background: rgba(15, 2, 2, 0.9);
+            border: 1px solid var(--neon-gold);
+            position: relative;
+            clip-path: polygon(
+                0 10%, 10% 0, 90% 0, 100% 10%, 
+                100% 90%, 90% 100%, 10% 100%, 0 90%
+            );
+        }
+
+        .gen-container {
+            border: 2px solid var(--neon-gold);
+            box-shadow: 0 0 40px rgba(139,0,0,0.5);
+        }
+
+        .image-display {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #000;
+            border: 1px solid var(--blood-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
 
         .loader {
             width: 48px;
@@ -140,230 +170,390 @@
             100% { transform: rotate(360deg); }
         }
 
-        .gen-container {
-            background: rgba(15, 2, 2, 0.9);
-            border: 2px solid var(--neon-gold);
-            box-shadow: 0 0 40px rgba(139,0,0,0.5);
+        .carousel-wrapper {
+            position: relative;
+            max-width: 100vw;
         }
 
-        #dexscreener-embed { position: relative; width: 100%; padding-bottom: 125%; }
-        @media(min-width:1401px) { #dexscreener-embed { padding-bottom: 600px; } }
-        #dexscreener-embed iframe { position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: 0; }
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 40px;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-snap-type: x mandatory;
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+
+        .carousel-card {
+            min-width: 325px;
+            background: #000;
+            border: 2px solid var(--blood-red);
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
+            transition: 0.3s;
+            scroll-snap-align: center;
+        }
+        .carousel-card:hover { 
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 30px var(--neon-gold);
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--blood-red);
+            color: var(--neon-gold);
+            border: 1px solid var(--neon-gold);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            font-size: 1.5rem;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--neon-gold);
+            color: var(--blood-red);
+        }
+
+        .nav-left { left: 10px; }
+        .nav-right { right: 10px; }
+
+        .story-border {
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            background-image: radial-gradient(circle at top right, rgba(139, 0, 0, 0.2), transparent);
+            padding: 2.5rem;
+        }
+
+        .stamp {
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--blood-red);
+            color: var(--blood-red);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Zhi Mang Xing';
+            font-size: 1.2rem;
+            transform: rotate(-15deg);
+            margin-bottom: 1rem;
+            font-weight: bold;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .lantern {
+            position: absolute;
+            color: var(--blood-red);
+            font-size: 3rem;
+            opacity: 0.6;
+            animation: swing 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes swing {
+            from { transform: rotate(-5deg); }
+            to { transform: rotate(5deg); }
+        }
     </style>
     <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
-<body class="pb-20">
+<body>
 
-    <canvas id="comp-canvas" style="display:none;"></canvas>
+    <div class="dragon-container">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50C10 50 20 20 40 30C60 40 80 10 90 50C100 90 60 80 40 70C20 60 10 80 10 50Z" stroke="#8b0000" stroke-width="0.5" stroke-dasharray="2 2" />
+            <text font-family="Zhi Mang Xing" font-size="8" fill="#8b0000" opacity="0.8">
+                <textPath href="#dragon-path">DRAGON DRAGON DRAGON DRAGON DRAGON</textPath>
+            </text>
+            <path id="dragon-path" d="M10 80 Q 25 10 50 50 T 90 20" fill="transparent" />
+            <text x="75" y="25" fill="#ffd700" font-size="25">🐲</text>
+        </svg>
+    </div>
+
+    <div class="lantern top-10 left-10">🏮</div>
+    <div class="lantern top-10 right-10">🏮</div>
 
     <nav class="pt-16 pb-8 px-8 flex flex-col md:flex-row justify-between items-center relative z-10 border-b border-red-900/30 gap-6">
         <div class="text-4xl md:text-6xl glow-text calligraphy-font">
             <span class="text-red-600 mr-2">ROT</span> $CHINESEROT
         </div>
         <div class="flex items-center gap-6 text-sm font-bold uppercase tracking-widest text-yellow-500">
-            <a href="https://axiom.trade/@dumacuk" target="_blank" class="hover:text-white transition-colors border-b border-yellow-500/30">BUY ON AXIOM</a>
+            <a href="https://axiom.trade/@dumacuk" target="_blank" class="btn-axiom">BUY ON AXIOM</a>
             <a href="https://x.com" target="_blank" class="hover:text-white transition-colors">Twitter (X)</a>
             <a href="https://t.me" target="_blank" class="hover:text-white transition-colors">Telegram</a>
         </div>
     </nav>
 
-    <main class="container mx-auto px-4 pt-16 text-center relative z-10">
+    <main class="container mx-auto px-4 pt-16 text-center relative z-10 pb-40">
         
-        <div class="mb-16">
-            <h1 class="text-7xl md:text-9xl glow-text calligraphy-font mb-4">Chinese Rot</h1>
-            <p class="text-xl text-red-100/60 italic calligraphy-font tracking-widest">"Compressing the ritual. Preserving the decay."</p>
+        <div class="mb-24">
+            <div class="inline-block border-y-2 border-yellow-600 py-4 px-12 mb-6">
+                <h1 class="text-7xl md:text-[10rem] glow-text calligraphy-font leading-none">Chinese Rot</h1>
+            </div>
+            <p class="text-2xl text-red-100/80 italic calligraphy-font max-w-2xl mx-auto tracking-widest">
+                "The algorithm decays. The forest provides. The dragon watches."
+            </p>
         </div>
 
         <!-- Generator Section -->
-        <section class="max-w-4xl mx-auto mb-24">
-            <div class="gen-container p-6 rounded-sm">
-                <div class="grid md:grid-cols-2 gap-8 items-center">
-                    <div id="gen-result" class="aspect-square bg-black border border-red-900 flex items-center justify-center overflow-hidden">
-                        <div class="text-red-950 calligraphy-font text-2xl">Awaiting Summon...</div>
+        <section class="max-w-5xl mx-auto mb-12">
+            <div class="gen-container p-1 md:p-1 rounded-sm">
+                <div class="bg-black p-8 md:p-12 grid md:grid-cols-2 gap-12 items-center">
+                    <div class="image-display rounded border-2 border-yellow-900/50" id="gen-result">
+                        <div class="text-red-900/60 text-sm italic calligraphy-font text-2xl">Awaiting Summoning...</div>
                     </div>
-                    <div class="text-left space-y-6">
-                        <h2 class="text-3xl text-yellow-500 calligraphy-font">Ritual Portal</h2>
-                        <p class="text-xs text-gray-500 uppercase tracking-widest">Images are automatically optimized below 1MB before entering the collective forest.</p>
-                        <button id="gen-trigger" class="btn-rot w-full py-6 text-xl calligraphy-font">Summon My Rot</button>
-                        <div id="gen-status" class="text-[10px] text-red-500 font-bold uppercase tracking-widest text-center min-h-[20px]"></div>
+                    <div class="text-left space-y-8">
+                        <div class="flex items-center gap-4">
+                            <div class="h-px flex-1 bg-yellow-600"></div>
+                            <h2 class="text-4xl text-yellow-500 calligraphy-font">Summoning Ritual</h2>
+                            <div class="h-px flex-1 bg-yellow-600"></div>
+                        </div>
+                        <p class="text-sm text-gray-400 uppercase tracking-widest leading-loose">
+                            Summon a digital hallucination from the depths of the moss. Burn your spirit to see the rot.
+                        </p>
+                        <button id="gen-trigger" class="btn-rot w-full py-8 text-2xl calligraphy-font">
+                            Summon My Rot
+                        </button>
+                        <button id="share-x" class="btn-share w-full">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            Share on X
+                        </button>
+                        <div id="gen-status" class="text-xs text-red-500 font-bold uppercase tracking-widest text-center min-h-[24px] bg-red-950/20 py-2 border border-red-900/30"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Community Carousel Section -->
-        <section class="max-w-6xl mx-auto mb-32 px-4">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-4xl text-yellow-500 calligraphy-font">The Collective Forest</h2>
-                <div class="hidden md:block h-px flex-1 bg-red-900/50 mx-8"></div>
-                <div class="flex gap-2">
-                    <span class="text-[10px] text-yellow-600 uppercase tracking-[0.3em]">Gallery Live</span>
-                    <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
+        <!-- Contract Address -->
+        <div class="max-w-5xl mx-auto mb-40">
+            <div id="ca-copy" class="cursor-pointer bg-black/80 border-2 border-yellow-600 p-8 rounded-sm flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:shadow-[0_0_50px_rgba(255,215,0,0.2)]">
+                <div class="flex items-center gap-4">
+                    <span class="text-red-600 font-bold calligraphy-font text-3xl">CA</span>
+                    <div class="h-8 w-px bg-yellow-900"></div>
                 </div>
+                <code class="text-yellow-500 font-mono text-sm md:text-lg tracking-widest">5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump</code>
+                <span class="text-xs bg-yellow-600 text-black font-bold px-6 py-2 uppercase tracking-tighter">Copy Scroll</span>
             </div>
+        </div>
 
+        <!-- Video Carousel Section -->
+        <section class="mb-40 py-10 relative">
+            <div class="mb-12">
+                <h2 class="text-4xl text-yellow-500 calligraphy-font mb-2">Visual Decay</h2>
+                <h3 class="text-red-600 tracking-[0.5em] uppercase text-xs font-bold">Visual Decay Timeline</h3>
+            </div>
+            
             <div class="carousel-wrapper">
-                <button class="carousel-nav prev" id="gallery-prev">❮</button>
-                <div id="community-carousel" class="carousel-scroll">
-                    <div class="py-20 w-full text-center text-red-900 italic calligraphy-font">Loading the roots...</div>
+                <button class="nav-btn nav-left" id="slide-left" aria-label="Slide Left">❮</button>
+                <div class="carousel-container" id="video-carousel">
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7459703700727090439" data-video-id="7459703700727090439"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7512387823685668114" data-video-id="7512387823685668114"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7525004521790262536" data-video-id="7525004521790262536"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7480460726088453384" data-video-id="7480460726088453384"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7311259741861203208" data-video-id="7311259741861203208"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7486412110096911624" data-video-id="7486412110096911624"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+                    <div class="carousel-card"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7359126837311606024" data-video-id="7359126837311606024"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
                 </div>
-                <button class="carousel-nav next" id="gallery-next">❯</button>
+                <button class="nav-btn nav-right" id="slide-right" aria-label="Slide Right">❯</button>
             </div>
         </section>
 
-        <!-- TikTok Feed Section -->
-        <section class="max-w-6xl mx-auto mb-32 px-4">
-            <h2 class="text-4xl text-yellow-500 calligraphy-font mb-8 text-left">Visual Decay</h2>
-            <div class="carousel-wrapper">
-                <button class="carousel-nav prev" id="tiktok-prev">❮</button>
-                <div id="tiktok-carousel" class="carousel-scroll">
-                    <div class="carousel-item"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7464142009926782215" data-video-id="7464142009926782215"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
-                    <div class="carousel-item"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7303840026671074568" data-video-id="7303840026671074568"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
-                    <div class="carousel-item"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7563226484593282322" data-video-id="7563226484593282322"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
-                    <div class="carousel-item"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@xiao_huang_lian/video/7459703700727090439" data-video-id="7459703700727090439"><section><a target="_blank" href="https://www.tiktok.com/@xiao_huang_lian">@xiao_huang_lian</a></section></blockquote></div>
+        <!-- Story Telling Section -->
+        <section class="max-w-5xl mx-auto mb-40 px-6">
+            <h2 class="text-5xl glow-text mb-16 text-center calligraphy-font">The Scrolls of Decay</h2>
+            <div class="grid md:grid-cols-2 gap-16 text-left">
+                <div class="story-card rounded story-border">
+                    <div class="stamp">SOURCE</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Origin</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        Deep within the partitioned sectors of the old internet, a new lifeform began to sprout. It was the Rot—a digital mycelium feeding on the abandoned fragments of our collective past.
+                    </p>
                 </div>
-                <button class="carousel-nav next" id="tiktok-next">❯</button>
+                <div class="story-card rounded story-border">
+                    <div class="stamp">FOREST</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Forest</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        The forest is an anomaly where time moves in infinite loops. Bamboo shoots grow from fiber-optic cables, and the dragon's breath smells of ozone and ancient ink.
+                    </p>
+                </div>
+                <div class="story-card rounded story-border md:col-span-2">
+                    <div class="stamp">SUMMON</div>
+                    <h3 class="text-yellow-500 text-2xl mb-4 calligraphy-font">Summoning</h3>
+                    <p class="text-gray-400 italic leading-relaxed">
+                        By burning the $CHINESEROT token, you manifest a piece of the forest in our realm. Every image is a fragment of a memory that never was, processed through the decaying logic of the digital dragon.
+                    </p>
+                </div>
             </div>
         </section>
 
         <!-- Chart Section -->
-        <section class="max-w-6xl mx-auto mb-32 px-4">
-            <h2 class="text-4xl text-yellow-500 calligraphy-font mb-8 text-left">Algorithmic Pulse</h2>
-            <div class="border-2 border-yellow-600/50 rounded-sm overflow-hidden bg-black">
+        <section class="max-w-6xl mx-auto mb-40">
+            <h2 class="text-4xl text-yellow-500 mb-12 calligraphy-font">Algorithmic Pulse</h2>
+            <div class="chart-container rounded-sm overflow-hidden h-[600px] border-2 border-yellow-600">
+                <style>#dexscreener-embed{position:relative;width:100%;padding-bottom:125%;}@media(min-width:1401px){#dexscreener-embed{padding-bottom:600px;}}#dexscreener-embed iframe{position:absolute;width:100%;height:100%;top:0;left:0;border:0;}</style>
                 <div id="dexscreener-embed">
                     <iframe src="https://dexscreener.com/solana/5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump?embed=1&theme=dark&trades=0&info=0"></iframe>
                 </div>
             </div>
         </section>
 
-        <!-- Contract -->
-        <div class="max-w-2xl mx-auto mb-20">
-            <div class="border border-yellow-600/30 p-6 bg-black/40 text-sm font-mono text-yellow-500/80">
-                <span class="block mb-2 text-red-800 text-[10px] uppercase font-bold tracking-widest">Contract Address</span>
-                5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump
-            </div>
-        </div>
-
     </main>
 
     <script>
-        // --- FIREBASE CONFIG ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyDNu6OysHLjFDrLha87TUI7rJT2q0AGK1Y",
-            authDomain: "chineserot-67bb3.firebaseapp.com",
-            projectId: "chineserot-67bb3",
-            storageBucket: "chineserot-67bb3.firebasestorage.app",
-            messagingSenderId: "231858192926",
-            appId: "1:231858192926:web:152533918c847f2e54e40f"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        const appId = "chineserot-67bb3";
-
-        // --- CAROUSEL LOGIC ---
-        const galleryCarousel = document.getElementById('community-carousel');
-        document.getElementById('gallery-prev').onclick = () => galleryCarousel.scrollBy({ left: -324, behavior: 'smooth' });
-        document.getElementById('gallery-next').onclick = () => galleryCarousel.scrollBy({ left: 324, behavior: 'smooth' });
-
-        const tiktokCarousel = document.getElementById('tiktok-carousel');
-        document.getElementById('tiktok-prev').onclick = () => tiktokCarousel.scrollBy({ left: -324, behavior: 'smooth' });
-        document.getElementById('tiktok-next').onclick = () => tiktokCarousel.scrollBy({ left: 324, behavior: 'smooth' });
-
-        async function initGallery() {
-            await auth.signInAnonymously();
-            const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
-            
-            creationsRef.onSnapshot(snap => {
-                const docs = snap.docs.map(d => d.data());
-                docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-
-                if (docs.length === 0) {
-                    galleryCarousel.innerHTML = '<div class="w-full text-center py-10 opacity-30 italic">No Rot Found Yet...</div>';
-                    return;
-                }
-
-                galleryCarousel.innerHTML = docs.map(d => `
-                    <div class="carousel-item">
-                        <img src="${d.imageUrl}" class="w-full aspect-square object-cover" loading="lazy">
-                        <div class="p-3 bg-black/80">
-                             <div class="text-[10px] text-yellow-600/60 uppercase tracking-tighter truncate">${d.prompt}</div>
-                        </div>
-                    </div>
-                `).join('');
-            });
-        }
-        initGallery();
-
-        // --- GENERATOR & COMPRESSION ---
-        const MAX_BYTES = 1000000; 
-        async function optimizeImage(b64) {
-            return new Promise(res => {
-                const img = new Image();
-                img.src = b64;
-                img.onload = () => {
-                    const canvas = document.getElementById('comp-canvas');
-                    let w = img.width;
-                    let h = img.height;
-                    const max = 1024;
-                    if (w > max || h > max) {
-                        if (w > h) { h *= max / w; w = max; }
-                        else { w *= max / h; h = max; }
-                    }
-                    canvas.width = w; canvas.height = h;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, w, h);
-                    
-                    const attempt = (q) => {
-                        const out = canvas.toDataURL('image/jpeg', q);
-                        if (out.length * 0.75 > MAX_BYTES && q > 0.1) return attempt(q - 0.1);
-                        res(out);
-                    }
-                    attempt(0.85);
-                };
-            });
-        }
-
         const genTrigger = document.getElementById('gen-trigger');
+        const shareX = document.getElementById('share-x');
         const genResult = document.getElementById('gen-result');
         const genStatus = document.getElementById('gen-status');
+        const videoCarousel = document.getElementById('video-carousel');
+        const slideLeft = document.getElementById('slide-left');
+        const slideRight = document.getElementById('slide-right');
 
-        genTrigger.onclick = async () => {
+        slideLeft.onclick = () => {
+            videoCarousel.scrollBy({ left: -345, behavior: 'smooth' });
+        };
+        slideRight.onclick = () => {
+            videoCarousel.scrollBy({ left: 345, behavior: 'smooth' });
+        };
+
+        const creatures = [
+            "cat", "capybara", "dragon", "koi fish", "giant panda", "red panda", "golden monkey", "shiba inu", 
+            "chinese phoenix", "white tiger", "mystic toad", "immortal crane", "qilin", "baby elephant", 
+            "cyber-axolotl", "golden turtle", "emperor penguin", "feral raccoon", "celestial rabbit", "ghost dog"
+        ];
+        
+        const costumes = [
+            "traditional silk hanfu with intricate embroidery", "ancient bamboo samurai armor", "weathered terracotta mask", 
+            "glowing paper lantern headpiece", "imperial dragon robe", "monk's saffron-colored shawl", 
+            "heavy jade jewelry and crown", "vibrant red Beijing opera mask", "straw conical farmer's hat", 
+            "futuristic neon-trim silk kimono", "ancient general's war plates", "taoist priest vestments",
+            "concubine's floral head-dress", "shadow assassin's cowl", "cyber-enhanced traditional armor"
+        ];
+
+        const settings = [
+            "in a dark mossy Chinese forest with glowing roots", "inside a misty mountain temple with burning incense", 
+            "floating on a giant lotus leaf in a pitch-black lake", "sitting on a red bridge under neon cherry blossoms", 
+            "beside a waterfall of liquid molten gold", "surrounded by a thousand floating red lanterns", 
+            "in a bamboo grove where trees are fiber-optic cables", "atop a crumbling stone dragon statue covered in moss",
+            "within a dense cloud of purple incense smoke", "in a rainy cyberpunk alley in Old Shanghai",
+            "inside a digital void filled with floating chinese calligraphy scrolls", "on a mountain peak piercing through a sea of red clouds"
+        ];
+
+        const poses = [
+            "meditating peacefully", "screaming into the void", "staring directly at the viewer with glowing eyes", 
+            "performing a martial arts stance", "holding a mysterious digital artifact", "dissolving into pixels", 
+            "emerging from a puddle of black ink", "surrounded by a swirl of magical energy", "sleeping on a pile of gold coins",
+            "pointing a jade staff towards the sky"
+        ];
+
+        const artifacts = [
+            "a glowing jade tablet", "a floating digital orb", "a cracked ancient vase leaking light", 
+            "a massive red paper fan", "a traditional pipa instrument made of glass", "a burning scroll of binary code",
+            "a golden coin with a square hole", "a cluster of glowing red mushrooms"
+        ];
+
+        const styles = [
+            "surreal and uncanny", "hyper-realistic 3D render", "viral brainrot aesthetic", 
+            "traditional Chinese ink painting mixed with modern 3D", "dark fantasy concept art", 
+            "glitch art with ancient paper textures", "psychedelic digital hallucination", 
+            "cinematic wide shot with dramatic volumetrics", "stylized claymation", "90s vhs recording style"
+        ];
+
+        const lighting = [
+            "dramatic red and gold lighting", "eerie green jade glow", "shimmering moonlit ozone", 
+            "harsh flickering neon light", "warm candlelight with long dramatic shadows", "bioluminescent purple moss glow",
+            "blinding golden sunbeams through thick fog"
+        ];
+
+        const shareTexts = [
+            "The algorithm decays. The forest provides. I have summoned the rot. $CHINESEROT",
+            "Manifesting pure digital brainrot from the deep forest. Witness the summoning. $CHINESEROT",
+            "The dragon's breath smells of ozone and ancient ink. I am the Rot. $CHINESEROT",
+            "I saw the future in the moss. It was beautiful and decaying. $CHINESEROT",
+            "Burn the spirit. Feed the forest. $CHINESEROT",
+            "A fragment of the collective digital unconscious has appeared. $CHINESEROT",
+            "The moss is winning. Join the rot. $CHINESEROT",
+            "My soul is currently 74% bamboo and 26% fiber optics. $CHINESEROT"
+        ];
+
+        async function generateRot() {
+            const creature = creatures[Math.floor(Math.random() * creatures.length)];
+            const costume = costumes[Math.floor(Math.random() * costumes.length)];
+            const setting = settings[Math.floor(Math.random() * settings.length)];
+            const pose = poses[Math.floor(Math.random() * poses.length)];
+            const artifact = artifacts[Math.floor(Math.random() * artifacts.length)];
+            const style = styles[Math.floor(Math.random() * styles.length)];
+            const light = lighting[Math.floor(Math.random() * lighting.length)];
+            
+            const promptText = `A ${style} ${creature} ${pose} while wearing a ${costume}, holding ${artifact}, ${setting}. The text '$CHINESEROT' is carved into the background. ${light}, 8k resolution, highly detailed textures, mixing ancient history with modern digital brainrot.`;
+
+            genStatus.innerText = "FERMENTING IN THE ABYSS...";
             genTrigger.disabled = true;
-            genStatus.innerText = "OPENING PORTAL...";
-            genResult.innerHTML = '<div class="loader"></div>';
+            shareX.style.display = 'none';
+            genResult.innerHTML = '<span class="loader"></span>';
 
             try {
-                const promptText = "Dark surreal Chinese brainrot aesthetic, mossy dragon forest, neon calligraphy, uncanny 8k hallucination";
-                const res = await fetch('/api/summon-rot', {
+                const response = await fetch('/api/summon-rot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: promptText })
                 });
-                const data = await res.json();
-                const raw = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                
-                genStatus.innerText = "OPTIMIZING FOR ETERNITY...";
-                const optimized = await optimizeImage(raw);
-                
-                genResult.innerHTML = `<img src="${optimized}" class="w-full h-full object-cover">`;
-                
-                if (auth.currentUser) {
-                    await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations').add({
-                        imageUrl: optimized,
-                        prompt: promptText,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        userId: auth.currentUser.uid
-                    });
-                    genStatus.innerText = "SUMMONED TO THE FOREST.";
+
+                const data = await response.json();
+
+                if (response.ok && data.predictions && data.predictions[0]?.bytesBase64Encoded) {
+                    const b64 = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
+                    genResult.innerHTML = `<img src="${b64}" class="w-full h-full object-cover rounded shadow-lg">`;
+                    genStatus.innerText = "MANIFESTED. RIGHT CLICK IMAGE TO COPY.";
+                    shareX.style.display = 'flex';
+                } else {
+                    const errorMsg = data.error?.message || data.error || "The Rot refused the connection.";
+                    throw new Error(errorMsg);
                 }
-            } catch (e) {
-                genStatus.innerText = "PORTAL COLLAPSED.";
-                genResult.innerHTML = '<div class="text-red-900 text-xs">SUMMON FAILED</div>';
+            } catch (err) {
+                console.error("Summoning error:", err);
+                genResult.innerHTML = `<div class="text-red-500 text-[12px] p-6 text-center uppercase">Portal Closed:<br><span class="text-[10px] mt-2 block">${err.message}</span></div>`;
+                genStatus.innerText = "ACCESS RESTRICTED";
             } finally {
                 genTrigger.disabled = false;
             }
-        };
+        }
+
+        function handleShare() {
+            const randomText = shareTexts[Math.floor(Math.random() * shareTexts.length)];
+            const currentUrl = window.location.href;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(randomText + "\n\n" + currentUrl)}`;
+            window.open(twitterUrl, '_blank');
+            genStatus.innerText = "PASTE YOUR IMAGE IN THE POST.";
+        }
+
+        genTrigger.addEventListener('click', generateRot);
+        shareX.addEventListener('click', handleShare);
+
+        document.getElementById('ca-copy').addEventListener('click', () => {
+            const txt = "5P4sZjYRbaawFZ6FyFgeaq1PYk57Bj5GL4UHXgnjpump";
+            const el = document.createElement('textarea');
+            el.value = txt;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const originalStatus = genStatus.innerText;
+            genStatus.innerText = "SCROLL COPIED.";
+            setTimeout(() => genStatus.innerText = originalStatus, 2000);
+        });
     </script>
 </body>
 </html>
