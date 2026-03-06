@@ -419,7 +419,7 @@
                         Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀💣</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🐉</span>.
                     </p>
                     <div id="final-score" class="hidden text-3xl text-red-500 font-bold mb-6 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
-                    <button id="start-game-btn" class="btn-rot py-3 px-8 text-xl calligraphy-font">INSERT COIN</button>
+                    <button id="start-game-btn" class="btn-rot py-3 px-8 text-xl calligraphy-font">PLAY</button>
                 </div>
                 
                 <canvas id="game-canvas" width="800" height="300"></canvas>
@@ -838,6 +838,8 @@
         gCtx.fillText("🐼", player.x, player.y);
         gCtx.fillText("🎽", player.x, player.y + 35);
 
+        // --- BIND START BUTTON ---
+        startBtn.addEventListener('click', resetGame);
 
         // --- FIREBASE INITIALIZATION ---
         const firebaseConfig = {
