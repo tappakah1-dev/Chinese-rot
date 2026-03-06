@@ -646,6 +646,9 @@
 
         // Keyboard Controls
         window.addEventListener('keydown', (e) => { 
+            // Ignore keypresses if user is typing in an input field (like the twitter handle)
+            if (document.activeElement.tagName === 'INPUT') return;
+
             // Stop page scroll for game keys
             if(['ArrowUp','ArrowDown','Space'].includes(e.code)) {
                if(isPlaying || !overlay.classList.contains('hidden')) e.preventDefault(); 
@@ -655,6 +658,7 @@
         }, {passive: false});
         
         window.addEventListener('keyup', (e) => {
+            if (document.activeElement.tagName === 'INPUT') return;
             if (e.code === 'ArrowDown' || e.code === 'KeyS') stopDuck(e);
         });
 
@@ -996,12 +1000,15 @@
                         if (idx === 0) colorClass = 'text-yellow-400 font-bold'; // 1st
                         if (idx === 1) colorClass = 'text-gray-300'; // 2nd
                         if (idx === 2) colorClass = 'text-amber-700'; // 3rd
+                        
+                        // Clean the handle for the URL by removing the "@" if it exists
+                        const cleanHandle = entry.handle.replace('@', '');
 
                         return `
                         <li class="flex justify-between items-center text-xs md:text-sm border-b border-red-900/20 py-2">
                             <span class="text-gray-400 font-mono flex items-center gap-2 truncate pr-2">
                                 <span class="${colorClass} w-4">${idx+1}</span>
-                                <span class="truncate max-w-[120px]">${entry.handle}</span>
+                                <a href="https://x.com/${cleanHandle}" target="_blank" rel="noopener noreferrer" class="truncate max-w-[120px] hover:text-white transition-colors hover:underline cursor-pointer">${entry.handle}</a>
                             </span>
                             <span class="text-neon-gold font-bold tracking-widest shrink-0">${entry.score}</span>
                         </li>
