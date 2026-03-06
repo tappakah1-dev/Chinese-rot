@@ -425,8 +425,8 @@
                         <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[10px] mb-6 text-center px-4 max-w-md leading-relaxed">
                             Use <strong class="text-white">UP Arrow</strong> to Jump. Use <strong class="text-white">DOWN Arrow</strong> to Duck.<br>
                             <span class="text-[9px] text-gray-500">(Mobile: Swipe UP to jump, Swipe DOWN to duck)</span><br><br>
-                            Collect <strong class="text-yellow-500 text-lg">🧧(10)</strong> and <strong class="text-yellow-500 text-lg">💰(5)</strong> for Social Credit.<br>
-                            Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀💣🧟🥡🐍🪳</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🧨🐉🦇🪁☄️</span>.
+                            Collect <strong class="text-yellow-500 text-lg">🧧💰💎👑🍜🏆</strong> for Social Credit.<br>
+                            Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀🔥💩🪤</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🐉🚀🌩️</span>.
                         </p>
                         
                         <div id="final-score" class="hidden text-3xl text-red-500 font-bold mb-4 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
@@ -585,13 +585,23 @@
         let player = { x: 50, y: GROUND_LEVEL - 40, width: 40, height: 80, vy: 0, isDucking: false };
         let entities = []; 
 
-        const lowObstacles = ['🀄', '🍲', '🐀', '💣', '🧟', '🥡', '🐍', '🪳'];
-        const highObstacles = ['🚄', '🛸', '🦅', '🧨', '🐉', '🦇', '🪁', '☄️'];
-        const collectibleEmojis = ['🧧', '💰']; // Simplified collectibles!
+        const lowObstacles = ['🀄', '🍲', '🐀', '💣', '🧟', '🥡', '🐍', '🪳', '🔥', '💩', '🪤', '🧱', '🪓'];
+        const highObstacles = ['🚄', '🛸', '🦅', '🧨', '🐉', '🦇', '🪁', '☄️', '🚀', '🪃', '🌩️', '🚁'];
+        const collectibleEmojis = ['🧧', '💰', '💎', '👑', '🍜', '🥮', '🥟', '🍵', '🍑', '🏆', '📜', '🏮'];
         
         const collectibleValues = {
+            '🏆': 25,
+            '💎': 20,
+            '👑': 15,
+            '📜': 15,
             '🧧': 10,
-            '💰': 5
+            '🥮': 10,
+            '🏮': 10,
+            '🍑': 10,
+            '💰': 5,
+            '🍜': 5,
+            '🥟': 5,
+            '🍵': 5
         };
 
         function resetGame() {
@@ -686,8 +696,8 @@
 
 
         function spawnEntity() {
-            // Spawn logic: 70% chance obstacle, 30% collectible
-            const isObstacle = Math.random() > 0.3;
+            // Spawn logic: 55% chance obstacle, 45% collectible (more rewarding gameplay)
+            const isObstacle = Math.random() > 0.45;
             let emoji, yPos;
 
             if (isObstacle) {
@@ -829,7 +839,7 @@
             if (frameCount % 400 === 0 && gameSpeed < 16) gameSpeed += 0.5;
 
             // Spawn Entities randomly
-            let spawnRate = Math.max(40, 100 - (gameSpeed * 4));
+            let spawnRate = Math.max(30, 90 - (gameSpeed * 4.5));
             if (frameCount % Math.floor(spawnRate) === 0) {
                 spawnEntity();
             }
