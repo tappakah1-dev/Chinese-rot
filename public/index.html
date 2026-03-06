@@ -420,21 +420,21 @@
                 <!-- Game Canvas Box -->
                 <div class="gen-container p-1 rounded-sm relative overflow-hidden flex-1 h-[350px]" id="arcade-wrapper">
                     <!-- Overlay for Start / Game Over -->
-                    <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/95 z-10 transition-opacity">
-                        <h3 id="game-title" class="text-4xl text-neon-gold calligraphy-font mb-2">Panda Rot Runner</h3>
-                        <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[10px] mb-6 text-center px-4 max-w-md leading-relaxed">
+                    <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/95 z-10 transition-opacity p-4">
+                        <h3 id="game-title" class="text-3xl text-neon-gold calligraphy-font mb-1">Panda Rot Runner</h3>
+                        <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[9px] mb-3 text-center max-w-md leading-normal">
                             Use <strong class="text-white">UP Arrow</strong> to Jump. Use <strong class="text-white">DOWN Arrow</strong> to Duck.<br>
-                            <span class="text-[9px] text-gray-500">(Mobile: Swipe UP to jump, Swipe DOWN to duck)</span><br><br>
-                            Collect <strong class="text-yellow-500 text-lg">🧧(10)</strong> and <strong class="text-yellow-500 text-lg">💰(5)</strong> for Social Credit.<br>
-                            Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀💣🧟🥡🐍🪳🔥💩🪤🧱🪓</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🧨🐉🦇🪁☄️🚀🪃🌩️🚁</span>.
+                            <span class="text-[8px] text-gray-500">(Mobile: Swipe UP to jump, Swipe DOWN to duck)</span><br>
+                            Collect <strong class="text-yellow-500 text-base">🧧(10)</strong> & <strong class="text-yellow-500 text-base">💰(5)</strong>. Avoid <span class="text-red-500 text-base">🀄🍲🐀💣🧟🥡🐍🪳🔥💩🪤🧱🪓</span><br>
+                            Duck under <span class="text-red-500 text-base">🚄🛸🦅🧨🐉🦇🪁☄️🚀🪃🌩️🚁</span>
                         </p>
                         
-                        <div id="final-score" class="hidden text-3xl text-red-500 font-bold mb-4 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
+                        <div id="final-score" class="hidden text-2xl text-red-500 font-bold mb-2 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
                         
-                        <div id="handle-error" class="hidden text-red-500 text-[10px] uppercase font-bold mb-1 tracking-widest bg-red-900/30 px-3 py-1 rounded">Enter a valid Twitter Handle!</div>
-                        <input type="text" id="twitter-handle" placeholder="@username" maxlength="15" class="mb-6 px-6 py-3 bg-black border-2 border-yellow-600 text-yellow-500 font-mono text-center uppercase tracking-widest focus:outline-none focus:shadow-[0_0_20px_rgba(255,215,0,0.4)] transition-all placeholder:text-yellow-900/50">
+                        <div id="handle-error" class="hidden text-red-500 text-[9px] uppercase font-bold mb-1 tracking-widest bg-red-900/30 px-2 py-1 rounded">Enter a valid Twitter Handle!</div>
+                        <input type="text" id="twitter-handle" placeholder="@username" maxlength="15" class="mb-3 px-4 py-2 bg-black border-2 border-yellow-600 text-yellow-500 font-mono text-center uppercase tracking-widest focus:outline-none focus:shadow-[0_0_20px_rgba(255,215,0,0.4)] transition-all placeholder:text-yellow-900/50 text-sm">
                         
-                        <button id="start-game-btn" class="btn-rot py-3 px-12 text-2xl calligraphy-font tracking-widest">PLAY</button>
+                        <button id="start-game-btn" class="btn-rot !py-2 !px-10 text-xl calligraphy-font tracking-widest mt-1">PLAY</button>
                     </div>
                     
                     <canvas id="game-canvas"></canvas>
@@ -1172,8 +1172,8 @@
             const setting = settings[Math.floor(Math.random()*settings.length)];
             const vfx = brainrotVFX[Math.floor(Math.random()*brainrotVFX.length)];
 
-            // HEAVILY MODIFIED PROMPT to force physical integration of text and ban overlays/watermarks
-            const promptText = `A ${style} of a ${subject} ${attire}, situated in ${setting}. ${vfx}. The word "$CHINESEROT" must be physically written inside the scene (e.g. painted directly on a wall, carved deeply into a tree, or printed on a traditional wooden sign). The text "$CHINESEROT" is part of the physical environment, absolutely NO text overlays, NO typography, NO watermarks. Organic traditional weirdness, highly detailed, chaotic energy.`;
+            // ULTRA-STRICT PROMPT to force physical integration of text and ban overlays/watermarks
+            const promptText = `A ${style} of a ${subject} ${attire}, situated in ${setting}. ${vfx}. The physical environment features the word "CHINESEROT" naturally embedded in the world (e.g., carved deeply into stone, painted realistically on a rustic wooden sign, or formed by physical objects). The text is a tangible, physical part of the 3D scene. NO digital overlays, NO typography watermarks, NO floating text. Organic traditional weirdness, highly detailed, chaotic energy.`;
 
             genStatus.innerText = "ACCESSING PORTAL 3.0...";
             genStatus.style.color = "var(--neon-gold)";
