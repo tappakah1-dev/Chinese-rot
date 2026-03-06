@@ -560,7 +560,7 @@
         }
         setupCommunity();
 
-        // --- GENERATOR LOGIC (ORGANIC BRAINROT EXPANDED) ---
+        // --- GENERATOR LOGIC (ORGANIC BRAINROT EXPANDED & SAFETY FILTER SAFE) ---
         const subjects = [
             "cross-eyed Tibetan mastiff",
             "extremely round red panda hitting the griddy",
@@ -568,7 +568,7 @@
             "wild-eyed Pekingese dog",
             "biblically accurate Chinese giant salamander",
             "extremely sweaty Qilin",
-            "shiba inu with a human face",
+            "shiba inu standing on two legs",
             "giant balloon-like koi fish floating in the air",
             "sun wukong but he is a literal golden monkey",
             "mythological Chinese dragon making a duck face",
@@ -578,8 +578,8 @@
             "feral silkworm moth",
             "buff yak posing aggressively",
             "goofy looking Chinese goose",
-            "mutant golden pheasant",
-            "bizarre hairless cat doing yoga"
+            "golden pheasant wearing sunglasses",
+            "silly hairless cat doing yoga"
         ];
 
         const attireModifiers = [
@@ -608,11 +608,11 @@
             "a crowded traditional Chinese wet market floating in the sky",
             "the middle of a flooded Forbidden City courtyard",
             "an ancient Daoist temple overgrown with glowing mushrooms",
-            "a terrifyingly large boiling hotpot that looks like a lake",
+            "an absurdly massive boiling hotpot that looks like a lake",
             "a traditional Chinese tea house dissolving into a surreal dreamscape",
             "a massive terraced rice paddy made of gelatinous slime",
             "a chaotic rural Chinese alleyway filled with floating red lanterns",
-            "a secret underground Mahjong parlor made entirely of giant noodles",
+            "a hidden magical Mahjong parlor made entirely of giant noodles",
             "the Great Wall of China but it is built out of giant mooncakes",
             "a dense bamboo forest where the bamboo is infinitely tall and twisting",
             "a misty Shaolin monastery balanced on a giant floating turtle",
@@ -625,29 +625,29 @@
 
         const styles = [
             "deep-fried uncanny valley Xiaohongshu beauty filter",
-            "hyper-detailed surrealistic slop painting",
+            "hyper-detailed surrealistic nonsense painting",
             "chaotic early 2000s Chinese forum graphic design",
             "cursed WeChat good morning greeting card aesthetic",
-            "surreal traditional Chinese ink wash painting but highly detailed and disturbing",
+            "surreal traditional Chinese ink wash painting but highly detailed and bizarre",
             "fever-dream Douyin video screenshot",
             "maximalist sensory-overload brainrot render",
             "hyper-realistic wet and slimy texture art",
             "bizarre 3D render from a fake Chinese mobile game ad",
             "highly saturated uncanny propaganda poster style",
             "bizarre claymation aesthetic",
-            "fever-dream collage of traditional Chinese elements"
+            "nonsense collage of traditional Chinese elements"
         ];
 
         const brainrotVFX = [
             "floating red text saying '-999 SOCIAL CREDIT' everywhere",
             "random Mahjong tiles raining from the sky",
-            "explosions of red envelopes (hongbao) filling the air",
+            "bursts of red envelopes (hongbao) filling the air",
             "unnecessary giant red arrows and circles pointing at nothing",
             "flying bowls of rice and noodles crashing into the camera",
             "a barrage of floating virtual roses and live-stream gifts",
             "distorted loud bass-boosted shockwaves visible in the air",
             "massive golden Chinese coins bouncing around",
-            "floating firecrackers exploding wildly",
+            "floating firecrackers popping wildly",
             "confetti and extremely saturated colorful smoke",
             "giant floating emojis of melting faces and crying laughing cats",
             "hundreds of steaming dumplings floating menacingly"
@@ -710,7 +710,8 @@
             const setting = settings[Math.floor(Math.random()*settings.length)];
             const vfx = brainrotVFX[Math.floor(Math.random()*brainrotVFX.length)];
 
-            const promptText = `A ${style} of a ${subject} ${attire}, situated in ${setting}. ${vfx}. The exact text "$CHINESEROT" must be massively and visibly integrated directly into the image as a physical sign, banner, or bold text. Surrealistic, bizarre fever-dream, chaotic energy, absolutely NO CYBERPUNK, NO NEON, NO DIGITAL elements, organic traditional weirdness.`;
+            // HEAVILY MODIFIED PROMPT to force physical integration of text and ban overlays/watermarks
+            const promptText = `A ${style} of a ${subject} ${attire}, situated in ${setting}. ${vfx}. The word "$CHINESEROT" must be physically written inside the scene (e.g. painted directly on a wall, carved deeply into a tree, or printed on a traditional wooden sign). The text "$CHINESEROT" is part of the physical environment, absolutely NO text overlays, NO typography, NO watermarks. Organic traditional weirdness, highly detailed, chaotic energy.`;
 
             genStatus.innerText = "ACCESSING PORTAL 3.0...";
             genStatus.style.color = "var(--neon-gold)";
