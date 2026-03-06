@@ -314,7 +314,7 @@
             max-width: 1000px;
             height: 300px;
             margin: 0 auto;
-            background: linear-gradient(to bottom, #110000 0%, #000000 100%);
+            background: #050000;
             border: 2px solid var(--blood-red);
             box-shadow: inset 0 0 50px rgba(139,0,0,0.5);
             touch-action: none;
@@ -412,8 +412,11 @@
                 <!-- Overlay for Start / Game Over -->
                 <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-10 transition-opacity">
                     <h3 id="game-title" class="text-4xl text-neon-gold calligraphy-font mb-2">Panda Rot Runner</h3>
-                    <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[10px] mb-6 text-center px-4 max-w-sm">
-                        Tap or Spacebar to jump.<br>Collect <span class="text-yellow-500 text-lg">🧧💰</span> for Social Credit.<br>Avoid <span class="text-red-500 text-lg">🀄🍲🚄</span> or face execution.
+                    <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[10px] mb-6 text-center px-4 max-w-md leading-relaxed">
+                        Use <strong class="text-white">UP Arrow</strong> to Jump. Use <strong class="text-white">DOWN Arrow</strong> to Duck.<br>
+                        <span class="text-[9px] text-gray-500">(Mobile: Swipe UP to jump, Swipe DOWN to duck)</span><br><br>
+                        Collect <span class="text-yellow-500 text-lg">🧧💰💎</span> for Social Credit.<br>
+                        Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀💣</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🐉</span>.
                     </p>
                     <div id="final-score" class="hidden text-3xl text-red-500 font-bold mb-6 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
                     <button id="start-game-btn" class="btn-rot py-3 px-8 text-xl calligraphy-font">INSERT COIN</button>
@@ -554,19 +557,23 @@
         let gameSpeed = 5;
         let frameCount = 0;
 
-        const GRAVITY = 0.6;
-        const JUMP_POWER = -12;
-        const GROUND_LEVEL = gCanvas.height - 40;
+        const GRAVITY = 0.8;
+        const JUMP_POWER = -14;
+        const GROUND_LEVEL = 260; // 300(height) - 40(base size)
 
-        let player = { x: 50, y: GROUND_LEVEL, width: 40, height: 40, vy: 0 };
+        // Player is now tall (80px height) and ducking shrinks them to 40px
+        let player = { x: 50, y: GROUND_LEVEL - 40, width: 40, height: 80, vy: 0, isDucking: false };
         let entities = []; 
 
-        const obstacleEmojis = ['🀄', '🍲', '🚄'];
-        const collectibleEmojis = ['🧧', '💰'];
+        const lowObstacles = ['🀄', '🍲', '🐀', '💣', '🧟'];
+        const highObstacles = ['🚄', '🛸', '🦅', '🧨', '🐉'];
+        const collectibleEmojis = ['🧧', '💰', '💎'];
 
         function resetGame() {
-            player.y = GROUND_LEVEL;
+            player.y = GROUND_LEVEL - 40;
             player.vy = 0;
+            player.isDucking = false;
+            player.height = 80;
             entities = [];
             score = 0;
             gameSpeed = 6;
@@ -577,30 +584,93 @@
         }
 
         function jump(e) {
-            // Prevent scrolling spacebar if playing
-            if(isPlaying && e.type === 'keydown' && e.code === 'Space') e.preventDefault();
-            
-            // Only jump if on ground
-            if (isPlaying && player.y >= GROUND_LEVEL) {
+            if (e && e.preventDefault) e.preventDefault();
+            // Only jump if on the ground
+            if (isPlaying && player.y + player.height >= GROUND_LEVEL) {
                 player.vy = JUMP_POWER;
+                player.isDucking = false;
+                player.height = 80;
             }
         }
 
-        // Event listeners for jump
-        window.addEventListener('keydown', (e) => { if (e.code === 'Space') jump(e); });
-        gCanvas.addEventListener('pointerdown', jump);
-        startBtn.addEventListener('click', resetGame);
+        function duck(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (isPlaying && !player.isDucking) {
+                player.isDucking = true;
+                player.height = 40;
+                // If already on the ground, snap down visually. Otherwise, fast fall.
+                if (player.y + 80 >= GROUND_LEVEL) {
+                    player.y = GROUND_LEVEL;
+                } else {
+                    player.vy += 8; 
+                }
+            }
+        }
+
+        function stopDuck(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (isPlaying && player.isDucking) {
+                player.isDucking = false;
+                player.height = 80;
+                // Snap height back up if on ground so they don't clip through the floor
+                if (player.y + 40 >= GROUND_LEVEL) {
+                    player.y = GROUND_LEVEL - 40;
+                }
+            }
+        }
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => { 
+            if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'Space') jump(e); 
+            if (e.code === 'ArrowDown' || e.code === 'KeyS') duck(e);
+        });
+        window.addEventListener('keyup', (e) => {
+            if (e.code === 'ArrowDown' || e.code === 'KeyS') stopDuck(e);
+        });
+
+        // Mobile Swipe Controls
+        let touchStartY = 0;
+        gCanvas.addEventListener('touchstart', e => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: false });
+        
+        gCanvas.addEventListener('touchmove', e => {
+            if(!isPlaying) return;
+            e.preventDefault(); 
+            let touchEndY = e.touches[0].clientY;
+            if (touchStartY - touchEndY > 30) {
+                jump(e);
+                touchStartY = touchEndY; 
+            } else if (touchEndY - touchStartY > 30) {
+                duck(e);
+            }
+        }, { passive: false });
+
+        gCanvas.addEventListener('touchend', e => {
+            stopDuck(e);
+        }, { passive: false });
+
 
         function spawnEntity() {
-            // Spawn logic: more obstacles than collectibles
+            // Spawn logic: 70% chance obstacle, 30% collectible
             const isObstacle = Math.random() > 0.3;
-            const emojiList = isObstacle ? obstacleEmojis : collectibleEmojis;
-            const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
-            
-            // Flying enemies/collectibles spawn higher up
-            let yPos = GROUND_LEVEL;
-            if (emoji === '🚄') yPos = GROUND_LEVEL - 10; // Train is low but big
-            if (emoji === '🧧' || emoji === '💰') yPos = GROUND_LEVEL - 50 - Math.random() * 80; // Floating coins
+            let emoji, yPos;
+
+            if (isObstacle) {
+                // 50% chance for a high obstacle (must duck) vs low obstacle (must jump)
+                const isHigh = Math.random() > 0.5;
+                if (isHigh) {
+                    emoji = highObstacles[Math.floor(Math.random() * highObstacles.length)];
+                    yPos = GROUND_LEVEL - 65; // Hits the top half of the tall player
+                } else {
+                    emoji = lowObstacles[Math.floor(Math.random() * lowObstacles.length)];
+                    yPos = GROUND_LEVEL; // Hits the bottom half/feet
+                }
+            } else {
+                emoji = collectibleEmojis[Math.floor(Math.random() * collectibleEmojis.length)];
+                // Collectibles can be low or high
+                yPos = Math.random() > 0.5 ? GROUND_LEVEL : GROUND_LEVEL - 70; 
+            }
             
             entities.push({
                 x: gCanvas.width,
@@ -610,6 +680,49 @@
                 emoji: emoji,
                 isObstacle: isObstacle
             });
+        }
+
+        function drawBackground() {
+            // Dark gradient sky
+            let grad = gCtx.createLinearGradient(0, 0, 0, gCanvas.height);
+            grad.addColorStop(0, "#110000");
+            grad.addColorStop(1, "#330000");
+            gCtx.fillStyle = grad;
+            gCtx.fillRect(0, 0, gCanvas.width, gCanvas.height);
+
+            // Blood moon
+            gCtx.fillStyle = 'rgba(139, 0, 0, 0.6)';
+            gCtx.beginPath();
+            gCtx.arc(600, 80, 50, 0, Math.PI * 2);
+            gCtx.fill();
+            gCtx.fillStyle = 'rgba(255, 215, 0, 0.2)';
+            gCtx.beginPath();
+            gCtx.arc(600, 80, 45, 0, Math.PI * 2);
+            gCtx.fill();
+
+            // Parallax Mountains (Slow)
+            gCtx.fillStyle = '#0a0000';
+            for(let i = 0; i < 4; i++) {
+                let mx = ((i * 300) - (frameCount * 0.5) % 300);
+                gCtx.beginPath();
+                gCtx.moveTo(mx, GROUND_LEVEL + 40);
+                gCtx.lineTo(mx + 100, GROUND_LEVEL - 100);
+                gCtx.lineTo(mx + 200, GROUND_LEVEL - 40);
+                gCtx.lineTo(mx + 300, GROUND_LEVEL + 40);
+                gCtx.fill();
+            }
+
+            // Parallax Bamboo/Pillars (Medium)
+            gCtx.fillStyle = '#1a0000';
+            for(let i = 0; i < 10; i++) {
+                let bx = ((i * 150) - (frameCount * 2) % 150);
+                gCtx.fillRect(bx, GROUND_LEVEL - 150, 15, 190);
+                // Bamboo joints
+                gCtx.fillStyle = '#2a0000';
+                gCtx.fillRect(bx-2, GROUND_LEVEL - 100, 19, 4);
+                gCtx.fillRect(bx-2, GROUND_LEVEL - 50, 19, 4);
+                gCtx.fillStyle = '#1a0000';
+            }
         }
 
         function gameOver() {
@@ -634,12 +747,11 @@
         function updateGame() {
             if (!isPlaying) return;
 
-            // Clear screen
-            gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
+            drawBackground();
 
             // Draw Ground Line
-            gCtx.strokeStyle = 'rgba(139, 0, 0, 0.5)';
-            gCtx.lineWidth = 2;
+            gCtx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
+            gCtx.lineWidth = 3;
             gCtx.beginPath();
             gCtx.moveTo(0, GROUND_LEVEL + 40);
             gCtx.lineTo(gCanvas.width, GROUND_LEVEL + 40);
@@ -650,22 +762,29 @@
             player.y += player.vy;
 
             // Ground Collision
-            if (player.y > GROUND_LEVEL) {
-                player.y = GROUND_LEVEL;
+            if (player.y + player.height > GROUND_LEVEL + 40) {
+                player.y = GROUND_LEVEL + 40 - player.height;
                 player.vy = 0;
             }
 
-            // Draw Player (Panda)
+            // Draw Player (Tall Panda)
             gCtx.font = "40px Arial";
             gCtx.textBaseline = "top";
-            gCtx.fillText("🐼", player.x, player.y);
+            
+            if (player.isDucking) {
+                // Squished panda
+                gCtx.fillText("🐼", player.x, player.y);
+            } else {
+                // Stacked emojis for tall player (Head + Shirt body)
+                gCtx.fillText("🐼", player.x, player.y);
+                gCtx.fillText("🎽", player.x, player.y + 35);
+            }
 
-            // Speed up gradually
-            if (frameCount % 600 === 0) gameSpeed += 0.5;
+            // Speed up gradually (Max out at 16 to keep it humanly possible)
+            if (frameCount % 400 === 0 && gameSpeed < 16) gameSpeed += 0.5;
 
             // Spawn Entities randomly
-            // Decrease spawn interval as speed increases to keep it chaotic but playable
-            let spawnRate = Math.max(40, 100 - (gameSpeed * 5));
+            let spawnRate = Math.max(40, 100 - (gameSpeed * 4));
             if (frameCount % Math.floor(spawnRate) === 0) {
                 spawnEntity();
             }
@@ -678,8 +797,8 @@
                 gCtx.font = "35px Arial";
                 gCtx.fillText(ent.emoji, ent.x, ent.y);
 
-                // Collision Detection (AABB - simplified for emojis)
-                let hitBoxBuffer = 10; // Forgive the player a little bit
+                // Collision Detection (AABB)
+                let hitBoxBuffer = 8; // Forgive the player a little bit
                 if (player.x < ent.x + ent.width - hitBoxBuffer &&
                     player.x + player.width - hitBoxBuffer > ent.x &&
                     player.y < ent.y + ent.height - hitBoxBuffer &&
@@ -690,7 +809,7 @@
                         return; // Stop updating instantly
                     } else {
                         // Collectible Hit!
-                        score += (ent.emoji === '💰' ? 50 : 15);
+                        score += (ent.emoji === '💎' ? 100 : (ent.emoji === '💰' ? 50 : 15));
                         entities.splice(i, 1);
                         continue;
                     }
@@ -699,14 +818,13 @@
                 // Remove off-screen entities
                 if (ent.x + ent.width < 0) {
                     entities.splice(i, 1);
-                    // Passively gain score for surviving obstacles
-                    if(ent.isObstacle) score += 5; 
+                    if(ent.isObstacle) score += 5; // Passively gain score for surviving obstacles
                 }
             }
 
             // Draw Score
             gCtx.fillStyle = '#ffd700';
-            gCtx.font = '20px "Zhi Mang Xing", cursive, sans-serif';
+            gCtx.font = '24px "Zhi Mang Xing", cursive, sans-serif';
             gCtx.fillText(`SOCIAL CREDIT: ${score}`, 20, 20);
 
             frameCount++;
@@ -714,9 +832,11 @@
         }
 
         // Draw initial static frame so canvas isn't empty on load
+        drawBackground();
         gCtx.font = "40px Arial";
         gCtx.textBaseline = "top";
         gCtx.fillText("🐼", player.x, player.y);
+        gCtx.fillText("🎽", player.x, player.y + 35);
 
 
         // --- FIREBASE INITIALIZATION ---
