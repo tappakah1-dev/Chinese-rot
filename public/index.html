@@ -686,8 +686,8 @@
 
 
         function spawnEntity(xOffset = 0) {
-            // Spawn logic: 40% chance obstacle, 60% collectible (more rewarding, less spammy obstacles)
-            const isObstacle = Math.random() > 0.60;
+            // Spawn logic: 60% chance obstacle, 40% collectible
+            const isObstacle = Math.random() > 0.40;
             let emoji, yPos;
 
             if (isObstacle) {
@@ -828,10 +828,13 @@
             // Speed up more aggressively (Max out at a blisteringly fast 24)
             if (frameCount % 120 === 0 && gameSpeed < 24) gameSpeed += 0.5;
 
-            // Spawn Entities randomly - Reduced spawn rate to make it playable
-            let spawnRate = Math.max(30, 80 - (gameSpeed * 2));
+            // Spawn Entities randomly - Increased spawn rate and clustering
+            let spawnRate = Math.max(25, 70 - (gameSpeed * 2.5));
             if (frameCount % Math.floor(spawnRate) === 0) {
-                spawnEntity(0); 
+                spawnEntity(0);
+                if (Math.random() > 0.6) { // 40% chance for a cluster spawn
+                    spawnEntity(45 + Math.random() * 45);
+                }
             }
 
             // Update and Draw Entities
