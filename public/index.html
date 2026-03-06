@@ -425,8 +425,8 @@
                         <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[10px] mb-6 text-center px-4 max-w-md leading-relaxed">
                             Use <strong class="text-white">UP Arrow</strong> to Jump. Use <strong class="text-white">DOWN Arrow</strong> to Duck.<br>
                             <span class="text-[9px] text-gray-500">(Mobile: Swipe UP to jump, Swipe DOWN to duck)</span><br><br>
-                            Collect <strong class="text-yellow-500 text-lg">🧧💰💎👑🍜🏆</strong> for Social Credit.<br>
-                            Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀🔥💩🪤</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🐉🚀🌩️</span>.
+                            Collect <strong class="text-yellow-500 text-lg">🧧(10)</strong> and <strong class="text-yellow-500 text-lg">💰(5)</strong> for Social Credit.<br>
+                            Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀💣🧟🥡🐍🪳🔥💩🪤🧱🪓</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🧨🐉🦇🪁☄️🚀🪃🌩️🚁</span>.
                         </p>
                         
                         <div id="final-score" class="hidden text-3xl text-red-500 font-bold mb-4 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
@@ -574,7 +574,7 @@
         let gameLoop;
         let isPlaying = false;
         let score = 0;
-        let gameSpeed = 5;
+        let gameSpeed = 8; // Starts much faster
         let frameCount = 0;
         let currentPlayerHandle = "";
 
@@ -587,21 +587,11 @@
 
         const lowObstacles = ['🀄', '🍲', '🐀', '💣', '🧟', '🥡', '🐍', '🪳', '🔥', '💩', '🪤', '🧱', '🪓'];
         const highObstacles = ['🚄', '🛸', '🦅', '🧨', '🐉', '🦇', '🪁', '☄️', '🚀', '🪃', '🌩️', '🚁'];
-        const collectibleEmojis = ['🧧', '💰', '💎', '👑', '🍜', '🥮', '🥟', '🍵', '🍑', '🏆', '📜', '🏮'];
+        const collectibleEmojis = ['🧧', '💰']; // Exclusively Red Envelopes and Money Bags
         
         const collectibleValues = {
-            '🏆': 25,
-            '💎': 20,
-            '👑': 15,
-            '📜': 15,
             '🧧': 10,
-            '🥮': 10,
-            '🏮': 10,
-            '🍑': 10,
-            '💰': 5,
-            '🍜': 5,
-            '🥟': 5,
-            '🍵': 5
+            '💰': 5
         };
 
         function resetGame() {
@@ -611,7 +601,7 @@
             player.height = 80;
             entities = [];
             score = 0;
-            gameSpeed = 6;
+            gameSpeed = 8; // Reset to the faster initial speed
             frameCount = 0;
             isPlaying = true;
             overlay.classList.add('hidden');
@@ -695,8 +685,8 @@
         }, { passive: false });
 
 
-        function spawnEntity() {
-            // Spawn logic: 55% chance obstacle, 45% collectible (more rewarding gameplay)
+        function spawnEntity(xOffset = 0) {
+            // Spawn logic: 55% chance obstacle, 45% collectible
             const isObstacle = Math.random() > 0.45;
             let emoji, yPos;
 
@@ -717,7 +707,7 @@
             }
             
             entities.push({
-                x: gCanvas.width,
+                x: gCanvas.width + xOffset,
                 y: yPos,
                 width: 35,
                 height: 35,
@@ -835,13 +825,18 @@
                 gCtx.fillText("🎽", player.x, player.y + 35);
             }
 
-            // Speed up gradually (Max out at 16 to keep it humanly possible)
-            if (frameCount % 400 === 0 && gameSpeed < 16) gameSpeed += 0.5;
+            // Speed up more aggressively (Max out at a blisteringly fast 24)
+            if (frameCount % 120 === 0 && gameSpeed < 24) gameSpeed += 0.5;
 
-            // Spawn Entities randomly
-            let spawnRate = Math.max(30, 90 - (gameSpeed * 4.5));
+            // Spawn Entities randomly - Spawn rate gets extremely tight as speed increases WAAAY more often
+            let spawnRate = Math.max(15, 45 - (gameSpeed * 1.2));
             if (frameCount % Math.floor(spawnRate) === 0) {
-                spawnEntity();
+                spawnEntity(0); // Primary spawn
+                
+                // 35% chance to immediately spawn a SECOND entity closely behind it to create rapid jump/duck clusters!
+                if (Math.random() > 0.65) {
+                    spawnEntity(40 + Math.random() * 60); 
+                }
             }
 
             // Update and Draw Entities
