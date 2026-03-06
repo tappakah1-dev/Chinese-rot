@@ -311,12 +311,8 @@
         #game-canvas {
             display: block;
             width: 100%;
-            max-width: 1000px;
-            height: 300px;
-            margin: 0 auto;
+            height: 350px;
             background: #050000;
-            border: 2px solid var(--blood-red);
-            box-shadow: inset 0 0 50px rgba(139,0,0,0.5);
             touch-action: none;
         }
         
@@ -329,6 +325,18 @@
             20%, 80% { transform: translate3d(2px, 0, 0); }
             30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
             40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Leaderboard Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(139,0,0,0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--neon-gold);
+            border-radius: 2px;
         }
     </style>
     <script async src="https://www.tiktok.com/embed.js"></script>
@@ -400,29 +408,47 @@
             </div>
         </section>
 
-        <!-- Brainrot Arcade Section (MINI GAME) -->
-        <section class="max-w-5xl mx-auto mb-32 relative">
+        <!-- Brainrot Arcade Section (MINI GAME + LEADERBOARD) -->
+        <section class="max-w-6xl mx-auto mb-32 relative">
             <div class="mb-8">
                 <h2 class="text-5xl text-yellow-500 calligraphy-font mb-4 drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">Brainrot Arcade</h2>
                 <div class="h-px w-32 bg-red-600 mx-auto mb-2"></div>
                 <p class="text-red-500/80 uppercase tracking-[0.3em] text-xs font-bold">Earn Social Credit</p>
             </div>
             
-            <div class="gen-container p-1 rounded-sm relative overflow-hidden" id="arcade-wrapper">
-                <!-- Overlay for Start / Game Over -->
-                <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-10 transition-opacity">
-                    <h3 id="game-title" class="text-4xl text-neon-gold calligraphy-font mb-2">Panda Rot Runner</h3>
-                    <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[10px] mb-6 text-center px-4 max-w-md leading-relaxed">
-                        Use <strong class="text-white">UP Arrow</strong> to Jump. Use <strong class="text-white">DOWN Arrow</strong> to Duck.<br>
-                        <span class="text-[9px] text-gray-500">(Mobile: Swipe UP to jump, Swipe DOWN to duck)</span><br><br>
-                        Collect <span class="text-yellow-500 text-lg">🧧💰💎</span> for Social Credit.<br>
-                        Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀💣</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🐉</span>.
-                    </p>
-                    <div id="final-score" class="hidden text-3xl text-red-500 font-bold mb-6 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
-                    <button id="start-game-btn" class="btn-rot py-3 px-8 text-xl calligraphy-font">PLAY</button>
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- Game Canvas Box -->
+                <div class="gen-container p-1 rounded-sm relative overflow-hidden flex-1 h-[350px]" id="arcade-wrapper">
+                    <!-- Overlay for Start / Game Over -->
+                    <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/95 z-10 transition-opacity">
+                        <h3 id="game-title" class="text-4xl text-neon-gold calligraphy-font mb-2">Panda Rot Runner</h3>
+                        <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[10px] mb-6 text-center px-4 max-w-md leading-relaxed">
+                            Use <strong class="text-white">UP Arrow</strong> to Jump. Use <strong class="text-white">DOWN Arrow</strong> to Duck.<br>
+                            <span class="text-[9px] text-gray-500">(Mobile: Swipe UP to jump, Swipe DOWN to duck)</span><br><br>
+                            Collect <strong class="text-yellow-500 text-lg">🧧(10)</strong> and <strong class="text-yellow-500 text-lg">💰(5)</strong> for Social Credit.<br>
+                            Avoid low objects <span class="text-red-500 text-lg">🀄🍲🐀💣🧟🥡🐍🪳</span> and duck under high flyers <span class="text-red-500 text-lg">🚄🛸🦅🧨🐉🦇🪁☄️</span>.
+                        </p>
+                        
+                        <div id="final-score" class="hidden text-3xl text-red-500 font-bold mb-4 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
+                        
+                        <div id="handle-error" class="hidden text-red-500 text-[10px] uppercase font-bold mb-1 tracking-widest bg-red-900/30 px-3 py-1 rounded">Enter a valid Twitter Handle!</div>
+                        <input type="text" id="twitter-handle" placeholder="@username" maxlength="15" class="mb-6 px-6 py-3 bg-black border-2 border-yellow-600 text-yellow-500 font-mono text-center uppercase tracking-widest focus:outline-none focus:shadow-[0_0_20px_rgba(255,215,0,0.4)] transition-all placeholder:text-yellow-900/50">
+                        
+                        <button id="start-game-btn" class="btn-rot py-3 px-12 text-2xl calligraphy-font tracking-widest">PLAY</button>
+                    </div>
+                    
+                    <canvas id="game-canvas"></canvas>
                 </div>
-                
-                <canvas id="game-canvas" width="800" height="300"></canvas>
+
+                <!-- Global Leaderboard Box -->
+                <div class="gen-container p-1 rounded-sm lg:w-[320px] flex-shrink-0 h-[350px]">
+                    <div class="bg-black/90 w-full h-full p-6 flex flex-col">
+                        <h3 class="text-2xl text-yellow-500 calligraphy-font mb-4 text-center border-b border-red-900 pb-3">TOP ROTTERS</h3>
+                        <ul id="leaderboard-list" class="space-y-1 overflow-y-auto flex-grow custom-scrollbar pr-2">
+                            <li class="text-center text-gray-800 italic uppercase tracking-widest text-xs mt-10">Syncing with forest...</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -498,7 +524,6 @@
         }
 
         function drawMatrix() {
-            // Semi-transparent black to create fading trail effect
             mCtx.fillStyle = 'rgba(5, 5, 5, 0.15)';
             mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
             
@@ -506,14 +531,9 @@
             
             for (let i = 0; i < matrixDrops.length; i++) {
                 const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
-                
-                // Randomly highlight some characters in gold, mostly blood red
                 mCtx.fillStyle = Math.random() > 0.9 ? '#ffd700' : '#8b0000';
-                
-                // Draw character
                 mCtx.fillText(text, i * matrixFontSize, matrixDrops[i] * matrixFontSize);
                 
-                // Reset drop to top randomly when it hits bottom
                 if (matrixDrops[i] * matrixFontSize > matrixCanvas.height && Math.random() > 0.95) {
                     matrixDrops[i] = 0;
                 }
@@ -523,7 +543,6 @@
 
         function startMatrixRain() {
             initMatrix();
-            // Lowered opacity to 0.35 so it's a persistent background that doesn't overwhelm the text
             matrixCanvas.style.opacity = '0.35';
             if (matrixInterval) clearInterval(matrixInterval);
             matrixInterval = setInterval(drawMatrix, 50);
@@ -533,7 +552,6 @@
             if(matrixCanvas.style.opacity !== '0') initMatrix();
         });
 
-        // Start the matrix rain immediately on load
         startMatrixRain();
 
 
@@ -546,28 +564,35 @@
         const gameSubtitle = document.getElementById('game-subtitle');
         const finalScoreDisplay = document.getElementById('final-score');
         const arcadeWrapper = document.getElementById('arcade-wrapper');
+        const handleInput = document.getElementById('twitter-handle');
+        const handleError = document.getElementById('handle-error');
 
         // Fix internal resolution for sharp rendering regardless of CSS size
         gCanvas.width = 800;
-        gCanvas.height = 300;
+        gCanvas.height = 350;
 
         let gameLoop;
         let isPlaying = false;
         let score = 0;
         let gameSpeed = 5;
         let frameCount = 0;
+        let currentPlayerHandle = "";
 
         const GRAVITY = 0.8;
         const JUMP_POWER = -14;
-        const GROUND_LEVEL = 260; // 300(height) - 40(base size)
+        const GROUND_LEVEL = 310; // 350(height) - 40(base size)
 
-        // Player is now tall (80px height) and ducking shrinks them to 40px
         let player = { x: 50, y: GROUND_LEVEL - 40, width: 40, height: 80, vy: 0, isDucking: false };
         let entities = []; 
 
-        const lowObstacles = ['🀄', '🍲', '🐀', '💣', '🧟'];
-        const highObstacles = ['🚄', '🛸', '🦅', '🧨', '🐉'];
-        const collectibleEmojis = ['🧧', '💰', '💎'];
+        const lowObstacles = ['🀄', '🍲', '🐀', '💣', '🧟', '🥡', '🐍', '🪳'];
+        const highObstacles = ['🚄', '🛸', '🦅', '🧨', '🐉', '🦇', '🪁', '☄️'];
+        const collectibleEmojis = ['🧧', '💰']; // Simplified collectibles!
+        
+        const collectibleValues = {
+            '🧧': 10,
+            '💰': 5
+        };
 
         function resetGame() {
             player.y = GROUND_LEVEL - 40;
@@ -621,9 +646,14 @@
 
         // Keyboard Controls
         window.addEventListener('keydown', (e) => { 
+            // Stop page scroll for game keys
+            if(['ArrowUp','ArrowDown','Space'].includes(e.code)) {
+               if(isPlaying || !overlay.classList.contains('hidden')) e.preventDefault(); 
+            }
             if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'Space') jump(e); 
             if (e.code === 'ArrowDown' || e.code === 'KeyS') duck(e);
-        });
+        }, {passive: false});
+        
         window.addEventListener('keyup', (e) => {
             if (e.code === 'ArrowDown' || e.code === 'KeyS') stopDuck(e);
         });
@@ -729,6 +759,16 @@
             isPlaying = false;
             cancelAnimationFrame(gameLoop);
             
+            // Save Score to Firebase Leaderboard!
+            if (score > 0 && currentPlayerHandle) {
+                const lbRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
+                lbRef.add({
+                    handle: currentPlayerHandle,
+                    score: score,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(err => console.error("Error saving score to forest:", err));
+            }
+            
             // UI Updates for Game Over
             arcadeWrapper.classList.add('shake-game');
             setTimeout(() => arcadeWrapper.classList.remove('shake-game'), 300);
@@ -739,6 +779,7 @@
             gameSubtitle.classList.add('hidden');
             finalScoreDisplay.classList.remove('hidden');
             finalScoreDisplay.innerText = `FINAL SOCIAL CREDIT: ${score}`;
+            handleInput.classList.add('hidden'); // Hide input after they've set it once
             
             startBtn.innerText = "APPEAL TO THE DRAGON (RETRY)";
             overlay.classList.remove('hidden');
@@ -809,7 +850,7 @@
                         return; // Stop updating instantly
                     } else {
                         // Collectible Hit!
-                        score += (ent.emoji === '💎' ? 100 : (ent.emoji === '💰' ? 50 : 15));
+                        score += collectibleValues[ent.emoji] || 5;
                         entities.splice(i, 1);
                         continue;
                     }
@@ -818,7 +859,6 @@
                 // Remove off-screen entities
                 if (ent.x + ent.width < 0) {
                     entities.splice(i, 1);
-                    if(ent.isObstacle) score += 5; // Passively gain score for surviving obstacles
                 }
             }
 
@@ -838,8 +878,26 @@
         gCtx.fillText("🐼", player.x, player.y);
         gCtx.fillText("🎽", player.x, player.y + 35);
 
-        // --- BIND START BUTTON ---
-        startBtn.addEventListener('click', resetGame);
+        // --- BIND START BUTTON W/ VALIDATION ---
+        startBtn.addEventListener('click', () => {
+            // Check handle only if input is visible
+            if(!handleInput.classList.contains('hidden')) {
+                let handle = handleInput.value.trim();
+                if (!handle || handle.length < 2) {
+                    handleInput.style.borderColor = 'red';
+                    handleError.classList.remove('hidden');
+                    return;
+                }
+                
+                handleInput.style.borderColor = 'var(--neon-gold)';
+                handleError.classList.add('hidden');
+                
+                if (!handle.startsWith('@')) handle = '@' + handle;
+                currentPlayerHandle = handle;
+            }
+            
+            resetGame();
+        });
 
         // --- FIREBASE INITIALIZATION ---
         const firebaseConfig = {
@@ -876,10 +934,12 @@
         slideLeft.onclick = () => { videoCarousel.scrollBy({ left: -345, behavior: 'smooth' }); };
         slideRight.onclick = () => { videoCarousel.scrollBy({ left: 345, behavior: 'smooth' }); };
 
-        // --- AUTH & GALLERY SETUP ---
-        async function setupCommunity() {
+        // --- CENTRALIZED FIREBASE DATA SETUP ---
+        async function initFirebaseData() {
             try {
                 await auth.signInAnonymously();
+                
+                // 1. SETUP COMMUNITY GALLERY
                 const creationsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('creations');
                 
                 creationsRef.onSnapshot((snapshot) => {
@@ -891,7 +951,6 @@
                         return;
                     }
 
-                    // Force word wrapping with 'whitespace-normal', 'break-words', and block layout
                     galleryCarousel.innerHTML = docs.map(d => `
                         <div class="gallery-card group">
                             <div class="overflow-hidden bg-red-950/20 shrink-0">
@@ -903,9 +962,55 @@
                         </div>
                     `).join('');
                 }, err => console.error("Gallery Sync Fail", err));
-            } catch (err) { console.error("Auth Fail", err); }
+
+                // 2. SETUP LIVE LEADERBOARD
+                const lbRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('leaderboard');
+                
+                lbRef.onSnapshot((snapshot) => {
+                    const docs = snapshot.docs.map(doc => doc.data());
+                    
+                    // Group by handle and keep only their highest score to prevent one person spamming top 10
+                    const bestScores = {};
+                    docs.forEach(doc => {
+                        const handle = (doc.handle || "UNKNOWN").toUpperCase();
+                        if (!bestScores[handle] || doc.score > bestScores[handle]) {
+                            bestScores[handle] = doc.score;
+                        }
+                    });
+
+                    // Convert back to array, sort Descending, and take Top 10
+                    const sortedUnique = Object.keys(bestScores)
+                        .map(k => ({handle: k, score: bestScores[k]}))
+                        .sort((a,b) => b.score - a.score)
+                        .slice(0, 10);
+                    
+                    const lbList = document.getElementById('leaderboard-list');
+                    
+                    if (sortedUnique.length === 0) {
+                        lbList.innerHTML = '<li class="text-center text-red-900/40 italic uppercase tracking-widest text-xs mt-10">NO ROTTERS YET</li>';
+                        return;
+                    }
+                    
+                    lbList.innerHTML = sortedUnique.map((entry, idx) => {
+                        let colorClass = 'text-gray-500';
+                        if (idx === 0) colorClass = 'text-yellow-400 font-bold'; // 1st
+                        if (idx === 1) colorClass = 'text-gray-300'; // 2nd
+                        if (idx === 2) colorClass = 'text-amber-700'; // 3rd
+
+                        return `
+                        <li class="flex justify-between items-center text-xs md:text-sm border-b border-red-900/20 py-2">
+                            <span class="text-gray-400 font-mono flex items-center gap-2 truncate pr-2">
+                                <span class="${colorClass} w-4">${idx+1}</span>
+                                <span class="truncate max-w-[120px]">${entry.handle}</span>
+                            </span>
+                            <span class="text-neon-gold font-bold tracking-widest shrink-0">${entry.score}</span>
+                        </li>
+                    `}).join('');
+                }, err => console.error("Leaderboard Sync Fail", err));
+
+            } catch (err) { console.error("Firebase Auth Fail", err); }
         }
-        setupCommunity();
+        initFirebaseData();
 
         // --- GENERATOR LOGIC (ORGANIC BRAINROT EXPANDED & SAFETY FILTER SAFE) ---
         const subjects = [
