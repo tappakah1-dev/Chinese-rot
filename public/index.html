@@ -306,6 +306,30 @@
         .gallery-card:hover img {
             filter: grayscale(0) contrast(1);
         }
+
+        /* BRAINROT GAME CSS */
+        #game-canvas {
+            display: block;
+            width: 100%;
+            max-width: 1000px;
+            height: 300px;
+            margin: 0 auto;
+            background: linear-gradient(to bottom, #110000 0%, #000000 100%);
+            border: 2px solid var(--blood-red);
+            box-shadow: inset 0 0 50px rgba(139,0,0,0.5);
+            touch-action: none;
+        }
+        
+        .shake-game {
+            animation: shake-small 0.2s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake-small {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
     </style>
     <script async src="https://www.tiktok.com/embed.js"></script>
 </head>
@@ -348,7 +372,7 @@
         </div>
 
         <!-- Generator Section -->
-        <section class="max-w-5xl mx-auto mb-12">
+        <section class="max-w-5xl mx-auto mb-32">
             <div class="gen-container p-1 rounded-sm">
                 <div class="bg-black p-8 md:p-12 grid md:grid-cols-2 gap-12 items-center">
                     <div class="image-display rounded border-2 border-yellow-900/50" id="gen-result">
@@ -373,6 +397,29 @@
                         <div id="gen-status" class="text-xs text-red-500 font-bold uppercase tracking-widest text-center min-h-[24px] bg-red-950/20 py-2 border border-red-900/30"></div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Brainrot Arcade Section (MINI GAME) -->
+        <section class="max-w-5xl mx-auto mb-32 relative">
+            <div class="mb-8">
+                <h2 class="text-5xl text-yellow-500 calligraphy-font mb-4 drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">Brainrot Arcade</h2>
+                <div class="h-px w-32 bg-red-600 mx-auto mb-2"></div>
+                <p class="text-red-500/80 uppercase tracking-[0.3em] text-xs font-bold">Earn Social Credit</p>
+            </div>
+            
+            <div class="gen-container p-1 rounded-sm relative overflow-hidden" id="arcade-wrapper">
+                <!-- Overlay for Start / Game Over -->
+                <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-10 transition-opacity">
+                    <h3 id="game-title" class="text-4xl text-neon-gold calligraphy-font mb-2">Panda Rot Runner</h3>
+                    <p id="game-subtitle" class="text-gray-400 tracking-widest uppercase text-[10px] mb-6 text-center px-4 max-w-sm">
+                        Tap or Spacebar to jump.<br>Collect <span class="text-yellow-500 text-lg">🧧💰</span> for Social Credit.<br>Avoid <span class="text-red-500 text-lg">🀄🍲🚄</span> or face execution.
+                    </p>
+                    <div id="final-score" class="hidden text-3xl text-red-500 font-bold mb-6 tracking-widest drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]">SOCIAL CREDIT: 0</div>
+                    <button id="start-game-btn" class="btn-rot py-3 px-8 text-xl calligraphy-font">INSERT COIN</button>
+                </div>
+                
+                <canvas id="game-canvas" width="800" height="300"></canvas>
             </div>
         </section>
 
@@ -479,19 +526,197 @@
             matrixInterval = setInterval(drawMatrix, 50);
         }
 
-        function stopMatrixRain() {
-            matrixCanvas.style.opacity = '0';
-            setTimeout(() => { 
-                if (matrixInterval) clearInterval(matrixInterval); 
-            }, 500); // Wait for CSS transition to finish fading out
-        }
-
         window.addEventListener('resize', () => {
             if(matrixCanvas.style.opacity !== '0') initMatrix();
         });
 
         // Start the matrix rain immediately on load
         startMatrixRain();
+
+
+        // --- BRAINROT RUNNER MINI-GAME LOGIC ---
+        const gCanvas = document.getElementById('game-canvas');
+        const gCtx = gCanvas.getContext('2d');
+        const overlay = document.getElementById('game-overlay');
+        const startBtn = document.getElementById('start-game-btn');
+        const gameTitle = document.getElementById('game-title');
+        const gameSubtitle = document.getElementById('game-subtitle');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const arcadeWrapper = document.getElementById('arcade-wrapper');
+
+        // Fix internal resolution for sharp rendering regardless of CSS size
+        gCanvas.width = 800;
+        gCanvas.height = 300;
+
+        let gameLoop;
+        let isPlaying = false;
+        let score = 0;
+        let gameSpeed = 5;
+        let frameCount = 0;
+
+        const GRAVITY = 0.6;
+        const JUMP_POWER = -12;
+        const GROUND_LEVEL = gCanvas.height - 40;
+
+        let player = { x: 50, y: GROUND_LEVEL, width: 40, height: 40, vy: 0 };
+        let entities = []; 
+
+        const obstacleEmojis = ['🀄', '🍲', '🚄'];
+        const collectibleEmojis = ['🧧', '💰'];
+
+        function resetGame() {
+            player.y = GROUND_LEVEL;
+            player.vy = 0;
+            entities = [];
+            score = 0;
+            gameSpeed = 6;
+            frameCount = 0;
+            isPlaying = true;
+            overlay.classList.add('hidden');
+            gameLoop = requestAnimationFrame(updateGame);
+        }
+
+        function jump(e) {
+            // Prevent scrolling spacebar if playing
+            if(isPlaying && e.type === 'keydown' && e.code === 'Space') e.preventDefault();
+            
+            // Only jump if on ground
+            if (isPlaying && player.y >= GROUND_LEVEL) {
+                player.vy = JUMP_POWER;
+            }
+        }
+
+        // Event listeners for jump
+        window.addEventListener('keydown', (e) => { if (e.code === 'Space') jump(e); });
+        gCanvas.addEventListener('pointerdown', jump);
+        startBtn.addEventListener('click', resetGame);
+
+        function spawnEntity() {
+            // Spawn logic: more obstacles than collectibles
+            const isObstacle = Math.random() > 0.3;
+            const emojiList = isObstacle ? obstacleEmojis : collectibleEmojis;
+            const emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+            
+            // Flying enemies/collectibles spawn higher up
+            let yPos = GROUND_LEVEL;
+            if (emoji === '🚄') yPos = GROUND_LEVEL - 10; // Train is low but big
+            if (emoji === '🧧' || emoji === '💰') yPos = GROUND_LEVEL - 50 - Math.random() * 80; // Floating coins
+            
+            entities.push({
+                x: gCanvas.width,
+                y: yPos,
+                width: 35,
+                height: 35,
+                emoji: emoji,
+                isObstacle: isObstacle
+            });
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            cancelAnimationFrame(gameLoop);
+            
+            // UI Updates for Game Over
+            arcadeWrapper.classList.add('shake-game');
+            setTimeout(() => arcadeWrapper.classList.remove('shake-game'), 300);
+            
+            gameTitle.innerText = "SOCIAL CREDIT BANKRUPT";
+            gameTitle.classList.replace('text-neon-gold', 'text-red-600');
+            
+            gameSubtitle.classList.add('hidden');
+            finalScoreDisplay.classList.remove('hidden');
+            finalScoreDisplay.innerText = `FINAL SOCIAL CREDIT: ${score}`;
+            
+            startBtn.innerText = "APPEAL TO THE DRAGON (RETRY)";
+            overlay.classList.remove('hidden');
+        }
+
+        function updateGame() {
+            if (!isPlaying) return;
+
+            // Clear screen
+            gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
+
+            // Draw Ground Line
+            gCtx.strokeStyle = 'rgba(139, 0, 0, 0.5)';
+            gCtx.lineWidth = 2;
+            gCtx.beginPath();
+            gCtx.moveTo(0, GROUND_LEVEL + 40);
+            gCtx.lineTo(gCanvas.width, GROUND_LEVEL + 40);
+            gCtx.stroke();
+
+            // Apply Gravity to Player
+            player.vy += GRAVITY;
+            player.y += player.vy;
+
+            // Ground Collision
+            if (player.y > GROUND_LEVEL) {
+                player.y = GROUND_LEVEL;
+                player.vy = 0;
+            }
+
+            // Draw Player (Panda)
+            gCtx.font = "40px Arial";
+            gCtx.textBaseline = "top";
+            gCtx.fillText("🐼", player.x, player.y);
+
+            // Speed up gradually
+            if (frameCount % 600 === 0) gameSpeed += 0.5;
+
+            // Spawn Entities randomly
+            // Decrease spawn interval as speed increases to keep it chaotic but playable
+            let spawnRate = Math.max(40, 100 - (gameSpeed * 5));
+            if (frameCount % Math.floor(spawnRate) === 0) {
+                spawnEntity();
+            }
+
+            // Update and Draw Entities
+            for (let i = entities.length - 1; i >= 0; i--) {
+                let ent = entities[i];
+                ent.x -= gameSpeed;
+
+                gCtx.font = "35px Arial";
+                gCtx.fillText(ent.emoji, ent.x, ent.y);
+
+                // Collision Detection (AABB - simplified for emojis)
+                let hitBoxBuffer = 10; // Forgive the player a little bit
+                if (player.x < ent.x + ent.width - hitBoxBuffer &&
+                    player.x + player.width - hitBoxBuffer > ent.x &&
+                    player.y < ent.y + ent.height - hitBoxBuffer &&
+                    player.y + player.height - hitBoxBuffer > ent.y) {
+                    
+                    if (ent.isObstacle) {
+                        gameOver();
+                        return; // Stop updating instantly
+                    } else {
+                        // Collectible Hit!
+                        score += (ent.emoji === '💰' ? 50 : 15);
+                        entities.splice(i, 1);
+                        continue;
+                    }
+                }
+
+                // Remove off-screen entities
+                if (ent.x + ent.width < 0) {
+                    entities.splice(i, 1);
+                    // Passively gain score for surviving obstacles
+                    if(ent.isObstacle) score += 5; 
+                }
+            }
+
+            // Draw Score
+            gCtx.fillStyle = '#ffd700';
+            gCtx.font = '20px "Zhi Mang Xing", cursive, sans-serif';
+            gCtx.fillText(`SOCIAL CREDIT: ${score}`, 20, 20);
+
+            frameCount++;
+            gameLoop = requestAnimationFrame(updateGame);
+        }
+
+        // Draw initial static frame so canvas isn't empty on load
+        gCtx.font = "40px Arial";
+        gCtx.textBaseline = "top";
+        gCtx.fillText("🐼", player.x, player.y);
 
 
         // --- FIREBASE INITIALIZATION ---
