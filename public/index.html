@@ -505,6 +505,10 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+
+        // FIX: Force standard HTTP long polling to bypass strict corporate firewalls and adblockers
+        db.settings({ experimentalForceLongPolling: true });
+
         const auth = firebase.auth();
         const appId = "chineserot-67bb3";
 
